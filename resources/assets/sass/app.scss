@@ -5,5 +5,66 @@
 // Variables
 @import "variables";
 
-// Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+ul, li {
+    list-style: none;
+}
+
+span {
+    padding-left:10px;
+}
+
+.active {
+    background: #0B4C5F;
+    border-radius: 5px;
+    border-color: #233C43;
+}
+
+.menu {
+    background: #233C43;
+    border-color: #233C43;
+    min-height: 200px;
+    border-radius: 5px;
+    padding-top:30px;
+    padding-bottom:30px;
+}
+
+.content-right {
+    border: 1px solid #b8b8b8;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    min-height: 600px;
+}
+
+.sub-menu {
+    background-color: #bbbbbb;
+    padding: 7px;
+    border-radius: 3px;
+}
+
+.paddingtop {
+    padding-top: 10px;
+}
+
+select.form-control {
+    height: 36px !important;
+}
+
+.menu-left-bar {
+    padding-top: 5px;
+    li {
+        &:hover {
+            background-color: #0B4C5F;
+        }
+        padding: 5px;
+        width: 90%;
+        a {
+            &:hover {
+                text-decoration: none;
+            }
+
+            padding-left: 10px;
+            color:#fff;
+        }
+    }
+}
+
