@@ -18,7 +18,7 @@ class CreateActivitiesTable extends Migration
             $table->string('action');
             $table->dateTime('time');
             $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users'); 
+            $table->foreign('user_id')->references('id')->on('users');
             $table->integer('activitiable_id')->unsigned();
             $table->integer('activitiable_type')->unsigned();
             $table->softDeletes();
