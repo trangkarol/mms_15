@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Skill extends Model
 {
     use SoftDeletes;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,9 +26,9 @@ class Skill extends Model
     protected $dates = ['deleted_at'];
 
     public function users()
-    { 
+    {
         return $this->belongsToMany(User::class);
-    } 
+    }
 
     public function activities()
     {

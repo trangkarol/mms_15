@@ -6,13 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class TeamUser extends Model
 {
+    protected $table = 'team_user';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'user_id', 
+        'user_id',
         'team_id',
     ];
 
@@ -24,5 +26,5 @@ class TeamUser extends Model
     public function projects()
     {
         return $this->belongsToMany(Project::class);
-    }    
+    }
 }
