@@ -12,7 +12,7 @@ class ProjectTeam extends Model
      * @var array
      */
     protected $fillable = [
-        'user_team_id', 
+        'user_team_id',
         'position_id',
         'is_leader',
     ];
