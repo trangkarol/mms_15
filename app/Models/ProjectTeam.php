@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectTeam extends Model
 {
-    protected $table = 'project_team';
-
     /**
      * The attributes that are mass assignable.
      *
