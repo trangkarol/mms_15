@@ -17,8 +17,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 
-        'email', 
+        'name',
+        'email',
         'password',
         'birthday',
         'role',
@@ -31,7 +31,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 
+        'password',
         'remember_token',
     ];
 
@@ -43,22 +43,32 @@ class User extends Authenticatable
     protected $dates = ['deleted_at'];
 
     public function skills()
-    {   
+    {
         return $this->belongsToMany(Skill::class)->withPivot('level', 'experiensive');
     }
 
     public function teams()
-    {    
+    {
         return $this->belongsToMany(Team::class);
     }
 
     public function activities()
-    {    
+    {
         return $this->morphMany(Activity::class, 'activitiable');
     }
 
     public function position()
-    {  
+    {
         return $this->belongsTo(Position::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role == config('setting.role.admin');
+    }
+
+    public function isUser()
+    {
+        return $this->role == config('setting.role.user');
     }
 }

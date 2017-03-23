@@ -25,6 +25,5 @@
         {{ Html::script('/bower_components/bootstrap/dist/js/bootstrap.min.js') }}
         {{ Html::script('/common/js/common.js') }}
     @show
-
     <!-- end js  -->
 @include('admin.block.footer')

@@ -6,4 +6,10 @@ $(document).ready(function() {
         // add class active
         $(this).addClass('active');
     });
+
+    //click logout
+    $(document).on('click', '#btn-logout', function() {
+        event.preventDefault();
+        $('#logout-form').submit();
+    });
 });
