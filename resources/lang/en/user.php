@@ -17,6 +17,8 @@ return [
     'lbl-position' => 'Postion',
     'lbl-skill' => 'Postion',
     'lbl-stt' => 'Postion',
+    'lbl-remember' => 'Remember Me',
+    'lbl-forget' => 'Forgot Your Password?',
     'msg' => [
         'email-required' => 'Please input email!',
         'email-format' => 'Email not accepted!',
@@ -28,5 +30,7 @@ return [
         'password-confirmed' => 'Invalid passwords!',
         'insert-success' => 'Insert user seccessfuly!',
         'insert-fail' => 'Insert user fail!',
+        'login-fail' => 'Login fail!',
+        'login-fail' => 'Login success!',
     ],
 ];
