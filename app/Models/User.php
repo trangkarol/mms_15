@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->role == config('setting.role.user');
     }
+
+    public function leader()
+    {
+        return $this->belongsTo(Team::class);
+    }
 }

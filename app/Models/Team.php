@@ -16,9 +16,10 @@ class Team extends Model
      */
     protected $fillable = [
         'name',
+        'user_id',
         'description',
     ];
-    
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -27,12 +28,17 @@ class Team extends Model
     protected $dates = ['deleted_at'];
 
     public function users()
-    { 
+    {
         return $this->belongsToMany(User::class);
     }
 
     public function activities()
-    { 
+    {
         return $this->morphMany(Activity::class, 'activitiable');
+    }
+
+    public function leader()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

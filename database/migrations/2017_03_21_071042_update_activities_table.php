@@ -15,6 +15,7 @@ class UpdateActivitiesTable extends Migration
     {
         Schema::table('activities', function (Blueprint $table) {
             $table->string('activitiable_type')->change();
+            $table->dropColumn('time');
         });
     }
 
@@ -26,7 +27,8 @@ class UpdateActivitiesTable extends Migration
     public function down()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->integer('activitiable_type')->unsigned()->change();
+            $table->string('activitiable_type')->change();
+            $table->dateTime('time');
         });
     }
 }

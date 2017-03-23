@@ -15,9 +15,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//admin
-Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admin'], function () {
-    //
+//admin , 'middleware' => 'admin'
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
+    // teams
+    Route::group(['prefix' => 'teams'], function () {
+        Route::resource('/', 'TeamController', ['only' => ['index', 'create', 'store']]);
+        Route::post('/destroy', 'TeamController@destroy');
+        Route::post('/update', 'TeamController@update');
+        Route::get('/add-member', 'TeamController@addMember');
+        Route::post('/add-member', 'TeamController@storeMember');
+        Route::post('/search', 'TeamController@search');
+        Route::get('/{id}/edit', 'TeamController@edit');
+    });
+
 });
 
 /*login user*/
