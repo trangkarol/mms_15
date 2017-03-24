@@ -16,6 +16,15 @@ class Library {
         });
     }
 
+    public static function getTeams()
+    {
+        $teams = Cache::remember('teams', config('view.minutes'), function() {
+            return Team::pluck('name', 'id')->all();
+        });
+        return array_prepend($teams, '----');
+    }
+
+
     public static function getLibrarySkills()
     {
         return Cache::remember('skills', config('view.minutes'), function() {
@@ -23,10 +32,10 @@ class Library {
         });
     }
 
-    public static function getLibraryPositions()
+    public static function getPositions()
     {
         return Cache::remember('positions', config('view.minutes'), function() {
-            return Position::pluck('name', 'id')->all();
+            return Position::where('type_position', 1)->pluck('name', 'id')->all();
         });
     }
 
@@ -42,5 +51,28 @@ class Library {
         return Cache::remember('user', config('view.minutes'), function() {
             return User::pluck('name', 'id')->all();
         });
+    }
+
+    public static function getPositionTeams()
+    {
+        return Cache::remember('positions', config('view.minutes'), function() {
+            return Position::where('type_position', 2)->pluck('name', 'id')->all();
+        });
+    }
+
+    public static function getTypePosition()
+    {
+        return  [
+            '1' => 'Position',
+            '2' => 'Position Team',
+        ];
+    }
+
+    public static function getLevel()
+    {
+        return  [
+            '1' => 'Junior',
+            '2' => 'Senior',
+        ];
     }
 }
