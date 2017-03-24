@@ -42,9 +42,11 @@ $factory->define(App\Models\Skill::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Models\Team::class, function (Faker\Generator $faker) {
+    static $userId;
 
     return [
         'name' => $faker->name,
+        'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::pluck('id')->toArray()),
         'description' => str_random(255),
     ];
 });
@@ -88,7 +90,7 @@ $factory->define(App\Models\SkillUser::class, function (Faker\Generator $faker) 
         'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::pluck('id')->toArray()),
         'skill_id' => $faker->randomElement($skillId ?: $skillId = App\Models\Skill::pluck('id')->toArray()),
         'level' => $faker->numberBetween(1, 4),
-        'experiensive' => $faker->paragraph,
+        'experiensive' => $faker->text,
     ];
 });
 
@@ -106,7 +108,6 @@ $factory->define(App\Models\Activity::class, function (Faker\Generator $faker) {
     static $userId;
 
     return [
-        'time' => $faker->dateTime(),
         'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::pluck('id')->toArray()),
         'action' => array_rand(['Isert', 'Update', 'Delete']),
     ];
