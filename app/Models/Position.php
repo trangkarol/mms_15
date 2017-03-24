@@ -15,8 +15,9 @@ class Position extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 
+        'name',
         'short_name',
+        'type_position',
     ];
 
     /**
@@ -25,19 +26,19 @@ class Position extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-    
+
     public function users()
-    { 
+    {
         return $this->hasMany(User::class);
     }
 
     public function activities()
-    { 
+    {
         return $this->morphMany(Activity::class, 'activitiable');
     }
 
     public function teamUsers()
     {
-        return $this->belongsToMany(TeamUser::class);
+        return $this->belongsToMany(TeamUser::class, 'position_teams');
     }
 }

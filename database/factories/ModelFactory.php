@@ -17,6 +17,7 @@ $factory->define(App\Models\Position::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'short_name' => $faker->name,
+        'type_position' => $faker->numberBetween(1, 2),
     ];
 });
 
@@ -29,7 +30,7 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'password' => bcrypt('123456'),
         'birthday' => $faker->dateTime($max = 'now'),
         'role' => $faker->numberBetween(0, 1),
-        'position_id' => $faker->randomElement($positionId ?: $positionId = App\Models\Position::pluck('id')->toArray()),
+        'position_id' => $faker->randomElement($positionId ?: $positionId = App\Models\Position::where('type_position', 1)->pluck('id')->toArray()),
         'remember_token' => str_random(10),
     ];
 });
@@ -67,7 +68,7 @@ $factory->define(App\Models\PositionTeam::class, function (Faker\Generator $fake
 
     return [
         'team_user_id' => $faker->randomElement($userTeamId ?: $userTeamId = App\Models\TeamUser::pluck('id')->toArray()),
-        'position_id' => $faker->randomElement($positionId ?: $positionId = App\Models\Position::pluck('id')->toArray()),
+        'position_id' => $faker->randomElement($positionId ?: $positionId = App\Models\Position::where('type_position', 2)->pluck('id')->toArray()),
     ];
 });
 

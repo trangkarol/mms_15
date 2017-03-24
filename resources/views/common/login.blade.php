@@ -31,7 +31,7 @@
                                 {{ Form::label('password', trans('user.lbl-password'), ['class' => 'col-md-4 control-label']) }}
 
                                 <div class="col-md-6">
-                                    {{ Form::text('password', '', ['class' => 'form-control',  'id' => 'password', 'required']) }}
+                                    {{ Form::password('password', null, ['class' => 'form-control',  'id' => 'password', 'required']) }}
 
                                     @if ($errors->has('password'))
                                         <span class="help-block">

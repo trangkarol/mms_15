@@ -14,7 +14,7 @@
                     <a href="{{ action('Auth\LoginController@logout') }}" id="btn-logout">
                         {{ trans('admin.title-logout') }}
                     </a>
-                    {!! Form::open(['action' => 'Auth\LoginController@logout', 'method' => 'POST', 'class' => 'form-horizontal']) !!}
+                    {!! Form::open(['action' => 'Auth\LoginController@logout', 'class' => 'form-horizontal', 'id' => 'logout-form']) !!}
                     {{ Form::close() }}
                 </li>
             </ul>

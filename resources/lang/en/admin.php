@@ -11,11 +11,19 @@ return [
     'title-activities' => 'Management Activity',
     'title-singin' => 'Signin',
     'title-login' => 'Login',
+    'title-logout' => 'Logout',
     //
     'lbl-search' => 'Search',
     'lbl-result-search' => 'Result Search',
+    'lbl-delete' => '<i class = "fa fa-trash-o"></i>',
+    'lbl-add' => '<i class = "fa fa-plus"></i>',
+    'lbl-edit' => '<i class = "fa fa-pencil-square-o"></i>',
+    'lbl-stt' => 'No.',
     // button
     'btn-insert' => 'Insert',
     'btn-reset' => 'Reset',
     'btn-update' => 'Update',
+    'btn-add' => 'Add',
+    'btn-edit' => 'Edit',
+    'btn-delete' => 'Delete',
 ];

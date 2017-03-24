@@ -6,7 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Helpers\Library;
 use App\Models\Team;
+use App\Models\User;
 use App\Models\Activity;
+use App\Models\TeamUser;
+use App\Models\SkillUser;
+use App\Models\Position;
+use App\Models\PositionTeam;
+use App\Models\ProjectTeam;
 use App\Http\Requests\Team\InsertRequest;
 use DB;
 use Carbon\Carbon;
@@ -34,7 +40,7 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teams = $this->team->paginate(15);
+        $teams = $this->team->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.team.index', compact('teams'));
     }
@@ -165,11 +171,185 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getMember()
+    public function addMember()
     {
         $teams = Library::getLibraryTeams();;
         $skills = Library::getLibrarySkills();
 
         return view('admin.team.team_users', compact('teams', 'skills'));
     }
+
+    /**
+     *  page add member
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeMember(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            // dd($request->all());
+            $teamId = $request->teamId;
+            $userId = $request->userId;
+            $positions = $request->positions;
+            $team = $this->team->findOrFail($teamId);
+            if($request->flag == 1) { //when flag is add
+                $team->users()->attach($userId);
+                $this->activity->insertActivities($team, 'add members to team');
+            } else {
+                $this->activity->insertActivities($team, 'edit members to team');
+            }
+
+            $teamUser = TeamUser::where('team_id', $teamId)->where('user_id', $userId)->with('positions')->pluck('id')->all();
+            $positionTeam = TeamUser::findOrFail($teamUser[0])->positions()->sync($positions);
+            DB::commit();
+
+            return response()->json(['result' => true]);
+        } catch(\Exception $e) {
+            DB::rollback();
+
+           return response()->json(['result' => false]);
+        }
+    }
+
+    /**
+     *  edit position member
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function positionTeam(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $teamId = $request->teamId;
+            $userId = $request->userId;
+            $teamUser = TeamUser::where('team_id', $teamId)->where('user_id', $userId)->with('positions')->pluck('id')->first();
+            $arrPosition = [];
+            if(!empty($teamUser)) {
+                $arrPosition = PositionTeam::where('team_user_id', $teamUser)->pluck('position_id')->all();
+            }
+
+            $positions = Library::getPositionTeams();
+
+            $html = view('admin.team.insert_positon_teams', compact('positions', 'teamId', 'userId', 'teamUser', 'arrPosition', 'positions'))->render();
+
+            return response()->json(['result' => true, 'html' => $html]);
+        } catch(\Exception $e) {
+            DB::rollback();
+           return response()->json(['result' => false]);
+        }
+    }
+
+    /**
+     * search the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        try {
+            $skills = $request->skills;
+            $levels = $request->levels;
+            $teamId = $request->teamId;
+
+            // dd($request->all());
+
+            $memberTeam = TeamUser::where('team_id', $teamId)->pluck('user_id')->toArray();
+
+            $users = new SkillUser;
+
+            if(!is_null($skills) && !is_null($levels)) {
+                // $users = User::with(['skills' => function($query) use ($levels, $skills) {
+                //     $query->whereIn('level', $levels)->orWhereIn('skill_id', $skills);
+                // }]);
+
+                $users = SkillUser::with('user')->whereIn('level', $levels)->WhereIn('skill_id', $skills);
+
+            } elseif(!is_null($skills) && is_null($levels)) {
+
+                    // $users = User::with(['skills' => function($query) use ( $skills) {
+                    //     $query->whereIn('skill_id', $skills);
+                    // }]);
+                    $users = SkillUser::with('user')->whereIn('skill_id', $skills);
+
+                } elseif(!is_null($levels) && is_null($skills)) {
+
+                    // $users = User::with(['skills' => function($query) use ( $levels) {
+                    //     $query->whereIn('level', $levels);
+                    // }]);
+
+                    $users = SkillUser::with('user')->whereIn('level', $levels);
+
+                }
+
+            if(!is_null($memberTeam)) {
+                $users = $users->whereNotIn('user_id', array_flatten($memberTeam));
+            }
+
+            $userSkills = $users->get();
+            // dd($userSkills->toArray());
+            $html = view('admin.team.search_user', compact('userSkills'))->render();
+
+            return response()->json(['result' => true, 'html' => $html]);
+        } catch(\Exception $e) {
+            dd($e);
+           return response()->json(['result' => false]);
+        }
+    }
+
+    /**
+     * search the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function searchMember(Request $request)
+    {
+        try {
+            $teamId = $request->teamId;
+            $members = TeamUser::with('positions', 'team', 'user')->where('team_users.team_id', '=', $teamId)->get();
+
+            $html = view('admin.team.list_member', compact('members'))->render();
+
+            return response()->json(['result' => true, 'html' => $html]);
+        } catch(\Exception $e) {
+           return response()->json(['result' => false]);
+        }
+    }
+
+    /**
+     *  page delete member
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteMember(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $teamId = $request->teamId;
+            $userId = $request->userId;
+
+            $teamUser = TeamUser::where('team_id', $teamId)->where('user_id', $userId)->with('positions')->pluck('id')->all();
+            $projectTeam = ProjectTeam::where('team_user_id', $teamUser[0])->delete();
+            $positionTeam = PositionTeam::where('team_user_id', $teamUser[0])->delete();
+
+            $team = $this->team->findOrFail($teamId);
+            $team->users()->detach($userId);
+
+            $this->activity->insertActivities($team, 'delete members to team');
+            DB::commit();
+
+            return response()->json(['result' => true]);
+        } catch(\Exception $e) {
+            DB::rollback();
+            dd($e);
+           return response()->json(['result' => false]);
+        }
+    }
 }
+
+

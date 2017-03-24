@@ -35,6 +35,11 @@ class Activity extends Model
         return $this->morphTo();
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     /**
      * Insert the specified resource from storage.
      *
@@ -44,7 +49,7 @@ class Activity extends Model
     public function insertActivities($model, $action)
     {
         $model->activities()->create([
-            'user_id' => Auth::user()->id,
+            'user_id' => 1,//Auth::user()->id,
             'action' => $action,
         ]);
     }
