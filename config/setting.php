@@ -9,5 +9,5 @@ return [
     'level' => [
         'one-year' => 1,
         'two-years' => 2,
-    ];
+    ],
 ];

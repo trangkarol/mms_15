@@ -19,5 +19,11 @@ elixir((mix) => {
                 'resources/assets/js/common/common.js',
             ], 'public/common/js/')
 
+        .copy([
+                'resources/assets/js/admin/team.js',
+                'resources/assets/js/admin/user.js',
+                'resources/assets/js/admin/project.js',
+            ], 'public/admin/js/')
+
        .webpack('app.js');
 });
