@@ -44,12 +44,12 @@ class User extends Authenticatable
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class)->withPivot('level', 'experiensive');
+        return $this->belongsToMany(Skill::class, 'skill_users')->withPivot('level', 'experiensive')->withTimestamps();
     }
 
     public function teams()
     {
-        return $this->belongsToMany(Team::class);
+        return $this->belongsToMany(Team::class, 'team_users')->withTimestamps();;
     }
 
     public function activities()
@@ -75,5 +75,15 @@ class User extends Authenticatable
     public function leader()
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function teamUsers()
+    {
+        return $this->hasMany(TeamUser::class);
+    }
+
+    public function skillUsers()
+    {
+        return $this->hasMany(SkillUser::class);
     }
 }

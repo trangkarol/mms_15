@@ -15,7 +15,7 @@ class Project extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 
+        'name',
         'short_name',
         'start_day',
         'end_day',
@@ -29,13 +29,18 @@ class Project extends Model
     protected $dates = ['deleted_at'];
 
     public function activities()
-    {  
+    {
         return $this->morphMany(Activity::class, 'activitiable');
     }
 
     public function teamUsers()
     {
-        return $this->belongsToMany(TeamUser::class);
+        return $this->belongsToMany(TeamUser::class, 'project_teams')->withPivot('is_leader')->withTimestamps();
     }
-    
+
+    public function projectTeams()
+    {
+        return $this->hasMany(ProjectTeam::class);
+    }
+
 }

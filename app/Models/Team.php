@@ -29,7 +29,7 @@ class Team extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'team_users')->withTimestamps();;
     }
 
     public function activities()
@@ -40,5 +40,10 @@ class Team extends Model
     public function leader()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function teamUsers()
+    {
+        return $this->hasMany(TeamUser::class);
     }
 }
