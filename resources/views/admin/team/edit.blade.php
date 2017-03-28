@@ -43,3 +43,7 @@
     </div>
 @endsection
 <!-- js used for page -->
+@section('contentJs')
+    @parent
+    {{ Html::script('admin/js/team.js') }}
+@endsection

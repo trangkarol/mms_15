@@ -13,10 +13,7 @@
 
         <div class="col-md-4 col-md-offset-3 paddingtop">
             <a href="{{ action('Admin\TeamController@create') }}" class="btn btn-primary"><i class="fa fa-plus " ></i></a>
-        </div>
-
-        <div class="col-md-4 col-md-offset-3 paddingtop">
-            <a href="{{ action('Admin\TeamController@addMember') }}" class="btn btn-primary"><i class="fa fa-plus " ></i></a>
+            <a href="{{ action('Admin\TeamController@addMember') }}" class="btn btn-primary"><i class="fa fa-user-plus " ></i></a>
         </div>
     </div>
     <!-- content -->
@@ -25,12 +22,12 @@
             @include('common.messages')
             <div class="panel panel-primary ">
                 <div class="panel-heading">
-                    {{ trans('admin.lbl-result-search') }}
+                    {{ trans('team.lbl-list-team') }}
                 </div>
                 <!--  -->
                 <div class="panel-body">
                     <div class="table-responsive">
-                        <table class="table table-borded table-striped">
+                        <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th >{{ trans('team.lbl-stt') }}</th>
@@ -56,7 +53,7 @@
                                             {{ Form::open(['action' => 'Admin\TeamController@destroy', 'method' => 'POST']) }}
 
                                             {{ Form::hidden('teamId', $team->id) }}
-                                            {!! Form::button(trans('team.lbl-stt'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit']) !!}
+                                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit']) !!}
                                             {{ Form::close() }}
                                         </div>
                                     </td>

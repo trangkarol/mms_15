@@ -15,4 +15,19 @@ class PositionTeam extends Model
         'user_team_id',
         'position_id',
     ];
+
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
+    }
+
+    public function teamUser()
+    {
+        return $this->belongsTo(TeamUser::class);
+    }
+
+    public function scopeTeamUserId($query, $value)
+    {
+        return $query->where('team_user_id', $value);
+    }
 }
