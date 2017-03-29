@@ -8,7 +8,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-primary">
+                <div class="panel panel-primary div-login">
                     <div class="panel-heading">{{ trans('admin.title-change-password') }}</div>
                     <div class="panel-body">
                         {!! Form::open(['action' => 'Auth\ResetPasswordController@changePassword', 'class' => 'form-horizontal']) !!}
@@ -17,7 +17,7 @@
                                 {{ Form::label('password', trans('user.lbl-password'), ['class' => 'col-md-4 control-label']) }}
 
                                 <div class="col-md-6">
-                                    {{ Form::password('password', null, ['class' => 'form-control',  'id' => 'password', 'required']) }}
+                                    {{ Form::password('password', ['class' => 'form-control',  'id' => 'password', 'required']) }}
 
                                     @if ($errors->has('password'))
                                         <span class="help-block">

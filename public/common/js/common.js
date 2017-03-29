@@ -10,7 +10,7 @@ $(document).ready(function() {
             jQuery.colorbox.resize({width:"90%"});
         });
     //click logout
-    $(document).on('click', '#btn-logout', function() {
+    $(document).on('click', '#btn-logout', function(event) {
         event.preventDefault();
         $('#logout-form').submit();
     });
