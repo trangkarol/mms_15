@@ -12,6 +12,16 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('users')->insert([
+            'name' => 'Admin',
+            'email' => 'admin.@gmail.com',
+            'password' => bcrypt('123456'),
+            'birthday' => '2017-03-12',
+            'role' => 0,
+            'position_id' => 1,
+            'remember_token' => str_random(10),
+        ]);
+
         factory(App\Models\User::class, 10)->create()->each(function ($user) {
             foreach(range(1, 2) as $key) {
                 $activities[] = factory(App\Models\Activity::class)->make()->toArray();
