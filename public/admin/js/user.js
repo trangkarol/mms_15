@@ -123,12 +123,10 @@ function addSkill(event, flag) {
                         event.parents('tr').remove();
                         alert(trans['msg_delete_skill_sucess']);
                     }
-
                 }
             } else {
                     alert(trans['msg_fail']);
             }
-
         }
     });
 }
@@ -180,8 +178,7 @@ function addTeam(event,flag) {
 
                     $('#result-team').html();
                     $('#result-team').html(data.html);
-                    //remove team curren
-                    // event.parents('div').remove();
+
                 } else {
                     if(flag == 1 ) {
                         alert(trans['msg_insert_fail']);
