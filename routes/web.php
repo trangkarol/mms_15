@@ -11,9 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 //admin
 Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admin'], function () {
@@ -77,6 +74,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
     Route::group(['prefix' => 'activities'], function () {
         Route::resource('/', 'ActivityController', ['only' => ['index']]);
         Route::post('/destroy', 'ActivityController@destroy');
+    });
+
+    Route::get('/', function () {
+        return view('welcome');
     });
 });
 
