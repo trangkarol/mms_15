@@ -57,7 +57,7 @@
     <!-- message -->
     <script type="text/javascript">
         var trans = {
-                'msg_emty_member' : '{{ trans('user.msg.empty-member') }}',
+                'msg_emty_member' : '{{ trans('team.msg.empty-member') }}',
                 'msg_update_success' : '{{ trans('team.msg.update-success') }}',
                 'msg_delete_success' : '{{ trans('team.msg.delete-success') }}',
                 'msg_update_fail' : '{{ trans('team.msg.update-fail') }}',
