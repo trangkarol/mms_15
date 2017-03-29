@@ -28,7 +28,7 @@ class UpdateActivitiesTable extends Migration
     {
         Schema::table('activities', function (Blueprint $table) {
             $table->string('activitiable_type')->change();
-            $table->dateTime('time');
+            $table->dateTime('time')->nullable();
         });
     }
 }
