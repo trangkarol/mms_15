@@ -15,17 +15,7 @@
             <a href="{{ action('Admin\ProjectController@index') }}" class="btn btn-primary"><i class="fa fa-list " ></i></a>
         </div>
     </div>
-    <script type="text/javascript">
-        var trans = {
-                'msg_emty_member' : '{{ trans('project.msg.empty-member') }}',
-                'msg_update_success' : '{{ trans('project.msg.update-success') }}',
-                'msg_delete_success' : '{{ trans('project.msg.delete-success') }}',
-                'msg_update_fail' : '{{ trans('project.msg.update-fail') }}',
-                'msg_delete_fail' : '{{ trans('project.msg.delete-fail') }}',
-                'msg_insert_fail' : '{{ trans('project.msg.insert-fail') }}',
-                'msg_insert_success' : '{{ trans('project.msg.insert-success') }}',
-            }
-    </script>
+
     <!-- content -->
     <div class="row">
         <div class="col-md-12 paddingtop">
@@ -59,4 +49,15 @@
 @section('contentJs')
     @parent
     {{ Html::script('admin/js/project.js') }}
+      <script type="text/javascript">
+        var trans = {
+                'msg_emty_member' : '{{ trans('project.msg.empty-member') }}',
+                'msg_update_success' : '{{ trans('project.msg.update-success') }}',
+                'msg_delete_success' : '{{ trans('project.msg.delete-success') }}',
+                'msg_update_fail' : '{{ trans('project.msg.update-fail') }}',
+                'msg_delete_fail' : '{{ trans('project.msg.delete-fail') }}',
+                'msg_insert_fail' : '{{ trans('project.msg.insert-fail') }}',
+                'msg_insert_success' : '{{ trans('project.msg.insert-success') }}',
+            }
+    </script>
 @endsection

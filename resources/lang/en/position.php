@@ -3,6 +3,7 @@
 return [
     // user
     'title-positions' => 'Management Positions',
+    'title-positons' => 'Management Positions',
     'title-insert-positions' => 'Insert Position',
     'title-update-positions' => 'Update Position',
     'lbl-name' => 'Name',

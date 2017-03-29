@@ -3,6 +3,7 @@
 return [
     // project
     'title-projects' => 'Management Projects',
+    'title-project' => 'Management Projects',
     'title-insert-projects' => 'Insert Project',
     'title-update-projects' => 'Update Project',
     //
@@ -32,6 +33,6 @@ return [
         'insert-member-success' => 'Insert member seccessfuly!',
         'insert-member-fail' => 'Insert member fail!',
         'positions-required' => 'Please choose a position!',
-        'empty-member' => "Don't have member in team",
+        'empty-member' => 'Empty',
     ],
 ];

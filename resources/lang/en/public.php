@@ -13,6 +13,7 @@ return [
     'lbl-team' => 'Team',
     'lbl-project' => 'Project',
     'lbl-list-team' => 'List team',
+    'lbl-title-public' => 'Public',
     'title-detail-member' => 'Detail Member',
     'title-list-team' => 'List Team',
     'title-list-member' => 'List member of Team',
