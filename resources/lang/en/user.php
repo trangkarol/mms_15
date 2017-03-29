@@ -41,7 +41,7 @@ return [
         'delete-fail' => 'Delete user fail!',
         'login-fail' => 'Login fail!',
         'login-success' => 'Login success!',
-        'login-success' => 'Login success!',
+        'change-password-success ' => 'Change password success!',
         'add-skill-sucess' => 'Add Skill Success!',
         'edit-skill-sucess' => 'Edit Skill Success!',
         'delete-skill-sucess' => 'Delete Skill Success!',
