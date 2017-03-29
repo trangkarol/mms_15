@@ -95,7 +95,7 @@ Route::group(['namespace' => 'Auth'], function() {
     Route::post('/login', 'LoginController@login');
     Route::post('/logout', 'LoginController@logout');
     Route::post('/change-password', 'ResetPasswordController@changePassword');
-    Route::get('/page-change-password', 'ResetPasswordController@index')->middleware('auth');;
+    Route::get('/page-change-password', 'ResetPasswordController@index')->middleware('auth');
 });
 
 Route::get('/home', 'HomeController@index');

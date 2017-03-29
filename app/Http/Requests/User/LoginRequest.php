@@ -39,7 +39,7 @@ class LoginRequest extends FormRequest
         return [
             'email.required' => trans('user.msg.email-required'),
             'email.email' => trans('user.msg.email-format'),
-            'password.required' => trans('user.msg.pass-required'),
+            'password.required' => trans('user.msg.password-required'),
         ];
     }
 }
