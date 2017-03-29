@@ -1,0 +1,82 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+ul, li {
+  list-style: none;
+}
+
+span {
+  padding-left: 10px;
+}
+
+.active {
+  background: #0B4C5F;
+  border-radius: 5px;
+  border-color: #233C43;
+}
+
+.menu {
+  background: #233C43;
+  border-color: #233C43;
+  min-height: 200px;
+  border-radius: 5px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.content-right {
+  border: 1px solid #b8b8b8;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+  min-height: 600px;
+}
+
+.sub-menu {
+  background-color: #bbbbbb;
+  padding: 7px;
+  border-radius: 3px;
+}
+
+.paddingtop {
+  padding-top: 10px;
+}
+
+select.form-control {
+  height: 36px !important;
+}
+
+#logout-form {
+  display: none;
+}
+
+.menu-left-bar {
+  padding-top: 5px;
+}
+
+.menu-left-bar li {
+  padding: 5px;
+  width: 90%;
+}
+
+.menu-left-bar li:hover {
+  background-color: #0B4C5F;
+}
+
+.menu-left-bar li a {
+  padding-left: 10px;
+  color: #fff;
+}
+
+.menu-left-bar li a:hover {
+  text-decoration: none;
+}
+
+.table-result {
+  height: 300px;
+  overflow-y: scroll;
+  border: 1px solid #b8b8b8;
+}
+
+.div-level {
+  padding-top: 26px;
+}
+
+/*# sourceMappingURL=app.css.map */
