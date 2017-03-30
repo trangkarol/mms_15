@@ -21,7 +21,7 @@
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td>{{ $skillUser->skill->name }}</td>
                             <td>{{ $skillUser->experiensive }}</td>
-                            <td>{{ $skillUser->level }}</td>
+                            <td>@if ($skillUser->level == config('setting.level.senior')) {{ tras('skill.lbl-senior') }}  @else {{ tras('skill.lbl-junior') }} @endif {{ $skillUser->level }}</td>
                             <td>
                                 <div class="col-md-6">
                                     {!! Form::button(trans('admin.lbl-edit'), ['class' => 'btn btn-primary btn-edit-skill', 'id' => '']) !!}
