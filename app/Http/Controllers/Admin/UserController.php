@@ -50,7 +50,7 @@ class UserController extends Controller
         $members  = $this->user->leftJoin('team_users', 'users.id', '=', 'team_users.user_id')
                                ->join('positions as position', 'position.id', '=', 'users.position_id')
                                ->leftJoin('teams', 'teams.id', '=', 'team_users.team_id')
-                               ->leftJoin('position_teams', 'positions.id', '=', 'position_teams.team_user_id')
+                               ->leftJoin('position_teams', 'team_users.id', '=', 'position_teams.team_user_id')
                                ->leftJoin('positions', 'positions.id', '=', 'position_teams.position_id')
                                ->select('users.id', 'users.name as userName', 'position.positionName', 'teams.teamName')
                                ->get();
