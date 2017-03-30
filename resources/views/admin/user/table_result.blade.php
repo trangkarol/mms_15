@@ -10,12 +10,19 @@
         </tr>
     </thead>
     <tbody>
+        @php
+            $index =0;
+        @endphp
+
         @if (!empty($members))
             @foreach ($members as $member)
                 @if ($member->teamUsers)
                     @foreach ($member->teamUsers as $temUser)
+                        @php
+                            $index = $index+1;
+                        @endphp
                         <tr>
-                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $index }</td>
                             <td><a href="{{ action('Member\HomeController@detailMember', $member->id) }}">{{ $member->name }}</a></td>
                             <td> @if ($member->position) {{ $member->position->name }} @endif</td>
                             <!-- <td>  </td>-->
@@ -43,8 +50,11 @@
                         </tr>
                     @endforeach
                 @else
+                     @php
+                        $index = $index+1;
+                    @endphp
                     <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
+                        <td class="text-center">{{ $index }}</td>
                         <td><a href="{{ action('Member\HomeController@detailMember', $member->id) }}">{{ $member->name }}</a></td>
                         <td> @if ($member->position) {{ $member->position->name }} @endif</td>
                         <!-- <td>  </td>-->
