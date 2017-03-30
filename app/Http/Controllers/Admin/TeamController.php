@@ -152,9 +152,17 @@ class TeamController extends Controller
 
         try {
             $team = $this->team->findOrFail($request->teamId);
+
+            $teamUser = TeamUser::getTeam($request->teamId);
+            $teamUserId = $teamUser->pluck('id');
+
+            PositionTeam::getId($teamUserId)->delete();
+            ProjectTeam::getId($teamUserId)->delete();
+            $teamUser->delete();
             $this->activity->insertActivities($team, 'delete');
             $team->delete();
             $request->session()->flash('success', trans('team.msg.delete-success'));
+
             DB::commit();
 
             return redirect()->action('Admin\TeamController@index');
