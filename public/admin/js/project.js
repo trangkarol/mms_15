@@ -28,10 +28,10 @@ $(document).ready(function(){
 
     //delete member
     $(document).on('click','.btn-delete-team',function(event){
-
-        bootbox.confirm('Are you want to delete?', function(result , event){
+        var teamId = $(this).parents('tr').find('.teamMemberId').html().trim();
+        bootbox.confirm('Are you want to delete?', function(result){
             if(result) {
-                var teamId = event.parents('tr').find('.teamMemberId').html().trim();
+
                 deleteMember(teamId, $(this));
             }
         });
