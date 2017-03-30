@@ -215,7 +215,6 @@ class UserController extends Controller
             try{
                 $teamId = $request->teamId;
                 if($teamId != 0) {
-
                     $members  = $this->user->with(['position', 'teamUsers.positions', 'teamUsers.team', 'teamUsers' => function($query) use($teamId) {
                         $query->where('team_id', '=', $teamId);
                     }])->orderBy('created_at', 'desc')->paginate(15);
@@ -417,9 +416,11 @@ class UserController extends Controller
                 // $arrProject = [];
 
                 if($flag == 0 || $flag == 2) {
-                    $teamUserId = TeamUser::where('team_id', $teamId)->where('user_id', $userId)->pluck('id');
+
+
+                    $userSkill = SkillUser::with('skill')->where('skill_id', $skillId)->where('user_id', $userId)->get();
                     // positions
-                    $arrPosition = PositionTeam::with('positions')->where('team_user_id', $teamUserId[0])->pluck('position_id')->all();
+                    // $arrPosition = PositionTeam::with('positions')->where('team_user_id', $teamUserId[0])->pluck('position_id')->all();
                     // projects
                     // $arrProject = ProjectTeam::getProject($teamUserId[0])->pluck('project_id')->all();
 
@@ -429,7 +430,7 @@ class UserController extends Controller
                 // project
                 // $projects = Library::getLibraryProjects();
                 // $projectTeams = Library::getLibraryProjects();
-                $html = view('admin.user.skill', compact('skills', 'levels', 'flag', 'userId', 'skillId'))->render();
+                $html = view('admin.user.skill', compact('skills', 'levels', 'flag', 'userId', 'skillId', 'userSkill'))->render();
 
                 DB::commit();
                 return response()->json(['result' => true, 'html' => $html]);

@@ -9,14 +9,14 @@
             <div class="col-cd-12">
                 {{ Form::label('level', trans('user.lbl-level'), ['class' => 'col-md-4 control-label']) }}
                 <div class="col-md-6">
-                    {{ Form::select('level', $levels, null, ['class' => 'form-control level']) }}
+                    {{ Form::select('level', $levels, $userskill->level, ['class' => 'form-control level']) }}
                 </div>
             </div>
 
             <div class="col-cd-12">
                 {{ Form::label('exper', trans('user.lbl-experiensive'), ['class' => 'col-md-4 control-label']) }}
                 <div class="col-md-6">
-                    {{ Form::textarea('exeper', null, ['class' => 'form-control exeper']) }}
+                    {{ Form::textarea('exeper', $userskill->experiensive, ['class' => 'form-control exeper']) }}
                 </div>
             </div>
 
