@@ -22,9 +22,9 @@
                             <td>{{ $project->short_name }}</td>
                             <td>{{ $project->start_day }}</td>
                             <td>{{ $project->end_day }}</td>
-                            <td>@if (!$projectTeam->teamUser) {{ $projectTeam->teamUser->user->name }} @endif</td>
+                            <td>@if ($projectTeam->teamUser) {{ $projectTeam->teamUser->user->name }} @endif</td>
                             <td>
-                                @if (!$projectTeam->teamUser) {{ $projectTeam->teamUser->team->name }} @endif
+                                @if ($projectTeam->teamUser) {{ $projectTeam->teamUser->team->name }} @endif
                             </td>
                             <td>
                                 <div class="col-md-6">
