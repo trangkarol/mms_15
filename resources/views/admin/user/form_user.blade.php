@@ -46,6 +46,13 @@
     </div>
 </div>
 
+<div class="form-group">
+    {{ Form::label('position', trans('user.lbl-avartar'), ['class' => 'col-md-4 control-label']) }}
+    <div class="col-md-6">
+        Form::file('image');
+    </div>
+</div>
+
 @if(isset($user))
     <!-- skill -->
     <div class="panel panel-primary">
