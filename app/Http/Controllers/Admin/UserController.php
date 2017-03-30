@@ -416,9 +416,7 @@ class UserController extends Controller
                 // $arrProject = [];
 
                 if($flag == 0 || $flag == 2) {
-                    $userSkill = SkillUser::with('skill')->where('skill_id', $skillId)->where('user_id', $userId)->get();
-
-                dd($userSkill->all());
+                    $userSkill = SkillUser::with('skill')->where('skill_id', $skillId)->where('user_id', $userId)->first();
                 }
 
                 $skills = Library::getLibrarySkills();
