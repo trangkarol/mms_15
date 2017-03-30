@@ -56,7 +56,8 @@ $(document).ready(function(){
     });
 
     // delete skill
-    $(document).on('click', '.btn-delete-team',function(event) {
+    $(document).on('click', '.btn-delete-skill',function(event) {
+
         var skillId = $(this).parents('tr').find('.skillId').html().trim();
         getFormSkill(skillId, 2);
     });
@@ -148,15 +149,15 @@ function addSkill(flag) {
                 $('#result-skill').html(data.html);
 
                 if (flag == 1) {
-                     bootbox.alert(trans['msg_add_sucess']);
+                     bootbox.alert('Add skill succesfully');
                 } else {
                     if (flag == 0) {
-                         bootbox.alert(trans['msg_edit_sucess']);
+                         bootbox.alert('Edit skill succesfully');
                     } else {
-                         bootbox.alert(trans['msg_delete_sucess']);
+                         bootbox.alert('Delete skill succesfully');
                     }                }
             } else {
-                     bootbox.alert(trans['msg_fail']);
+                     bootbox.alert('Fail!');
             }
         }
     });
@@ -202,9 +203,9 @@ function addTeam(event,flag) {
         success:function(data) {
             if(data.result) {
                     if(flag == 1 ) {
-                        bootbox.alert(trans['msg_insert_succes']);
+                        bootbox.alert('Insert succesfully!');
                     } else {
-                        bootbox.alert(trans['msg_update_succes']);
+                        bootbox.alert('Update succesfully!');
                     }
 
                     $('#result-team').html();
@@ -212,9 +213,9 @@ function addTeam(event,flag) {
 
                 } else {
                     if(flag == 1 ) {
-                        bootbox.alert(trans['msg_insert_fail']);
+                        bootbox.alert('Insert fail!');
                     } else {
-                        bootbox.alert(trans['msg_update_fail']);
+                        bootbox.alert('Update fail!');
                     }
                 }
                 $.colorbox.close();
@@ -244,7 +245,7 @@ function deleteTeam(event) {
         success:function(data) {
             console.log('trang');
             if(data.result) {
-                    bootbox.alert(trans['msg_delete_succes']);
+                    bootbox.alert('Delete succesfully');
 
                     $.colorbox.close();
 
@@ -253,7 +254,7 @@ function deleteTeam(event) {
                     //remove team curren
                     event.remove;
                 } else {
-                    bootbox.alert(trans['msg_delete_fail']);
+                    bootbox.alert('Delete fail');
                 }
         }
     });

@@ -126,18 +126,18 @@ function addMember(flag) {
             success:function(data) {
                 if(data.result) {
                     if(flag == 1 ) {
-                        bootbox.alert(trans['msg_insert_succes']);
+                        bootbox.alert('Insert successfully!');
                     } else {
-                        bootbox.alert(trans['msg_update_succes']);
+                        bootbox.alert('Update successfully!');
                     }
 
                     $.colorbox.close();
                     searchMember();
                 } else {
                     if(flag == 1 ) {
-                        bootbox.alert(trans['msg_insert_fail']);
+                        bootbox.alert('Insert fail!');
                     } else {
-                        bootbox.alert(trans['msg_update_fail']);
+                        bootbox.alert('Update fail!');
                     }
                 }
             }
@@ -193,11 +193,11 @@ function deleteMember(userId) {
         },
         success:function(data) {
             if(data.result) {
-                bootbox.alert(trans['msg_delete_succes']);
+                bootbox.alert('Delete successfully!');
                 $.colorbox.close();
                 searchMember();
             } else {
-                bootbox.alert(trans['msg_delete_fail']);
+                bootbox.alert('Delete fail!');
             }
         }
     });

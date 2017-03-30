@@ -94,7 +94,7 @@ function searchMember(teamId, flag) {
             if(data.html != '') {
                 $.colorbox({html : data.html});
             } else {
-                bootbox.alert(trans['msg_empty_member']);
+                bootbox.alert('Data empty!');
             }
 
         }
@@ -126,18 +126,18 @@ function addMember(flag) {
         success:function(data){
             if(data.result) {
                 if(flag == 1 ) {
-                    bootbox.alert(trans['msg_insert_success']);
+                    bootbox.alert('Insert successfuly!');
                 } else {
-                    bootbox.alert(trans['msg_update_success']);
+                    bootbox.alert('Update successfuly!');
                 }
 
                 $.colorbox.close();
                 location.reload();
             } else {
                 if(flag == 1 ) {
-                    bootbox.alert(trans['msg_insert_fail']);
+                    bootbox.alert(trans['Insert fail!']);
                 } else {
-                    bootbox.alert(trans['msg_update_fail']);
+                    bootbox.alert(trans['Update fail']);
                 }
 
                 $.colorbox.close();
@@ -167,12 +167,12 @@ function deleteMember(teamId, event) {
         },
         success:function(data){
             if(data.result) {
-                bootbox.alert(trans['msg_delete_success']);
+                bootbox.alert('Delete successfuly!');
                 $.colorbox.close();
                 location.reload();
                 // searchMember();
             } else {
-                bootbox.alert(trans['msg_delete_fail']);
+                bootbox.alert('Delete fail!');
 
                 $.colorbox.close();
             }
