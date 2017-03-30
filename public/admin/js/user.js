@@ -57,14 +57,7 @@ $(document).ready(function(){
 
     // delete skill
     $(document).on('click', '.btn-delete-skill',function(event) {
-
-        var skillId = $(this).parents('tr').find('.skillId').html().trim();
-        bootbox.confirm('Are you want to delete?', function(result, event){
-            if(result) {
-
-                getFormSkill(skillId, 2);
-            }
-        });
+        getFormSkill(skillId, 2);
     });
 
     // position team
