@@ -46,8 +46,15 @@ class UserController extends Controller
     public function index()
     {
         $teams = Library::getTeams();
-        $members = TeamUser::with('positions', 'team', 'user.position')->orderBy('created_at', 'desc')->paginate(15);
-
+        // $members = TeamUser::with('positions', 'team', 'user.position')->orderBy('created_at', 'desc')->paginate(15);
+        $members  = $this->user->leftJoin('team_users', 'users.id', '=', 'team_users.user_id')
+                               ->join('positions as position', 'position.id', '=', 'users.position_id')
+                               ->leftJoin('teams', 'teams.id', '=', 'teams.team_id')
+                               ->leftJoin('position_teams', 'positions.id', '=', 'position_teams.team_user_id')
+                               ->leftJoin('positions', 'positions.id', '=', 'position_teams.position_id')
+                               ->select('users.id', 'users.name as userName', 'position.positionName', 'teams.teamName')
+                               ->get();
+        dd($members->toArray());
         return view('admin.user.index', compact('members', 'teams'));
     }
 
