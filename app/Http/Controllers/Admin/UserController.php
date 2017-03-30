@@ -52,7 +52,7 @@ class UserController extends Controller
                                ->leftJoin('teams', 'teams.id', '=', 'team_users.team_id')
                                ->leftJoin('position_teams', 'team_users.id', '=', 'position_teams.team_user_id')
                                ->leftJoin('positions', 'positions.id', '=', 'position_teams.position_id')
-                               ->select('users.id', 'users.name as userName', 'position.positionName', 'teams.teamName')
+                               ->select('users.id', 'users.name as userName', 'position.Name as positionName', 'teams.teamName', 'positions.Name as positionTeam')
                                ->get();
         dd($members->toArray());
         return view('admin.user.index', compact('members', 'teams'));
