@@ -159,8 +159,9 @@ class TeamController extends Controller
             PositionTeam::getId($teamUserId)->delete();
             ProjectTeam::getId($teamUserId)->delete();
             $teamUser->delete();
-            $this->activity->insertActivities($team, 'delete');
             $team->delete();
+            $this->activity->insertActivities($team, 'delete');
+
             $request->session()->flash('success', trans('team.msg.delete-success'));
 
             DB::commit();
