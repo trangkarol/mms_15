@@ -8,6 +8,7 @@ use App\Http\Requests\User\ChangePasswordRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
+use DB;
 
 class ResetPasswordController extends Controller
 {
@@ -60,12 +61,22 @@ class ResetPasswordController extends Controller
      */
     public function changePassWord(ChangePasswordRequest $request)
     {
-        $user = User::find(Auth::user()->id);
-        $user->password = bcrypt($request->password);
-        $user->save();
+        DB::beginTransaction();
 
-        Auth::logout();
-        $request->session()->flash('success', trans('user.msg.change-password-success'));
-        return redirect()->action('Auth\LoginController@login');
+        try {
+            $user = User::find(Auth::user()->id);
+            $user->password = bcrypt($request->password);
+            $user->save();
+            DB::commit();
+            Auth::logout();
+            $request->session()->flash('success', trans('user.msg.change-password-success'));
+
+            return redirect()->action('Auth\LoginController@login');
+        } catch(\Exception $e) {
+            $request->session()->flash('fail', trans('user.msg.change-password-fail'));
+            DB::rollback();
+
+            return redirect()->back();
+        }
     }
 }

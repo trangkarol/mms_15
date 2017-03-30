@@ -52,23 +52,19 @@
 <!-- js used for page -->
 @section('contentJs')
     @parent
-    {{ Html::script('admin/js/user.js') }}
-
-    <!-- message -->
+     <!-- message -->
     <script type="text/javascript">
         var trans = {
-                'msg_emty_member' : '{{ trans('team.msg.empty-member') }}',
-                'msg_update_success' : '{{ trans('team.msg.update-success') }}',
-                'msg_delete_success' : '{{ trans('team.msg.delete-success') }}',
-                'msg_update_fail' : '{{ trans('team.msg.update-fail') }}',
-                'msg_delete_fail' : '{{ trans('team.msg.delete-fail') }}',
-                'msg_insert_fail' : '{{ trans('team.msg.insert-fail') }}',
-                'msg_insert_success' : '{{ trans('team.msg.insert-success') }}',
-                'msg_add_skill_sucess' : '{{ trans('user.msg.add-skill-sucess') }}',
-                'msg_edit_skill_sucess' : '{{ trans('user.msg.edit-skill-sucess') }}',
-                'msg_delete_skill_sucess' : '{{ trans('user.msg.delete-skill-sucess') }}',
-                'msg_fail' : '{{ trans('user.msg.fail') }}',
+                'msg_emty_member' : '{{ trans('public.msg.empty-member') }}',
+                'msg_update_success' : '{{ trans('public.msg.update-success') }}',
+                'msg_delete_success' : '{{ trans('public.msg.delete-success') }}',
+                'msg_update_fail' : '{{ trans('public.msg.update-fail') }}',
+                'msg_delete_fail' : '{{ trans('public.msg.delete-fail') }}',
+                'msg_insert_fail' : '{{ trans('public.msg.insert-fail') }}',
+                'msg_insert_success' : '{{ trans('public.msg.insert-success') }}',
             }
     </script>
+    {{ Html::script('admin/js/user.js') }}
     <!-- content -->
+
 @endsection

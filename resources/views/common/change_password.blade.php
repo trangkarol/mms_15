@@ -27,15 +27,15 @@
                                 </div>
                             </div>
 
-                            <div class="form-group{{ $errors->has('comfirm_password') ? ' has-error' : '' }}">
-                                {{ Form::label('comfirm_password', trans('user.lbl-comfirm_password'), ['class' => 'col-md-4 control-label']) }}
+                            <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                                {{ Form::label('password_confirmation', trans('user.lbl-comfirm_password'), ['class' => 'col-md-4 control-label']) }}
 
                                 <div class="col-md-6">
-                                    {{ Form::password('comfirm_password', null, ['class' => 'form-control',  'id' => 'comfirm_password', 'required']) }}
+                                    {{ Form::password('password_confirmation', ['class' => 'form-control',  'id' => 'password_confirmation', 'required']) }}
 
                                     @if ($errors->has('comfirm_password'))
                                         <span class="help-block">
-                                            <strong>{{ $errors->first('comfirm_password') }}</strong>
+                                            <strong>{{ $errors->first('password_confirmation') }}</strong>
                                         </span>
                                     @endif
                                 </div>

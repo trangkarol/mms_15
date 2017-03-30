@@ -56,18 +56,6 @@
                 </div>
             </div>
         </div>
-        <!-- add member -->
-        <script type="text/javascript">
-            var trans = {
-                'msg_update_succes' : '{{ trans('team.msg.update-member-success') }}',
-                'msg_delete_succes' : '{{ trans('team.msg.delete-member-success') }}',
-                'msg_insert_succes' : '{{ trans('team.msg.insert-member-success') }}',
-                'msg_insert_fail' : '{{ trans('team.msg.insert-member-fail') }}',
-                'msg_update_fail' : '{{ trans('team.msg.update-member-fail') }}',
-                'msg_delete_fail' : '{{ trans('team.msg.delete-member-fail') }}',
-                'msg_positions_required' : '{{ trans('team.msg.positions-required') }}',
-            }
-        </script>
         <div class="col-md-12 paddingtop">
             <div class="panel panel-primary ">
                 <div class="panel-heading">
@@ -108,5 +96,18 @@
 <!-- js used for page -->
 @section('contentJs')
     @parent
+      <!-- message -->
+    <script type="text/javascript">
+        var trans = {
+                'msg_emty_member' : '{{ trans('public.msg.empty-member') }}',
+                'msg_update_success' : '{{ trans('public.msg.update-success') }}',
+                'msg_delete_success' : '{{ trans('public.msg.delete-success') }}',
+                'msg_update_fail' : '{{ trans('public.msg.update-fail') }}',
+                'msg_delete_fail' : '{{ trans('public.msg.delete-fail') }}',
+                'msg_insert_fail' : '{{ trans('public.msg.insert-fail') }}',
+                'msg_insert_success' : '{{ trans('public.msg.insert-success') }}',
+            }
+    </script>
     {{ Html::script('/admin/js/team.js') }}
+
 @endsection

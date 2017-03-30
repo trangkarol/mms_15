@@ -48,7 +48,26 @@
 
 @if(isset($user))
     <!-- skill -->
-    @include('admin.user.skill')
+    <div class="panel panel-primary">
+        <div class="panel panel-heading">
+            {{ trans('user.lbl-skill') }}
+        </div>
+
+        <div class="panel panel-body table-result">
+            <div class="form-group">
+                @foreach ($skills as $key => $skill)
+                    @if(!in_array($key, $skillId))
+                        <div class="col-md-6">
+                            {{ Form::checkbox('skill[]', $key, null, ['class' => 'skill', 'id' => 'skill']) }} {{ $skill }}
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+        <div class="panel panel-body" id="result-skill">
+            @include('admin.user.list_skill')
+        </div>
+    </div>
     <!-- team -->
     <div class="panel panel-primary">
         <div class="panel panel-heading">

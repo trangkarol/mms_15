@@ -6,6 +6,17 @@ $(document).ready(function() {
         search(0);
     });
 
+    // delelete
+    $(document).on('click', '#btn-delete', function(event) {
+        event.preventDefault();
+        bootbox.confirm('Are you want to delete?', function(result){
+            if(result) {
+                $('#form-delete-team').submit();
+            }
+        });
+
+    });
+
     // click add member
     $(document).on('click', '#btn-add',function() {
         addMember(1);
@@ -18,8 +29,12 @@ $(document).ready(function() {
 
     // click delete member
     $(document).on('click', '#btn-delete',function() {
-        var userId = $(this).parents('tr').find('.userId').html().trim();
-        deleteMember(userId);
+        bootbox.confirm('Are you want to delete?', function(result){
+            if(result) {
+                var userId = $(this).parents('tr').find('.userId').html().trim();
+                deleteMember(userId);
+            }
+        });
     });
 
     // position team
@@ -111,24 +126,24 @@ function addMember(flag) {
             success:function(data) {
                 if(data.result) {
                     if(flag == 1 ) {
-                        alert(trans['msg_insert_succes']);
+                        bootbox.alert(trans['msg_insert_succes']);
                     } else {
-                        alert(trans['msg_update_succes']);
+                        bootbox.alert(trans['msg_update_succes']);
                     }
 
                     $.colorbox.close();
                     searchMember();
                 } else {
                     if(flag == 1 ) {
-                        alert(trans['msg_insert_fail']);
+                        bootbox.alert(trans['msg_insert_fail']);
                     } else {
-                        alert(trans['msg_update_fail']);
+                        bootbox.alert(trans['msg_update_fail']);
                     }
                 }
             }
         });
     } else {
-        alert(trans['msg_positions_required']);
+       bootbox.alert(trans['msg_positions_required']);
     }
 }
 
@@ -178,11 +193,11 @@ function deleteMember(userId) {
         },
         success:function(data) {
             if(data.result) {
-                alert(trans['msg_delete_succes']);
+                bootbox.alert(trans['msg_delete_succes']);
                 $.colorbox.close();
                 searchMember();
             } else {
-                alert(trans['msg_delete_fail']);
+                bootbox.alert(trans['msg_delete_fail']);
             }
         }
     });

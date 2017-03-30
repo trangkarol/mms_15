@@ -2,48 +2,39 @@
     <div class="panel panel-heading">
         {{ trans('user.lbl-skill') }}
     </div>
-    <div id ="result-skill">
-        @include('admin.user.list_skill')
-    </div>
+    <div class ="panel panel-body">
+        {!! Form::open(['class' => 'form-horizontal']) !!}
+            {{ Form::hidden('skillId', $skillId, ['id' => 'skillId-skill']) }}
+            {{ Form::hidden('userId', $userId, ['id' => 'userId-skill']) }}
+            <div class="col-cd-12">
+                {{ Form::label('level', trans('user.lbl-level'), ['class' => 'col-md-4 control-label']) }}
+                <div class="col-md-6">
+                    {{ Form::select('level', $levels, null, ['class' => 'form-control level']) }}
+                </div>
+            </div>
 
+            <div class="col-cd-12">
+                {{ Form::label('exper', trans('user.lbl-experiensive'), ['class' => 'col-md-4 control-label']) }}
+                <div class="col-md-6">
+                    {{ Form::textarea('exeper', null, ['class' => 'form-control exeper']) }}
+                </div>
+            </div>
 
-    <div class="table-responsive">
-        <h4>{{ trans('user.lbl-list-skill') }}</h4>
-        <div class="table-result">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th class="hidden"></th>
-                        <th >{{ trans('user.lbl-skill') }}</th>
-                        <th >{{ trans('user.lbl-experiensive')}}</th>
-                        <th >{{ trans('user.lbl-level') }}</th>
-                        <th ></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                @foreach ($skills as $skill)
-                    @if(!in_array($skill->id, $skillId))
-                        <tr>
-                            <td class="hidden skillId">{{ $skill->id }}
-                            </td>
-                            <td>{{ $skill->name }}</td>
-                            <td>
-                                {{ Form::text('exeper', null, ['class' => 'form-control exeper', 'id' => 'name']) }}
-                            </td>
-                            <td>
-                                {{ Form::select('levels', $levels, null, ['class' => 'form-control level']) }}
-                            </td>
-                            <td>
-                                <div class="col-md-12">
-                                    {!! Form::button(trans('admin.lbl-add'), ['class' => 'btn btn-primary btn-add-skill' ]) !!}
-                                </div>
-                            </td>
-                        </tr>
+            <div class="row">
+                <div class="col-md-3 col-md-offset-8">
+                    @if($flag == 1)
+                        {{ Form::button(trans('admin.btn-add'), ['class' => 'btn btn-primary', 'id' => 'btn-add-skill']) }}
                     @endif
-                @endforeach
-                </tbody>
-            </table>
-        </div>
+
+                    @if($flag == 0)
+                        {{ Form::button(trans('admin.btn-edit'), ['class' => 'btn btn-primary ', 'id' => 'btn-update-skill']) }}
+                    @endif
+
+                    @if($flag == 2)
+                        {{ Form::button(trans('admin.btn-delete'), ['class' => 'btn btn-primary ', 'id' => 'btn-delete-skill']) }}
+                    @endif
+                </div>
+            </div>
+        {{ Form::close() }}
     </div>
 </div>

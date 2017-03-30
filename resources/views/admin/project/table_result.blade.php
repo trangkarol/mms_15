@@ -16,13 +16,13 @@
             @foreach ($projects as $project)
                 <tr>
                     <td class="text-center">{{ $loop->iteration }}</td>
-                    <td>{{ $project->project->name }}</a></td>
-                    <td>{{ $project->project->short_name }}</a></td>
-                    <td>{{ $project->project->start_day }}</a></td>
-                    <td>{{ $project->project->end_day }}</a></td>
-                    <td>{{ $project->teamUser->user->name }}</a></td>
+                    <td>{{ $project->name }}</td>
+                    <td>{{ $project->short_name }}</td>
+                    <td>{{ $project->start_day }}</td>
+                    <td>{{ $project->end_day }}</td>
+                    <td>@if (!$project->teamUsers->isEmpty()) {{ $project->teamUsers->user->name }} @endif</td>
                     <td>
-                        {{ $project->teamUser->team->name }}
+                        @if (!$project->teamUsers->isEmpty()) {{ $project->teamUsers->team->name }} @endif
                     </td>
                     <td>
                         <div class="col-md-6">

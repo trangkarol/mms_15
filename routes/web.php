@@ -43,6 +43,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
         Route::post('/position-team', 'UserController@positionTeam');
         Route::post('/add-team', 'UserController@addTeam');
         Route::post('/delete-team', 'UserController@deleteTeam');
+        Route::post('/get-skill', 'UserController@getSkill');
     });
 
     // position

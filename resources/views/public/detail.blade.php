@@ -1,8 +1,9 @@
-<!-- content -->
-<div class="row">
-    <div class="col-md-12 paddingtop">
-        <div class="panel panel-primary ">
-            <div class="panel-heading"> {{ trans('public.lbl-profile') }} <strong>{{ $user->name }}</strong> </div>
+    <div class="row">
+        <div class="col-md-5 sub-menu">
+            <h4>  {{ trans('public.lbl-profile') }} <strong>{{ $user->name }}</strong> </h4>
+        </div>
+    </div>
+    <div class="panel panel-primary" style="margin-top:10px;">
             <div class="panel-body">
                 <div class="col-md-7 col-md-offset-2">
                     <div class="row">
@@ -130,4 +131,3 @@
             </div>
         </div>
     </div>
-</div>

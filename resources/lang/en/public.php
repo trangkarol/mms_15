@@ -19,4 +19,17 @@ return [
     'title-list-member' => 'List member of Team',
     'title-change-password' => 'Change Password',
     'change-password-success' => 'Change Password successfully',
+    'msg' => [
+        'insert-success' => 'Insert Successfully!',
+        'insert-fail' => 'Insert Fail!',
+        'update-success' => 'Update Successfully!',
+        'update-fail' => 'Update Fail!',
+        'delete-success' => 'Delete Successfully!',
+        'delete-fail' => 'Delete Fail!',
+        // comfirm
+        'insert-comfirm' => 'Are you want to insert this rows?',
+        'update-comfirm' => 'Are you want to update this rows?',
+        'delete-comfirm' => 'Are you want to delete this rows?',
+        'empty-member' => 'Data is empty!',
+    ],
 ];

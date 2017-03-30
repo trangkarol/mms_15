@@ -39,26 +39,28 @@
                             </thead>
 
                             <tbody>
-                            @foreach ($teams as $team)
-                                <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td>{{ $team->name }}</td>
-                                    <td>@if ($team->leader) {{ $team->leader->name }} @endif</td>
-                                    <td >{{ $team->description }}</td>
-                                    <td >
-                                        <div class="col-md-5">
-                                            <a href ="{{ action('Admin\TeamController@edit', $team->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
-                                        </div>
-                                        <div class="col-md-5">
-                                            {{ Form::open(['action' => 'Admin\TeamController@destroy', 'method' => 'POST']) }}
+                            @if (!empty($teams))
+                                @foreach ($teams as $team)
+                                    <tr>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td>{{ $team->name }}</td>
+                                        <td>@if ($team->leader) {{ $team->leader->name }} @endif</td>
+                                        <td >{{ $team->description }}</td>
+                                        <td >
+                                            <div class="col-md-5">
+                                                <a href ="{{ action('Admin\TeamController@edit', $team->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
+                                            </div>
+                                            <div class="col-md-5">
+                                                {{ Form::open(['action' => 'Admin\TeamController@destroy', 'id' => 'form-delete-team']) }}
 
-                                            {{ Form::hidden('teamId', $team->id) }}
-                                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit']) !!}
-                                            {{ Form::close() }}
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                                {{ Form::hidden('teamId', $team->id) }}
+                                                {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete', 'type' => 'button']) !!}
+                                                {{ Form::close() }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                             </tbody>
 
                         </table>
@@ -70,4 +72,10 @@
             </div>
         </div>
     </div>
+@endsection
+<!-- js used for page -->
+@section('contentJs')
+    @parent
+    {{ Html::script('/admin/js/team.js') }}
+
 @endsection

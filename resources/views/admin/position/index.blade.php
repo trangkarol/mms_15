@@ -38,30 +38,32 @@
                             </thead>
 
                             <tbody>
-                            @foreach ($positions as $position)
-                                <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td>{{ $position->name }}</td>
-                                    <td>{{ $position->short_name }}</td>
-                                    @if($position->type_position == config('setting.type_position.position'))
-                                        <td>{{ trans('position.lbl-position') }}</td>
-                                    @else
-                                        <td>{{ trans('position.lbl-position-team') }}</td>
-                                    @endif
-                                    <td>
-                                        <div class="col-md-6">
-                                            <a href ="{{ action('Admin\PositionController@edit', $position->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
-                                        </div>
-                                        <div class="col-md-6">
-                                            {{ Form::open(['action' => 'Admin\PositionController@destroy', 'method' => 'POST']) }}
+                                @if (!empty($positions))
+                                    @foreach ($positions as $position)
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td>{{ $position->name }}</td>
+                                            <td>{{ $position->short_name }}</td>
+                                            @if($position->type_position == config('setting.type_position.position'))
+                                                <td>{{ trans('position.lbl-position') }}</td>
+                                            @else
+                                                <td>{{ trans('position.lbl-position-team') }}</td>
+                                            @endif
+                                            <td>
+                                                <div class="col-md-6">
+                                                    <a href ="{{ action('Admin\PositionController@edit', $position->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{ Form::open(['action' => 'Admin\PositionController@destroy', 'id' => 'form-delete-position']) }}
 
-                                            {{ Form::hidden('positionId', $position->id) }}
-                                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit']) !!}
-                                            {{ Form::close() }}
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                                    {{ Form::hidden('positionId', $position->id) }}
+                                                    {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete-position', 'type' => 'button']) !!}
+                                                    {{ Form::close() }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
 
                         </table>

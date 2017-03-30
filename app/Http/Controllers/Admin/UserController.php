@@ -46,7 +46,7 @@ class UserController extends Controller
     public function index()
     {
         $teams = Library::getTeams();
-        $members = TeamUser::with('positions', 'team', 'user.position')->orderBy('team_users.user_id', 'team_users.team_id')->orderBy('created_at', 'desc')->paginate(15);
+        $members = TeamUser::with('positions', 'team', 'user.position')->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.user.index', compact('members', 'teams'));
     }
@@ -116,7 +116,7 @@ class UserController extends Controller
         $user = $this->user->find($id);
         $levels = Library::getLevel();
         $positions = Library::getPositions();
-        $skills = Skill::paginate(15);
+        $skills = Library::getLibrarySkills();
         $skillUsers = SkillUser::skillUsers($id)->get();
 
         $skillId = $skillUsers->pluck('skill_id')->all();
@@ -215,9 +215,9 @@ class UserController extends Controller
             try{
                 $teamId = $request->teamId;
                 if($teamId != 0) {
-                    $members = TeamUser::with('positions', 'user', 'team')->where('team_users.team_id', $teamId)->orderBy('team_users.user_id', 'team_users.team_id')->orderBy('created_at', 'desc')->paginate(15);
+                    $members = TeamUser::with('positions', 'user', 'team')->where('team_users.team_id', $teamId)->orderBy('created_at', 'desc')->paginate(15);
                 } else {
-                    $members = TeamUser::with('positions', 'team', 'user.position')->orderBy('team_users.user_id', 'team_users.team_id')->orderBy('created_at', 'desc')->paginate(15);
+                    $members = TeamUser::with('positions', 'team', 'user.position')->orderBy('created_at', 'desc')->paginate(15);
                 }
                 $html = view('admin.user.table_result', compact('members'))->render();
 
@@ -239,8 +239,9 @@ class UserController extends Controller
         if ($request->ajax()) {
             DB::beginTransaction();
             try{
+                // dd($request->all());
                 $userId = $request->userId;
-                $skill = $request->skill;
+                $skill = $request->skillId;
                 $exeper = $request->exeper;
                 $level = $request->level;
                 $flag = $request->flag;
@@ -272,7 +273,7 @@ class UserController extends Controller
     }
 
     /**
-     * add skill
+     * positionTeam
      *
      * @param  User $user
      * @return \Illuminate\Http\Response
@@ -386,6 +387,47 @@ class UserController extends Controller
                 $html = view('admin.user.team', compact('positionTeams'))->render();
                 DB::commit();
 
+                return response()->json(['result' => true, 'html' => $html]);
+            }catch(Exception $e){
+                DB::rollback();
+                return response()->json('result', false);
+            }
+        }
+    }
+
+    /**
+     * get skill
+     *
+     * @param  User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function getSkill(Request $request)
+    {
+        if ($request->ajax()) {
+            DB::beginTransaction();
+            try{
+                $userId = $request->userId;
+                $skillId = $request->skillId;
+                $flag = $request->flag;
+                $arrPosition = [];
+                // $arrProject = [];
+
+                if($flag == 0 || $flag == 2) {
+                    $teamUserId = TeamUser::where('team_id', $teamId)->where('user_id', $userId)->pluck('id');
+                    // positions
+                    $arrPosition = PositionTeam::with('positions')->where('team_user_id', $teamUserId[0])->pluck('position_id')->all();
+                    // projects
+                    // $arrProject = ProjectTeam::getProject($teamUserId[0])->pluck('project_id')->all();
+
+                }
+                $skills = Library::getLibrarySkills();
+                $levels = Library::getLevel();
+                // project
+                // $projects = Library::getLibraryProjects();
+                // $projectTeams = Library::getLibraryProjects();
+                $html = view('admin.user.skill', compact('skills', 'levels', 'flag', 'userId', 'skillId'))->render();
+
+                DB::commit();
                 return response()->json(['result' => true, 'html' => $html]);
             }catch(Exception $e){
                 DB::rollback();

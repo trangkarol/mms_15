@@ -4,6 +4,16 @@ $(document).ready(function(){
         search(0);
     });
 
+    // delelete
+    $(document).on('click', '#btn-delete', function(event) {
+        event.preventDefault();
+        bootbox.confirm('Are you want to delete?', function(result){
+            if(result) {
+                $('#form-delete-project').submit();
+            }
+        });
+
+    });
     // click on search
     $(document).on('click','.team',function(){
        var teamId = $(this).val();
@@ -84,7 +94,7 @@ function searchMember(teamId, flag) {
             if(data.html != '') {
                 $.colorbox({html : data.html});
             } else {
-                alert(trans['msg_empty_member']);
+                bootbox.alert(trans['msg_empty_member']);
             }
 
         }
@@ -116,18 +126,18 @@ function addMember(flag) {
         success:function(data){
             if(data.result) {
                 if(flag == 1 ) {
-                    alert(trans['msg_insert_success']);
+                    bootbox.alert(trans['msg_insert_success']);
                 } else {
-                    alert(trans['msg_update_success']);
+                    bootbox.alert(trans['msg_update_success']);
                 }
 
                 $.colorbox.close();
                 location.reload();
             } else {
                 if(flag == 1 ) {
-                    alert(trans['msg_insert_fail']);
+                    bootbox.alert(trans['msg_insert_fail']);
                 } else {
-                    alert(trans['msg_update_fail']);
+                    bootbox.alert(trans['msg_update_fail']);
                 }
 
                 $.colorbox.close();
@@ -157,12 +167,12 @@ function deleteMember(teamId, event) {
         },
         success:function(data){
             if(data.result) {
-                alert(trans['msg_delete_success']);
+                bootbox.alert(trans['msg_delete_success']);
                 $.colorbox.close();
                 location.reload();
                 // searchMember();
             } else {
-                alert(trans['msg_delete_fail']);
+                bootbox.alert(trans['msg_delete_fail']);
 
                 $.colorbox.close();
             }

@@ -36,11 +36,12 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        // $projects = ProjectTeam::with('teamUser.team', 'teamUser.user', 'project')->get();
+        // $projects = ProjectTeam::with('teamUser.team', 'teamUser.user', 'project')->where('is_leader', '=', 1)->paginate(15);
         // dd($projects);
-        $projects = $this->project->with(['teamUsers.team', 'teamUsers.user', 'teamUsers' => function($query) {
-                $query->where('is_leader', '=', 1);
-        }])->orderBy('created_at', 'desc')->paginate(15);
+        $projects = $this->project->with('teamUsers.team', 'teamUsers.user', 'teamUsers')->orderBy('created_at', 'desc')->paginate(15);
+        // $projects = TeamUser::with('projects', 'user', 'team')->get();
+        // $projects = Project::all();
+        //      dd($projects->toArray());
         $teams = Library::getTeams();
 
         // dd($projects);
@@ -330,7 +331,8 @@ class ProjectController extends Controller
                     $teamUser = TeamUser::where('team_id', $teamId)->pluck('id')->all();
                     $projects = ProjectTeam::with('project', 'teamUser.team', 'teamUser.user')->whereIn('team_user_id', $teamUser)->where('is_leader', '=', 1)->orderBy('created_at', 'desc')->paginate(15);
                 } else {
-                   $projects = ProjectTeam::with('project', 'teamUser.team', 'teamUser.user')->orderBy('created_at', 'desc')->paginate(15);
+                   $projects = ProjectTeam::with('project', 'teamUser.team', 'teamUser.user')->where('is_leader', '=', 1)->orderBy('created_at', 'desc')->paginate(15);
+                   dd($projects->toArray());
                 }
 
                 $html = view('admin.project.table_result', compact('projects'))->render();

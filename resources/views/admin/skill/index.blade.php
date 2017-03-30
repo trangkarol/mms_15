@@ -36,24 +36,26 @@
                             </thead>
 
                             <tbody>
-                            @foreach ($skills as $skill)
-                                <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td>{{ $skill->name }}</td>
-                                    <td class="col-md-3">
-                                        <div class="col-md-6">
-                                            <a href ="{{ action('Admin\SkillController@edit', $skill->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
-                                        </div>
-                                        <div class="col-md-6">
-                                            {{ Form::open(['action' => 'Admin\SkillController@destroy', 'method' => 'POST']) }}
+                            @if (!empty($skills))
+                                @foreach ($skills as $skill)
+                                    <tr>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td>{{ $skill->name }}</td>
+                                        <td class="col-md-3">
+                                            <div class="col-md-6">
+                                                <a href ="{{ action('Admin\SkillController@edit', $skill->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ Form::open(['action' => 'Admin\SkillController@destroy', 'id' => 'form-delete-skill']) }}
 
-                                            {{ Form::hidden('skillId', $skill->id) }}
-                                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit']) !!}
-                                            {{ Form::close() }}
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                                {{ Form::hidden('skillId', $skill->id) }}
+                                                {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete-skill', 'type' => 'submit']) !!}
+                                                {{ Form::close() }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                             </tbody>
 
                         </table>

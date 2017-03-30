@@ -6,10 +6,12 @@
 <!-- css used for page -->
 <!-- content of page -->
 @section('content')
-    <div class="panel panel-primary ">
-        <div class="panel-heading">
-            {{ trans('public.lbl-list-team') }}
+    <div class="row">
+        <div class="col-md-5 sub-menu">
+            <h4>  {{ trans('public.lbl-list-team') }} </h4>
         </div>
+    </div>
+    <div class="panel panel-primary" style="margin-top:10px;">
         <!--  -->
         <div class="panel-body">
             <div class="table-responsive">
@@ -24,16 +26,18 @@
                     </thead>
 
                     <tbody>
-                    @foreach ($teams as $team)
-                        <tr>
-                            <td class="text-center">{{ $loop->iteration }}</td>
-                            <td>
-                                <a href="{{ action('Member\HomeController@listMember', $team->id) }}">{{ $team->name }}</a>
-                            </td>
-                            <td>{{ $team->leader->name}}</td>
-                            <td>{{ $team->description }}</td>
-                        </tr>
-                    @endforeach
+                    @if (!empty($team))
+                        @foreach ($teams as $team)
+                            <tr>
+                                <td class="text-center">{{ $loop->iteration }}</td>
+                                <td>
+                                    <a href="{{ action('Member\HomeController@listMember', $team->id) }}">{{ $team->name }}</a>
+                                </td>
+                                <td>{{ $team->leader->name}}</td>
+                                <td>{{ $team->description }}</td>
+                            </tr>
+                        @endforeach
+                    @endif
                     </tbody>
                 </table>
                 @if (isset($teams))

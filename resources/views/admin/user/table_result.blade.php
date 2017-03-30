@@ -10,16 +10,16 @@
         </tr>
     </thead>
     <tbody>
-        @if (isset($members))
+        @if (!empty($members))
             @foreach ($members as $member)
                 <tr>
                     <td class="text-center">{{ $loop->iteration }}</td>
                     <td><a href="{{ action('Member\HomeController@detailMember', $member->user->id) }}">{{ $member->user->name }}</a></td>
-                    <td> @if($member->user->position) {{ $member->user->position->name }} @endif</td>
+                    <td> @if ($member->user->position) {{ $member->user->position->name }} @endif</td>
                     <!-- <td>  </td>-->
-                    <td>   {{ $member->team->name }}  </td>
+                    <td> @if ($member->team)  {{ $member->team->name }}  @endif</td>
                     <td>
-                        @if(!$member->positions->isEmpty())
+                        @if ($member->positions)
                             @foreach ($member->positions as $positon)
                                {{ $positon->name }} @php echo ',' @endphp
                             @endforeach
@@ -31,10 +31,10 @@
                         </div>
 
                         <div class="col-md-6">
-                            {{ Form::open(['action' => 'Admin\UserController@destroy', 'method' => 'POST']) }}
+                            {{ Form::open(['action' => 'Admin\UserController@destroy', 'method' => 'POST', 'id' => 'delete-form-user']) }}
 
                             {{ Form::hidden('userId',$member->user->id) }}
-                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit']) !!}
+                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete', 'type' => 'button']) !!}
                             {{ Form::close() }}
                         </div>
                     </td>

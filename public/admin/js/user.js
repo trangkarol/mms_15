@@ -3,6 +3,17 @@ $(document).ready(function(){
     $(document).on('click','#btn-search',function(){
         search(0);
     });
+
+    // delelete
+    $(document).on('click', '#btn-delete', function(event) {
+        event.preventDefault();
+        bootbox.confirm('Are you want to delete?', function(result){
+            if(result) {
+                $('#delete-form-user').submit();
+            }
+        });
+    });
+
     //handel pagination by ajax
     $(document).on('click','.search.pagination a',function(event){
         event.preventDefault();
@@ -11,18 +22,43 @@ $(document).ready(function(){
     });
 
     //handel pagination by ajax
-    $(document).on('click','.btn-add-skill',function(event){
-        addSkill($(this), 1);
+    $(document).on('click','#btn-add-skill',function(){
+        addSkill(1);
     });
 
     //handel pagination by ajax
-    $(document).on('click','.btn-edit-skill',function(event){
-        addSkill($(this), 0);
+    $(document).on('click','#btn-edit-skill',function(event){
+        addSkill(0);
     });
 
     //handel pagination by ajax
-    $(document).on('click','.btn-delete-skill',function(event){
-        addSkill($(this), 2);
+    $(document).on('click','#btn-delete-skill',function(event){
+        confirm("Press a button!", function(confirm){
+            if(confirm) {
+                deleteSkill(2);
+            }
+        });
+
+    });
+
+    // get skill
+    $(document).on('click', '.skill',function(event) {
+        // $(this).addClass('users-current');
+        var skillId = $(this).val();
+        getFormSkill(skillId, 1);
+    });
+
+    // edit skill
+    $(document).on('click', '.btn-edit-team',function(event) {
+        // $(this).addClass('users-current');
+        var skillId = $(this).parents('tr').find('.skillId').html().trim();
+        getFormSkill(skillId, 0);
+    });
+
+    // delete skill
+    $(document).on('click', '.btn-delete-team',function(event) {
+        var skillId = $(this).parents('tr').find('.skillId').html().trim();
+        getFormSkill(skillId, 2);
     });
 
     // position team
@@ -30,7 +66,6 @@ $(document).ready(function(){
         // $(this).addClass('users-current');
         var teamId = $(this).val();
         positionTeam(teamId, 1);
-
     });
 
     // position team
@@ -38,7 +73,6 @@ $(document).ready(function(){
         // $(this).addClass('users-current');
         var teamId = $(this).parents('tr').find('.teamId').html().trim();
         positionTeam(teamId, 0);
-
     });
 
     // position team
@@ -91,18 +125,18 @@ function search(page) {
     });
 }
 
-function addSkill(event, flag) {
-    var skill = event.parents('tr').find('.skillId').html().trim();
-    var exeper = event.parents('tr').find('.exeper').val();
-    var level = event.parents('tr').find('.level').val();
-    var userId = $('#userId').val();
+function addSkill(flag) {
+    var skillId = $('#skillId-skill').val();
+    var userId = $('#userId-skill').val();
+    var exeper = $('.exeper').val();
+    var level = $('.level').val();
 
     $.ajax({
         type: 'POST',
         url: '/admin/users/add-skill',
         dataType: 'json',
         data: {
-            skill : skill,
+            skillId : skillId,
             exeper : exeper,
             level : level,
             userId : userId,
@@ -114,18 +148,15 @@ function addSkill(event, flag) {
                 $('#result-skill').html(data.html);
 
                 if (flag == 1) {
-                    event.parents('tr').remove();
-                    alert(trans['msg_add_skill_sucess']);
+                     bootbox.alert(trans['msg_add_sucess']);
                 } else {
                     if (flag == 0) {
-                        alert(trans['msg_edit_skill_sucess']);
+                         bootbox.alert(trans['msg_edit_sucess']);
                     } else {
-                        event.parents('tr').remove();
-                        alert(trans['msg_delete_skill_sucess']);
-                    }
-                }
+                         bootbox.alert(trans['msg_delete_sucess']);
+                    }                }
             } else {
-                    alert(trans['msg_fail']);
+                     bootbox.alert(trans['msg_fail']);
             }
         }
     });
@@ -171,9 +202,9 @@ function addTeam(event,flag) {
         success:function(data) {
             if(data.result) {
                     if(flag == 1 ) {
-                        alert(trans['msg_insert_succes']);
+                        bootbox.alert(trans['msg_insert_succes']);
                     } else {
-                        alert(trans['msg_update_succes']);
+                        bootbox.alert(trans['msg_update_succes']);
                     }
 
                     $('#result-team').html();
@@ -181,9 +212,9 @@ function addTeam(event,flag) {
 
                 } else {
                     if(flag == 1 ) {
-                        alert(trans['msg_insert_fail']);
+                        bootbox.alert(trans['msg_insert_fail']);
                     } else {
-                        alert(trans['msg_update_fail']);
+                        bootbox.alert(trans['msg_update_fail']);
                     }
                 }
                 $.colorbox.close();
@@ -213,7 +244,7 @@ function deleteTeam(event) {
         success:function(data) {
             console.log('trang');
             if(data.result) {
-                    alert(trans['msg_delete_succes']);
+                    bootbox.alert(trans['msg_delete_succes']);
 
                     $.colorbox.close();
 
@@ -222,8 +253,27 @@ function deleteTeam(event) {
                     //remove team curren
                     event.remove;
                 } else {
-                    alert(trans['msg_delete_fail']);
+                    bootbox.alert(trans['msg_delete_fail']);
                 }
+        }
+    });
+}
+
+/*skill*/
+function  getFormSkill(skillId, flag) {
+    var userId = $('#userId').val();
+
+    $.ajax({
+        type : 'POST',
+        url : '/admin/users/get-skill',
+        dataType : 'json',
+        data : {
+            skillId : skillId,
+            userId : userId,
+            flag : flag,
+        },
+        success:function(data) {
+            $.colorbox({html : data.html});
         }
     });
 }

@@ -35,25 +35,30 @@
                             </thead>
 
                             <tbody>
-                            @foreach ($activities as $activity)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $activity->user->name }}</td>
-                                    <td>{{ $activity->action }}</td>
-                                    <td>{{ $activity->created_at }}</td>
-                                    <td>
-                                        {{ $activity->activitiable->name.' at table'.$activity->activitiable_type }}
-                                    </td>
-                                    <td>
-                                        <div class="col-md-6">
-                                            {{ Form::open(['action' => 'Admin\ActivityController@destroy', 'method' => 'POST']) }}
 
-                                            {{ Form::hidden('activityId', $activity->id) }}
-                                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit']) !!}
-                                            {{ Form::close() }}
-                                        </div>
-                                    </td>
-                                </tr>
+                            @foreach ($activities as $activity)
+                                @if($activity->user)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>@if ( $activity->user){{ $activity->user->name }} @endif</td>
+                                        <td>{{ $activity->action }}</td>
+                                        <td>{{ $activity->created_at }}</td>
+                                        <td>
+                                            @if ( $activity->activitiable)
+                                                {{ $activity->activitiable->name.' at table'.$activity->activitiable_type }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="col-md-6">
+                                                {{ Form::open(['action' => 'Admin\ActivityController@destroy', 'id' => 'form-delete-activity']) }}
+
+                                                {{ Form::hidden('activityId', $activity->id) }}
+                                                {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete-activity', 'type' => 'button']) !!}
+                                                {{ Form::close() }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                             </tbody>
 

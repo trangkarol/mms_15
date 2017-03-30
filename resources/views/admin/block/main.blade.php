@@ -23,6 +23,7 @@
     @section('contentJs')
         {{ Html::script('/bower_components/bootstrap/dist/js/bootstrap.min.js') }}
         {{ Html::script('/common/js/common.js') }}
+        {{ Html::script('/common/js/bootbox.min.js') }}
         {{ Html::script('/jquery-colorbox/jquery.colorbox-min.js') }}
     @show
     <!-- end js  -->
