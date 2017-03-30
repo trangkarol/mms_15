@@ -412,6 +412,7 @@ class UserController extends Controller
                 $userId = $request->userId;
                 $skillId = $request->skillId;
                 $flag = $request->flag;
+                dd($request->all());
                 $arrPosition = [];
                 // $arrProject = [];
 
