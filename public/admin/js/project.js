@@ -28,8 +28,13 @@ $(document).ready(function(){
 
     //delete member
     $(document).on('click','.btn-delete-team',function(){
-        var teamId = $(this).parents('tr').find('.teamMemberId').html().trim();
-        deleteMember(teamId, $(this));
+
+        bootbox.confirm('Are you want to delete?', function(result){
+            if(result) {
+                var teamId = $(this).parents('tr').find('.teamMemberId').html().trim();
+                deleteMember(teamId, $(this));
+            }
+        });
     });
 
     // add tab

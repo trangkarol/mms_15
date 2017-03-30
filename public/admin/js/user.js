@@ -49,7 +49,7 @@ $(document).ready(function(){
     });
 
     // edit skill
-    $(document).on('click', '.btn-edit-team',function(event) {
+    $(document).on('click', '.btn-edit-skill',function(event) {
         // $(this).addClass('users-current');
         var skillId = $(this).parents('tr').find('.skillId').html().trim();
         getFormSkill(skillId, 0);
@@ -58,8 +58,13 @@ $(document).ready(function(){
     // delete skill
     $(document).on('click', '.btn-delete-skill',function(event) {
 
-        var skillId = $(this).parents('tr').find('.skillId').html().trim();
-        getFormSkill(skillId, 2);
+
+        bootbox.confirm('Are you want to delete?', function(result){
+            if(result) {
+                var skillId = $(this).parents('tr').find('.skillId').html().trim();
+                getFormSkill(skillId, 2);
+            }
+        });
     });
 
     // position team
@@ -78,9 +83,14 @@ $(document).ready(function(){
 
     // position team
     $(document).on('click', '.btn-delete-team',function(event) {
-        var teamId = $(this).parents('tr').find('.teamId').html().trim();
-        positionTeam(teamId, 2);
+        bootbox.confirm('Are you want to delete?', function(result){
+            if(result) {
+                var teamId = $(this).parents('tr').find('.teamId').html().trim();
+                positionTeam(teamId, 2);
+            }
+        });
     });
+
 
     // position team
     $(document).on('click', '#btn-add-team',function(event) {
@@ -94,7 +104,6 @@ $(document).ready(function(){
 
     // position team
     $(document).on('click', '#btn-delete-team',function(event) {
-
         console.log('ddd');
         deleteTeam(event);
     });
