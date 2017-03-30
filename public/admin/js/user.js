@@ -32,8 +32,8 @@ $(document).ready(function(){
     });
 
     //handel pagination by ajax
-    $(document).on('click','#btn-delete-skill',function(event){
-        confirm("Press a button!", function(confirm){
+    $(document).on('click','#btn-delete-skill-popup',function(event){
+        bootbox.confirm("Are you want to delte?!", function(confirm){
             if(confirm) {
                 deleteSkill(2);
             }
