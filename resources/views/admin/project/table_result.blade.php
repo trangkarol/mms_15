@@ -13,11 +13,17 @@
     </thead>
     <tbody>
         @if (isset($projects))
+            @php
+                $index =0;
+            @endphp
             @foreach ($projects as $project)
                 @if ($project->projectTeams)
                     @foreach($project->projectTeams as $projectTeam)
+                        @php
+                            $index = $index+1;
+                        @endphp
                         <tr>
-                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $index }}</td>
                             <td>{{ $project->name }}</td>
                             <td>{{ $project->short_name }}</td>
                             <td>{{ $project->start_day }}</td>
@@ -42,8 +48,11 @@
                         </tr>
                     @endforeach
                 @else
+                        @php
+                            $index = $index+1;
+                        @endphp
                      <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
+                        <td class="text-center">{{ $index }}</td>
                         <td>{{ $project->name }}</td>
                         <td>{{ $project->short_name }}</td>
                         <td>{{ $project->start_day }}</td>
