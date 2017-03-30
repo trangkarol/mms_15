@@ -14,30 +14,57 @@
     <tbody>
         @if (isset($projects))
             @foreach ($projects as $project)
-                <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
-                    <td>{{ $project->name }}</td>
-                    <td>{{ $project->short_name }}</td>
-                    <td>{{ $project->start_day }}</td>
-                    <td>{{ $project->end_day }}</td>
-                    <td>@if (!$project->teamUsers->isEmpty()) {{ $project->teamUsers->user->name }} @endif</td>
-                    <td>
-                        @if (!$project->teamUsers->isEmpty()) {{ $project->teamUsers->team->name }} @endif
-                    </td>
-                    <td>
-                        <div class="col-md-6">
-                            <a href ="{{ action('Admin\ProjectController@edit', $project->id ) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
-                        </div>
+                @if ($project->projectTeams)
+                    @foreach($project->projectTeams as $projectTeam)
+                        <tr>
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td>{{ $project->name }}</td>
+                            <td>{{ $project->short_name }}</td>
+                            <td>{{ $project->start_day }}</td>
+                            <td>{{ $project->end_day }}</td>
+                            <td>@if (!$projectTeam->teamUser) {{ $$projectTeam->teamUser->user->name }} @endif</td>
+                            <td>
+                                @if (!$$projectTeam->teamUser) {{ $$projectTeam->teamUser->team->name }} @endif
+                            </td>
+                            <td>
+                                <div class="col-md-6">
+                                    <a href ="{{ action('Admin\ProjectController@edit', $project->id ) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
+                                </div>
 
-                        <div class="col-md-6">
-                            {{ Form::open(['action' => 'Admin\ProjectController@destroy', 'method' => 'POST']) }}
+                                <div class="col-md-6">
+                                    {{ Form::open(['action' => 'Admin\ProjectController@destroy', 'method' => 'POST']) }}
 
-                            {{ Form::hidden('projectId',$project->id) }}
-                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit']) !!}
-                            {{ Form::close() }}
-                        </div>
-                    </td>
-                </tr>
+                                    {{ Form::hidden('projectId',$project->id) }}
+                                    {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit']) !!}
+                                    {{ Form::close() }}
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                     <tr>
+                        <td class="text-center">{{ $loop->iteration }}</td>
+                        <td>{{ $project->name }}</td>
+                        <td>{{ $project->short_name }}</td>
+                        <td>{{ $project->start_day }}</td>
+                        <td>{{ $project->end_day }}</td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <div class="col-md-6">
+                                <a href ="{{ action('Admin\ProjectController@edit', $project->id ) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
+                            </div>
+
+                            <div class="col-md-6">
+                                {{ Form::open(['action' => 'Admin\ProjectController@destroy', 'method' => 'POST']) }}
+
+                                {{ Form::hidden('projectId',$project->id) }}
+                                {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit']) !!}
+                                {{ Form::close() }}
+                            </div>
+                        </td>
+                    </tr>
+                @endif
             @endforeach
         @endif
     </tbody>
