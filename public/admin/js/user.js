@@ -57,6 +57,7 @@ $(document).ready(function(){
 
     // delete skill
     $(document).on('click', '.btn-delete-skill',function(event) {
+        var skillId = $(this).parents('tr').find('.skillId').html().trim();
         getFormSkill(skillId, 2);
     });
 
