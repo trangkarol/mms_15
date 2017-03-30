@@ -16,7 +16,7 @@
             <div class="col-cd-12">
                 {{ Form::label('exper', trans('user.lbl-experiensive'), ['class' => 'col-md-4 control-label']) }}
                 <div class="col-md-6">
-                    {{ Form::textarea('exeper', sset($userSkill->level) ? $userSkill->experiensive : null, ['class' => 'form-control exeper']) }}
+                    {{ Form::textarea('exeper', isset($userSkill->level) ? $userSkill->experiensive : null, ['class' => 'form-control exeper']) }}
                 </div>
             </div>
 
