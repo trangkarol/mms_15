@@ -330,7 +330,7 @@ class ProjectController extends Controller
             try{
                 $teamId = $request->teamId;
                 if($teamId != 0) {
-                    $projects = $this->project->with(['projectTeams.user','projectTeams.teamUser.team' => function($query) use ($teamId) {
+                    $projects = $this->project->with(['projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser' => function($query) use ($teamId) {
                                 $query->where('team_id', '=', $teamId);
                             }],'projectTeams.teamUser.user')
                             ->with(['projectTeams'=> function($query) {
