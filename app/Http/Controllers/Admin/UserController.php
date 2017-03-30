@@ -215,8 +215,9 @@ class UserController extends Controller
             try{
                 $teamId = $request->teamId;
                 if($teamId != 0) {
-                    // $members = TeamUser::with('positions', 'user', 'team')->where('team_users.team_id', $teamId)->orderBy('created_at', 'desc')->paginate(15);
-                    $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team')->where('team_users.team_id', $teamId)->orderBy('created_at', 'desc')->paginate(15);
+                    $members  = $this->user->with(['position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team' => function($query) use ($teamId){
+                        $query->where('team_users.team_id', $teamId);
+                    }])->orderBy('created_at', 'desc')->paginate(15);
                     dd($members);
                 } else {
                     $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team')->orderBy('created_at', 'desc')->paginate(15);
