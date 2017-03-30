@@ -59,9 +59,9 @@ $(document).ready(function(){
     $(document).on('click', '.btn-delete-skill',function(event) {
 
 
-        bootbox.confirm('Are you want to delete?', function(result){
+        bootbox.confirm('Are you want to delete?', function(result, event){
             if(result) {
-                var skillId = $(this).parents('tr').find('.skillId').html().trim();
+                var skillId = event.parents('tr').find('.skillId').html().trim();
                 getFormSkill(skillId, 2);
             }
         });
@@ -83,9 +83,9 @@ $(document).ready(function(){
 
     // position team
     $(document).on('click', '.btn-delete-team',function(event) {
-        bootbox.confirm('Are you want to delete?', function(result){
+        bootbox.confirm('Are you want to delete?', function(result, event){
             if(result) {
-                var teamId = $(this).parents('tr').find('.teamId').html().trim();
+                var teamId = event.parents('tr').find('.teamId').html().trim();
                 positionTeam(teamId, 2);
             }
         });

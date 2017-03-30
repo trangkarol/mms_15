@@ -27,11 +27,11 @@ $(document).ready(function(){
     });
 
     //delete member
-    $(document).on('click','.btn-delete-team',function(){
+    $(document).on('click','.btn-delete-team',function(event){
 
-        bootbox.confirm('Are you want to delete?', function(result){
+        bootbox.confirm('Are you want to delete?', function(result , event){
             if(result) {
-                var teamId = $(this).parents('tr').find('.teamMemberId').html().trim();
+                var teamId = event.parents('tr').find('.teamMemberId').html().trim();
                 deleteMember(teamId, $(this));
             }
         });
