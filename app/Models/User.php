@@ -77,14 +77,8 @@ class User extends Authenticatable
         return $this->belongsTo(Team::class);
     }
 
-    // public function setPasswordAttribute($value)
-    // {
-    //     $this->password = bcrypt($value);
-    // }
-
-
-    // public function scopeUserName($query, $id)
-    // {
-    //     return $query->findOrFail($id);
-    // }
+    public function teamUsers()
+    {
+        return $this->belongsToMany(TeamUser::class);
+    }
 }
