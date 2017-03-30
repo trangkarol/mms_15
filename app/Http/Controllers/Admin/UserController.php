@@ -46,7 +46,7 @@ class UserController extends Controller
     public function index()
     {
         $teams = Library::getTeams();
-        $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team')->paginate(15);
+        $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team')->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.user.index', compact('members', 'teams'));
     }
@@ -215,9 +215,11 @@ class UserController extends Controller
             try{
                 $teamId = $request->teamId;
                 if($teamId != 0) {
-                    $members = TeamUser::with('positions', 'user', 'team')->where('team_users.team_id', $teamId)->orderBy('created_at', 'desc')->paginate(15);
+                    // $members = TeamUser::with('positions', 'user', 'team')->where('team_users.team_id', $teamId)->orderBy('created_at', 'desc')->paginate(15);
+                    $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team')->where('team_users.team_id', $teamId)->orderBy('created_at', 'desc')->paginate(15);
+                    dd($members);
                 } else {
-                    $members = TeamUser::with('positions', 'team', 'user.position')->orderBy('created_at', 'desc')->paginate(15);
+                    $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team')->orderBy('created_at', 'desc')->paginate(15);
                 }
                 $html = view('admin.user.table_result', compact('members'))->render();
 
