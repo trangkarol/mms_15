@@ -29,7 +29,7 @@
                             </td>
                             <td>
                                 <div class="col-md-6">
-                                    <a href ="{{ action('Admin\UserController@edit', $member->user->id ) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
+                                    <a href ="{{ action('Admin\UserController@edit', $member->id ) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
                                 </div>
 
                                 <div class="col-md-6">
@@ -45,20 +45,20 @@
                 @else
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td><a href="{{ action('Member\HomeController@detailMember', $member->user->id) }}">{{ $member->name }}</a></td>
+                        <td><a href="{{ action('Member\HomeController@detailMember', $member->id) }}">{{ $member->name }}</a></td>
                         <td> @if ($member->position) {{ $member->position->name }} @endif</td>
                         <!-- <td>  </td>-->
                         <td></td>
                         <td></td>
                         <td>
                             <div class="col-md-6">
-                                <a href ="{{ action('Admin\UserController@edit', $member->user->id ) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
+                                <a href ="{{ action('Admin\UserController@edit', $member->id ) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
                             </div>
 
                             <div class="col-md-6">
                                 {{ Form::open(['action' => 'Admin\UserController@destroy', 'method' => 'POST', 'id' => 'delete-form-user']) }}
 
-                                {{ Form::hidden('userId',$member->user->id) }}
+                                {{ Form::hidden('userId',$member->id) }}
                                 {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete', 'type' => 'button']) !!}
                                 {{ Form::close() }}
                             </div>
