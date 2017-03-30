@@ -52,8 +52,8 @@ class UserController extends Controller
                                // ->join('positions as position', 'position.id', '=', 'users.position_id')
                                // ->leftJoin('teams', 'teams.id', '=', 'team_users.team_id')
                                ->leftJoin('position_teams', 'team_users.id', '=', 'position_teams.team_user_id')
-                               ->with('postion_teams.position')
-                               // ->leftJoin('positions', 'positions.id', '=', 'position_teams.position_id')
+                               // ->with('postion_teams.position')
+                               ->join('positions', 'positions.id', '=', 'position_teams.position_id')
                                // ->select('users.id', 'users.name as userName', 'position.name as positionName', 'teams.name as teamName', 'positions.name as positionTeam')
                                ->get();
         dd($members->toArray());
