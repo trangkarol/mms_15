@@ -36,9 +36,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        // $projects = ProjectTeam::with('teamUser.team', 'teamUser.user', 'project')->where('is_leader', '=', 1)->paginate(15);
+        $projects = ProjectTeam::with('teamUser.team', 'teamUser.user', 'project')->where('is_leader', '=', 1)->paginate(15);
         // dd($projects);
-        $projects = $this->project->with('teamUsers.team', 'teamUsers.user', 'teamUsers')->orderBy('created_at', 'desc')->paginate(15);
+        // $projects = $this->project->with('teamUsers.team', 'teamUsers.user', 'teamUsers')->orderBy('created_at', 'desc')->paginate(15);
         // $projects = TeamUser::with('projects', 'user', 'team')->get();
         // $projects = Project::all();
         //      dd($projects->toArray());
