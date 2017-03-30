@@ -114,13 +114,14 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
 
         $userTeams = ProjectTeam::with('teamUser.team','teamUser.user')->where('project_id', $id)->where('is_leader', 1)->get();
+        if(!empty($userTeams)) {
+            $arrTeam = $userTeams->map(function ($item, $key) {
+                return $item->teamUser->team->id;
+            });
+             $arrTeam = $arrTeam->toArray();
 
-        $arrTeam = $userTeams->map(function ($item, $key) {
-            return $item->teamUser->team->id;
-        });
-         $arrTeam = $arrTeam->toArray();
-
-        $listTeams = Team::with('users')->whereIn('id', $arrTeam)->get();
+            $listTeams = Team::with('users')->whereIn('id', $arrTeam)->get();
+        }
 
         // dd($listTeam);
 
@@ -336,8 +337,6 @@ class ProjectController extends Controller
                             ->with(['projectTeams'=> function($query) {
                                 $query->where('is_leader', '=', 1);
                             }])->paginate(15);
-                    // $teamUser = TeamUser::where('team_id', $teamId)->pluck('id')->all();
-                    // $projects = ProjectTeam::with('project', 'teamUser.team', 'teamUser.user')->whereIn('team_user_id', $teamUser)->where('is_leader', '=', 1)->orderBy('created_at', 'desc')->paginate(15);
                 } else {
                     $projects = $this->project->with(['projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser.user','projectTeams'=>function($query) {
                         $query->where('is_leader', '=', 1);
