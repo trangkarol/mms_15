@@ -40,7 +40,6 @@ class ProjectController extends Controller
         $projects = $this->project->with(['projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser.user','projectTeams'=> function($query) {
             $query->where('is_leader', '=', 1);
         }] )->paginate(15);
-        dd($projects->toArray());
         // $projects = $this->project->with('teamUsers.team', 'teamUsers.user', 'teamUsers')->orderBy('created_at', 'desc')->paginate(15);
         // $projects = TeamUser::with('projects', 'user', 'team')->get();
         // $projects = Project::all();
