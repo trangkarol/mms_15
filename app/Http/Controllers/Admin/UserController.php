@@ -48,10 +48,11 @@ class UserController extends Controller
         $teams = Library::getTeams();
         // $members = TeamUser::with('positions', 'team', 'user.position')->orderBy('created_at', 'desc')->paginate(15);
         $members  = $this->user->leftJoin('team_users', 'users.id', '=', 'team_users.user_id')
-                               ->with('position','teams.team')
+                               ->with('position')
                                // ->join('positions as position', 'position.id', '=', 'users.position_id')
                                // ->leftJoin('teams', 'teams.id', '=', 'team_users.team_id')
                                ->leftJoin('position_teams', 'team_users.id', '=', 'position_teams.team_user_id')
+                               ->with('postion_teams.position')
                                // ->leftJoin('positions', 'positions.id', '=', 'position_teams.position_id')
                                // ->select('users.id', 'users.name as userName', 'position.name as positionName', 'teams.name as teamName', 'positions.name as positionTeam')
                                ->get();
