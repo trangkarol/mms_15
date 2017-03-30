@@ -156,7 +156,7 @@ function addSkill(flag) {
             if (data.result) {
                 $('#result-skill').html();
                 $('#result-skill').html(data.html);
-
+                 $.colorbox.close();
                 if (flag == 1) {
                      bootbox.alert('Add skill succesfully');
                 } else {

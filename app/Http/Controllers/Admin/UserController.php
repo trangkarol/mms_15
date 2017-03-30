@@ -419,6 +419,7 @@ class UserController extends Controller
 
 
                     $userSkill = SkillUser::with('skill')->where('skill_id', $skillId)->where('user_id', $userId)->get();
+                    dd($userSkill);
                     // positions
                     // $arrPosition = PositionTeam::with('positions')->where('team_user_id', $teamUserId[0])->pluck('position_id')->all();
                     // projects
