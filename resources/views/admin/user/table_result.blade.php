@@ -22,7 +22,7 @@
                             $index = $index+1;
                         @endphp
                         <tr>
-                            <td class="text-center">{{ $index }</td>
+                            <td class="text-center">{{ $index }}</td>
                             <td><a href="{{ action('Member\HomeController@detailMember', $member->id) }}">{{ $member->name }}</a></td>
                             <td> @if ($member->position) {{ $member->position->name }} @endif</td>
                             <!-- <td>  </td>-->
