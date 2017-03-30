@@ -38,4 +38,9 @@ class Project extends Model
         return $this->belongsToMany(TeamUser::class, 'project_teams')->withPivot('is_leader')->withTimestamps();
     }
 
+    public function projectTeams()
+    {
+        return $this->hasMany(ProjectTeam::class);
+    }
+
 }
