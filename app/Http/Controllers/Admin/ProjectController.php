@@ -331,7 +331,7 @@ class ProjectController extends Controller
                 $teamId = $request->teamId;
                 if($teamId != 0) {
                     $projects = $this->project->with(['projectTeams.user','projectTeams.teamUser.team' => function($query) use ($teamId) {
-                                $query->where('team_id', '=', $userTeamId);
+                                $query->where('team_id', '=', $teamId);
                             }],'projectTeams.teamUser.user')
                             ->with(['projectTeams'=> function($query) {
                                 $query->where('is_leader', '=', 1);
