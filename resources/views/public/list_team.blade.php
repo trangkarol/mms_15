@@ -26,7 +26,7 @@
                     </thead>
 
                     <tbody>
-                    @if (!empty($team))
+                    @if (!empty($teams))
                         @foreach ($teams as $team)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
