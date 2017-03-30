@@ -1,7 +1,7 @@
 @include('admin.block.header')
     <div class="container-fluid">
         <!-- menu -->
-        @include('public.block.menu')
+        @include('admin.block.menu')
         <!-- end menu -->
         <div class="container">
             <!-- container -->

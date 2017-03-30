@@ -16,7 +16,8 @@ class UpdateUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->date('birthday')->after('password');
             $table->integer('role')->after('birthday');
-            $table->integer('position_id')->unsigned()->after('role');
+            $table->string('avatar')->after('role')->nullable() ;
+            $table->integer('position_id')->unsigned()->after('avatar');
             $table->foreign('position_id')->references('id')->on('positions');
             $table->softDeletes()->after('remember_token');
         });
@@ -31,6 +32,7 @@ class UpdateUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('birthday');
+            $table->dropColumn('avatar');
             $table->dropColumn('role');
             $table->dropForeign(['position_id']);
             $table->dropColumn('position_id');

@@ -24,8 +24,7 @@
                 </div>
                 <!--  -->
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ action('Admin\UserController@update', $user->id) }}">
-                        {{ csrf_field() }}
+                    {!! Form::open(['action' => 'Admin\UserController@update', 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
                         {{ Form::hidden('userId', $user->id, ['id' => 'userId']) }}
 
                         @include('admin.user.form_user')

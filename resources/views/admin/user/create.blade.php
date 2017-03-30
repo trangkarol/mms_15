@@ -25,7 +25,7 @@
                 </div>
                 <!--  -->
                 <div class="panel-body">
-                    {!! Form::open(['action' => 'Admin\UserController@store', 'method' => 'POST', 'class' => 'form-horizontal']) !!}
+                    {!! Form::open(['action' => 'Admin\UserController@store', 'method' => 'POST', 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
 
                         @include('admin.user.form_user')
                         <!-- button -->

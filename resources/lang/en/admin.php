@@ -20,6 +20,8 @@ return [
     'lbl-add' => '<i class = "fa fa-plus"></i>',
     'lbl-edit' => '<i class = "fa fa-pencil-square-o"></i>',
     'lbl-stt' => 'No.',
+    'lbl-admin' => 'Admin',
+    'lbl-user' => 'User',
     // button
     'btn-insert' => 'Insert',
     'btn-reset' => 'Reset',

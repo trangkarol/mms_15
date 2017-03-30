@@ -101,6 +101,20 @@ $(document).ready(function(){
         deleteTeam(event);
     });
 
+    //import-file
+    $(document).on('click', '#import-file', function(event) {
+        // event.preventDefault();
+        $('#file-csv').click();
+        $('#file-csv').change(function() {
+            $('#form-input-file').submit();
+        });
+    });
+
+    // save user
+    $(document).on('click', '#add-user',function(event) {
+        $('#form-save-user').submit();
+    });
+
 });
 
 function search(page) {

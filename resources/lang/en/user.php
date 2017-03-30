@@ -24,6 +24,7 @@ return [
     'lbl-list-skill' => 'List Skill',
     'lbl-project' => 'List Project',
     'lbl-comfirm_password' => 'Comfirm Password',
+    'lbl-avartar' => 'Avatar',
     'msg' => [
         'email-required' => 'Please input email!',
         'email-format' => 'Email not accepted!',

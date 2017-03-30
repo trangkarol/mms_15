@@ -6,8 +6,10 @@
         <!-- information of user -->
         @if (Auth::guard()->check())
             <ul class="nav  navbar-right col-md-3">
-                <li class="col-md-6">
-                    <a href="{{ action('Member\HomeController@index') }}">{{ Auth::user()->name }}</a>
+                <li class="col-md-8">
+                    <a href="{{ action('Member\HomeController@index') }}">
+                            <img src="{{ isset(Auth::user()->avatar)? url('/Upload', Auth::user()->avatar) : '' }}" width="70px" height="50px">{{ Auth::user()->name }}
+                    </a>
                 </li>
 
                 <li class="col-md-4">
