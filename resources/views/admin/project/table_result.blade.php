@@ -12,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-        @if (isset($projects))
+        @if (!empty($projects))
             @php
                 $index =0;
             @endphp

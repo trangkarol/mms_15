@@ -33,9 +33,9 @@ $(document).ready(function(){
 
     //handel pagination by ajax
     $(document).on('click','#btn-delete-skill-popup',function(event){
-        bootbox.confirm("Are you want to delte?!", function(confirm){
-            if(confirm) {
-                deleteSkill(2);
+        bootbox.confirm('Are you want to delete?', function(result, event){
+            if(result) {
+                addSkill(2);
             }
         });
 
@@ -104,7 +104,6 @@ $(document).ready(function(){
 
     // position team
     $(document).on('click', '#btn-delete-team',function(event) {
-        console.log('ddd');
         deleteTeam(event);
     });
 
@@ -287,3 +286,28 @@ function  getFormSkill(skillId, flag) {
         }
     });
 }
+
+// function deleteSkill() {
+//     var skillId = $('#skillId-skill').val();
+//     var userId = $('#userId-skill').val();
+
+//     $.ajax({
+//         type: 'POST',
+//         url: '/admin/users/add-skill',
+//         dataType: 'json',
+//         data: {
+//             skillId : skillId,
+//             exeper : exeper,
+//         },
+//         success:function(data){
+//             if (data.result) {
+//                 $('#result-skill').html();
+//                 $('#result-skill').html(data.html);
+//                 $.colorbox.close();
+//                 bootbox.alert('Delete skill succesfully');
+//             } else {
+//                      bootbox.alert('Fail!');
+//             }
+//         }
+//     });
+// }
