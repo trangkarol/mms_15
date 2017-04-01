@@ -11,13 +11,13 @@ class ProjectsTableSeeder extends Seeder
      */
     public function run()
     {
-        // factory(App\Models\Project::class, 10)->create()->each(function ($project) {
-        //     foreach(range(1, 2) as $key) {
-        //         $activities[] = factory(App\Models\Activity::class)->make()->toArray();
-        //     }
+        factory(App\Models\Project::class, 10)->create()->each(function ($project) {
+            foreach(range(1, 2) as $key) {
+                $activities[] = factory(App\Models\Activity::class)->make()->toArray();
+            }
 
-        //    $project->activities()->createMany($activities);
-        // });
-        factory(App\Models\Project::class, 10)->create();
+           $project->activities()->createMany($activities);
+        });
+        // factory(App\Models\Project::class, 10)->create();
     }
 }
