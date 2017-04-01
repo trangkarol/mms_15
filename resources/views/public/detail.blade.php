@@ -6,7 +6,7 @@
     <div class="panel panel-primary" style="margin-top:10px;">
             <div class="panel-body">
                 <div class="col-md-5">
-                    <img src="{{ isset($user->avatar)? url('/Upload', $user->avatar) : '' }}" width="300px" height="250px">
+                    <img src="{{ url('/Upload', $user->avatar) }}" width="300px" height="250px">
                 </div>
                 <div class="col-md-7">
                     <div class="row">

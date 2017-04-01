@@ -8,7 +8,7 @@
             <ul class="nav  navbar-right col-md-3">
                 <li class="col-md-8">
                     <a href="{{ action('Member\HomeController@index') }}">
-                            <img src="{{ isset(Auth::user()->avatar)? url('/Upload', Auth::user()->avatar) : '' }}" width="70px" height="50px">{{ Auth::user()->name }}
+                            <img src="{{ url('/Upload', Auth::user()->avatar) }}" width="70px" height="50px">{{ Auth::user()->name }}
                     </a>
                 </li>
 

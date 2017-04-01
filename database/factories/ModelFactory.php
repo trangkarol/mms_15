@@ -28,7 +28,7 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'name' => $faker->name,
         'email' => $faker->email,
         'password' => bcrypt('123456'),
-        'avatar' => 'avatar.jpg',
+        'avatar' => "avatar.jpg",
         'birthday' => $faker->dateTime($max = 'now'),
         'role' => $faker->numberBetween(0, 1),
         'position_id' => $faker->randomElement($positionId ?: $positionId = App\Models\Position::where('type_position', 1)->pluck('id')->toArray()),
