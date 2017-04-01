@@ -8,6 +8,8 @@ use App\Http\Requests\Position\InsertPositionRequest;
 use App\Helpers\Library;
 use App\Models\Position;
 use App\Models\Activity;
+use App\Models\User;
+use App\Models\PositionTeam;
 use DB;
 
 class PositionController extends Controller
@@ -116,7 +118,6 @@ class PositionController extends Controller
             return redirect()->action('Admin\PositionController@index');
         } catch(\Exception $e) {
             $request->session()->flash('fail', trans('position.msg.update-fail'));
-            dd($e);
             DB::rollback();
 
             return redirect()->action(['Admin\PositionController@edit',  $request->positionId]);
@@ -134,9 +135,14 @@ class PositionController extends Controller
         DB::beginTransaction();
 
         try {
-            $position = $this->position->findOrFail($request->positionId);
-            $this->activity->insertActivities($position, 'delete');
+            $positionId = $request->positionId;
+
+            $position = $this->position->find($positionId);
+            User::where('position_id', $positionId)->delete();
+            PositionTeam::where('position_id', $positionId)->delete();
             $position->delete();
+
+            $this->activity->insertActivities($position, 'delete');
             $request->session()->flash('success', trans('position.msg.delete-success'));
             DB::commit();
 

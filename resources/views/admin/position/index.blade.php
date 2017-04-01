@@ -54,10 +54,10 @@
                                                     <a href ="{{ action('Admin\PositionController@edit', $position->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    {{ Form::open(['action' => 'Admin\PositionController@destroy', 'id' => 'form-delete-position']) }}
+                                                    {{ Form::open(['action' => 'Admin\PositionController@destroy', 'class' => 'form-delete-position']) }}
 
                                                     {{ Form::hidden('positionId', $position->id) }}
-                                                    {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete-position', 'type' => 'button']) !!}
+                                                    {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary btn-delete-position', 'id' => '', 'type' => 'button']) !!}
                                                     {{ Form::close() }}
                                                 </div>
                                             </td>

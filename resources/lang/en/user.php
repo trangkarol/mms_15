@@ -25,6 +25,7 @@ return [
     'lbl-project' => 'List Project',
     'lbl-comfirm_password' => 'Comfirm Password',
     'lbl-avartar' => 'Avatar',
+    'lbl-position_team' => 'Position Team',
     'msg' => [
         'email-required' => 'Please input email!',
         'email-format' => 'Email not accepted!',
@@ -35,6 +36,8 @@ return [
         'birthday-required' => 'Please input birhtday!',
         'password-confirmed' => 'Invalid passwords!',
         'avatar-required' => 'Please input avatar!',
+        'avatar-mimes' => 'Please choose a picture format jpeg,jpg!',
+        'avatar-max' => 'The image is too large!',
         //messages
         'insert-success' => 'Insert user seccessfuly!',
         'insert-fail' => 'Insert user fail!',

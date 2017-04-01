@@ -52,9 +52,11 @@ class UserController extends Controller
         // Mail::to('thientrang2808@gmail.com')->send(new SendPassword());
         // dd('hello');
         $teams = Library::getTeams();
+        $position = array_prepend(Library::getPositions(), '------');
+        $positionTeams = array_prepend(Library::getPositionTeams(), '-------');
         $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team')->orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.user.index', compact('members', 'teams'));
+        return view('admin.user.index', compact('members', 'teams', 'position', 'positionTeams'));
     }
 
     /**
@@ -173,9 +175,13 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->birthday = $request->birthday;
             $user->role = $request->role;
+
             if (isset($request->file)) {
                 $urlAvartar = base_path().'/public/Upload/'.$user->avatar;
-                unlink($urlAvartar);
+                if($user->avatar != 'avatar.jpg') {
+                    unlink($urlAvartar);
+                }
+
                 $user->avatar = Library::importFile($request->file);
             }
 
@@ -242,15 +248,50 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             try{
+                dd($request->all());
                 $teamId = $request->teamId;
-                if($teamId != 0) {
-                    $members  = $this->user->with(['position', 'teamUsers.positions', 'teamUsers.team', 'teamUsers' => function($query) use($teamId) {
+                $position = $request->position;
+                $positionTeams = $request->positionTeams;
+                // dd($teamId);
+                $members = $this->user;
+                if($teamId == 0 && $position == 0 && $positionTeams == 0) {
+                    $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team');
+                }
+
+                if($teamId != 0 && $position != 0) {
+                    $members  = $this->user->whereHas('teamUsers.team', function($query) use($teamId) {
                         $query->where('team_id', '=', $teamId);
-                    }])->orderBy('created_at', 'desc')->paginate(15);
+                    })->with('position', 'teamUsers.positions')->where('position_id', $position);
+                }
+
+                if($teamId != 0 && $positionTeams != 0) {
+                    $members  = $this->user->whereHas('teamUsers.team', function($query) use($teamId) {
+                        $query->where('team_id', '=', $teamId);
+                    })->with('position')>whereHas('teamUsers.positions', function($query) use($positionTeams) {
+                        $query->where('position_id', '=', $positionTeams);
+                    });
+                }
+
+                if($position != 0 && $positionTeams != 0) {
+                    $members  = $this->user->whereHas('teamUsers.team', function($query) use($teamId) {
+                        $query->where('team_id', '=', $teamId);
+                    })->with('position')>whereHas('teamUsers.positions', function($query) use($positionTeams) {
+                        $query->where('position_id', '=', $positionTeams);
+                    });
+                }
+
+                if($teamId != 0) {
+                    $members->whereHas('teamUsers.team', function($query) use($teamId) {
+                        $query->where('team_id', '=', $teamId);
+                    })->with('position', 'teamUsers.positions')->paginate(15);
+                    // $members  = $this->user->with('position', 'teamUsers.positions', 'teamUsers.team', 'teamUsers')->where('teamUsers.team_id', '=', $teamId)->paginate(15);
+                    // dd($members->toArray());
 
                 } else {
                     $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team')->orderBy('created_at', 'desc')->paginate(15);
                 }
+
+
                 $html = view('admin.user.table_result', compact('members'))->render();
 
                 return response()->json(['html' => $html]);
