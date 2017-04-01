@@ -11,12 +11,13 @@ class TeamsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\Team::class, 10)->create()->each(function ($team) {
-            foreach(range(1, 2) as $key) {
-                $activities[] = factory(App\Models\Activity::class)->make()->toArray();
-            }
+        // factory(App\Models\Team::class, 10)->create()->each(function ($team) {
+        //     foreach(range(1, 2) as $key) {
+        //         $activities[] = factory(App\Models\Activity::class)->make()->toArray();
+        //     }
 
-           $team->activities()->createMany($activities);
-        });
+        //    $team->activities()->createMany($activities);
+        // });
+        factory(App\Models\Team::class, 10)->create();
     }
 }

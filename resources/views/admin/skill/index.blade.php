@@ -46,10 +46,10 @@
                                                 <a href ="{{ action('Admin\SkillController@edit', $skill->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
                                             </div>
                                             <div class="col-md-6">
-                                                {{ Form::open(['action' => 'Admin\SkillController@destroy', 'id' => 'form-delete-skill']) }}
+                                                {{ Form::open(['action' => 'Admin\SkillController@destroy', 'class' => 'form-delete-skill']) }}
 
                                                 {{ Form::hidden('skillId', $skill->id) }}
-                                                {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete-skill', 'type' => 'submit']) !!}
+                                                {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary btn-delete-skill', 'type' => 'submit']) !!}
                                                 {{ Form::close() }}
                                             </div>
                                         </td>

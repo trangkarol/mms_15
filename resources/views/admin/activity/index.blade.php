@@ -45,15 +45,15 @@
                                         <td>{{ $activity->created_at }}</td>
                                         <td>
                                             @if ( $activity->activitiable)
-                                                {{ $activity->activitiable->name.' at table'.$activity->activitiable_type }}
+                                                {{ $activity->description }}
                                             @endif
                                         </td>
                                         <td>
                                             <div class="col-md-6">
-                                                {{ Form::open(['action' => 'Admin\ActivityController@destroy', 'id' => 'form-delete-activity']) }}
+                                                {{ Form::open(['action' => 'Admin\ActivityController@destroy', 'class' => 'form-delete-activity']) }}
 
                                                 {{ Form::hidden('activityId', $activity->id) }}
-                                                {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete-activity', 'type' => 'button']) !!}
+                                                {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary btn-delete-activity', 'id' => '', 'type' => 'button']) !!}
                                                 {{ Form::close() }}
                                             </div>
                                         </td>

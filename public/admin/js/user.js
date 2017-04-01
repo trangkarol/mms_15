@@ -128,6 +128,9 @@ $(document).ready(function(){
 
 function search(page) {
 	var teamId = $('#team').val();
+    var position = $('#position').val();
+    var positionTeams = $('#positionTeams').val();
+
 	url = '/admin/users/search';
 	if(page != 0){
 		url = '/admin/users/search?page='+page;
@@ -138,7 +141,9 @@ function search(page) {
         url: url,
         dataType: 'json',
         data: {
-        	teamId:teamId
+        	teamId: teamId,
+            position: position,
+            positionTeams: positionTeams,
         },
        	success:function(data){
           	$('#result-users').html();

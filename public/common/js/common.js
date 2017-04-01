@@ -9,34 +9,36 @@ $(document).ready(function() {
         $('#logout-form').submit();
     });
 
-    // delelete skill
-    $(document).on('click', '#btn-delete-skill', function(event) {
+     // delelete skill
+    $(document).on('click', '.btn-delete-skill', function(event) {
+        $(this).parents('.form-delete-skill').addClass('current');
         event.preventDefault();
         bootbox.confirm('Are you want to delete?', function(result){
             if(result) {
-                $('#form-delete-skill').submit();
+                $('.form-delete-skill.current').submit();
             }
         });
     });
 
     // delelete position
-    $(document).on('click', '#btn-delete-position', function(event) {
+    $(document).on('click', '.btn-delete-position', function(event) {
+        $(this).parents('.form-delete-position').addClass('current');
         event.preventDefault();
         bootbox.confirm('Are you want to delete?', function(result){
             if(result) {
-                $('#form-delete-position').submit();
+                $('.form-delete-position.current').submit();
             }
         });
     });
 
     // delelete activity
-    $(document).on('click', '#btn-delete-activity', function(event) {
+    $(document).on('click', '.btn-delete-activity', function(event) {
+        $(this).parents('.form-delete-activity').addClass('current');
         event.preventDefault();
         bootbox.confirm('Are you want to delete?', function(result){
             if(result) {
-                $('#form-delete-activity').submit();
+                $('.form-delete-activity.current').submit();
             }
         });
     });
-
 });

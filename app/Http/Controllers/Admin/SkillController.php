@@ -127,7 +127,9 @@ class SkillController extends Controller
         DB::beginTransaction();
 
         try {
-            $skill = $this->skill->findOrFail($request->skillId);
+            $skillId = $request->skillId;
+            $skill = $this->skill->findOrFail($skillId);
+            SkillUser::where('skill_id', $skillId)->delete();
             $this->activity->insertActivities($skill, 'delete');
             $skill->delete();
             $request->session()->flash('success', trans('skill.msg.delete-success'));

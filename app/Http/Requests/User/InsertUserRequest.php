@@ -26,6 +26,7 @@ class InsertUserRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|email|unique:users',
+            'avatar' => 'mimes:jpeg,jpg|max:10000',
             'birthday' => 'required',
         ];
     }
@@ -42,6 +43,8 @@ class InsertUserRequest extends FormRequest
             'email.required' => trans('user.msg.email-required'),
             'email.unique' => trans('user.msg.email-unique'),
             'birthday.required' => trans('user.msg.birthday-required'),
+            'avatar.mimes' => trans('user.msg.avatar-mimes'),
+            'avatar.max' => trans('user.msg.avatar-max'),
         ];
     }
 }

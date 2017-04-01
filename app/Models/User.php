@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function activities()
     {
-        return $this->morphMany(Activity::class, 'activitiable');
+        return $this->morphMany(App\Models\Activity::class, 'activitiable');
     }
 
     public function position()
