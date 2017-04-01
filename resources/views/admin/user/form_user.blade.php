@@ -30,6 +30,12 @@
     <div class="col-md-6">
         {{ Form::date('birthday', isset($user->birthday) ? $user->birthday : old('birthday'), ['class' => 'form-control', 'id' => 'birthday', 'required' => true]) }}
     </div>
+
+    @if ($errors->has('birthday'))
+        <span class="help-block">
+            <strong>{{ $errors->first('birthday') }}</strong>
+        </span>
+    @endif
 </div>
 
 <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">

@@ -466,8 +466,9 @@ class UserController extends Controller
 
     public function importFile(Request $request)
     {
-        // if ($request->ajax()) {
+        if ($request->ajax()) {
             try{
+                dd($request->all());
                 $report = new Report;
                 $file = $request->file;
 
@@ -487,7 +488,7 @@ class UserController extends Controller
                 DB::rollback();
                 return response()->json('result', false);
             }
-        // }
+        }
     }
 
     public function saveImport(Request $request)
@@ -499,20 +500,26 @@ class UserController extends Controller
                 // dd($request->all());
                 $nameFile = $request->nameFile;
                 $members = $report->importFileExcel($nameFile)->toArray();
+                // dd($members);
                 // validate users
 
                 foreach ($members as $member) {
-                   if($this->validator($member)->validate()) {
 
-                        $this->user->create($member);
-                   }
+                        $insert = $this->dataMember($member);
+                        //insert password
+                        $password = str_random(8);
+                        $insert['password'] = $password;
+
+                    if(!$this->validator($insert)->validate()) {
+                        Mail::to($insert['email'])->queue(new SendPassword($insert));
+                        $insert['password'] = bcrypt($password);
+                        $this->user->create($insert);
+                    }
                 }
-                // dd($members);
-
-                // $html = view('admin.user.table_scv', compact('members', 'position'))->render();
                 DB::commit();
                 return redirect()->action('Admin\UserController@index');
             }catch(Exception $e){
+                dd($e);
                 DB::rollback();
                 return response()->json('result', false);
             }
@@ -535,6 +542,24 @@ class UserController extends Controller
             'password' => 'required',
             'birthday' => 'required',
         ]);
+    }
+
+    /**
+     *data Member.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function dataMember($member)
+    {
+        $data = [];
+        $data['name'] = $member['name'];
+        $data['email'] = $member['email'];
+        $data['role']= $member['role'];
+        $data['avatar']= 'avatar.jpg';
+        $data['birthday'] = $member['birthday'];
+        $data['position_id'] = $member['position'];
+        return $data;
     }
 }
 

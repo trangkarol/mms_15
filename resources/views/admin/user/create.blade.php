@@ -1,7 +1,7 @@
 @extends('admin.block.main')
 <!-- title off page -->
 @section('title')
-    {{trans('languages.title-insert-users')}}
+    {{trans('user.title-insert-users')}}
 @endsection
 <!-- css used for page -->
 <!-- content of page -->

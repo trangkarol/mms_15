@@ -34,6 +34,8 @@ return [
         'password-min' => 'The password must be at least 6 characters!',
         'birthday-required' => 'Please input birhtday!',
         'password-confirmed' => 'Invalid passwords!',
+        'avatar-required' => 'Please input avatar!',
+        //messages
         'insert-success' => 'Insert user seccessfuly!',
         'insert-fail' => 'Insert user fail!',
         'update-success' => 'Update user seccessfuly!',
