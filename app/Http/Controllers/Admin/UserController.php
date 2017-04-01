@@ -6,9 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Controllers\Controller;
 use \Illuminate\Pagination\Paginator;
-use DB;
 use App\Http\Requests\User\InsertUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\ReportController as Report;
 use App\Helpers\Library;
 use App\Models\User;
 use App\Models\Team;
@@ -21,6 +22,9 @@ use App\Models\Skill;
 use App\Models\SkillUser;
 use App\Models\Activity;
 use Carbon\Carbon;
+use App\Mail\SendPassword;
+use Mail, DB;
+
 
 class UserController extends Controller
 {
@@ -45,6 +49,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        // Mail::to('thientrang2808@gmail.com')->send(new SendPassword());
+        // dd('hello');
         $teams = Library::getTeams();
         $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team')->orderBy('created_at', 'desc')->paginate(15);
 
@@ -73,20 +79,37 @@ class UserController extends Controller
         DB::beginTransaction();
 
         try {
+            // dd($request->all());
             $this->user->name = $request->name;
             $this->user->email = $request->email;
-            $this->user->birthday = $request->birthday;
-            $this->user->password = bcrypt(config('setting.password'));
+            $this->user->birthday = date_create($request->birthday);
+            $password = str_random(8);
+
+            $this->user->password = bcrypt($password);
             $this->user->role = $request->role;
+
+            //images
+            $this->user->avatar = Library::importFile($request->file);
+
             $this->user->position()->associate($request->position);
             $this->user->save();
 
             $this->activity->insertActivities($this->user, 'insert');
             $request->session()->flash('success', trans('user.msg.insert-success'));
+
+            // send password to user
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $password,
+            ];
+
+            Mail::to($request->email)->send(new SendPassword($data));
             DB::commit();
 
             return redirect()->action('Admin\UserController@edit', $this->user->id);
         } catch(\Exception $e) {
+            dd($e);
             $request->session()->flash('fail', trans('user.msg.insert-fail'));
             DB::rollback();
 
@@ -118,7 +141,6 @@ class UserController extends Controller
         $positions = Library::getPositions();
         $skills = Library::getLibrarySkills();
         $skillUsers = SkillUser::skillUsers($id)->get();
-
         $skillId = $skillUsers->pluck('skill_id')->all();
 
         // team
@@ -140,16 +162,23 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(InsertUserRequest $request)
+    public function update(Request $request)
     {
         DB::beginTransaction();
 
         try {
+            // dd($request->all());
             $user = $this->user->find($request->userId);
             $user->name = $request->name;
             $user->email = $request->email;
             $user->birthday = $request->birthday;
             $user->role = $request->role;
+            if (isset($request->file)) {
+                $urlAvartar = base_path().'/public/Upload/'.$user->avatar;
+                unlink($urlAvartar);
+                $user->avatar = Library::importFile($request->file);
+            }
+
             $user->position()->associate($request->position);
             $user->save();
 
@@ -434,4 +463,105 @@ class UserController extends Controller
             }
         }
     }
+
+    public function importFile(Request $request)
+    {
+        if ($request->ajax()) {
+            try{
+                dd($request->all());
+                $report = new Report;
+                $file = $request->file;
+
+                if(isset($file)) {
+
+                    $nameFile = Library::importFile($file);
+                    $members = $report->importFileExcel($nameFile);
+                    $position = Library::getPositions();
+                }
+
+                // $html = view('admin.user.table_scv', compact('members', 'position'))->render();
+                return view('admin.user.table_scv', compact('members', 'position', 'nameFile'));
+
+                DB::commit();
+                return response()->json(['result' => true, 'html' => $html]);
+            }catch(Exception $e){
+                DB::rollback();
+                return response()->json('result', false);
+            }
+        }
+    }
+
+    public function saveImport(Request $request)
+    {
+
+            DB::beginTransaction();
+            try{
+                $report = new Report;
+                // dd($request->all());
+                $nameFile = $request->nameFile;
+                $members = $report->importFileExcel($nameFile)->toArray();
+                // dd($members);
+                // validate users
+
+                foreach ($members as $member) {
+
+                        $insert = $this->dataMember($member);
+                        //insert password
+                        $password = str_random(8);
+                        $insert['password'] = $password;
+
+                    if(!$this->validator($insert)->validate()) {
+                        Mail::to($insert['email'])->queue(new SendPassword($insert));
+                        $insert['password'] = bcrypt($password);
+                        $this->user->create($insert);
+                    }
+                }
+                DB::commit();
+                return redirect()->action('Admin\UserController@index');
+            }catch(Exception $e){
+                dd($e);
+                DB::rollback();
+                return response()->json('result', false);
+            }
+        // }
+    }
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'role' => 'required',
+            'position_id' => 'required',
+            'password' => 'required',
+            'birthday' => 'required',
+        ]);
+    }
+
+    /**
+     *data Member.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function dataMember($member)
+    {
+        $data = [];
+        $data['name'] = $member['name'];
+        $data['email'] = $member['email'];
+        $data['role']= $member['role'];
+        $data['avatar']= 'avatar.jpg';
+        $data['birthday'] = $member['birthday'];
+        $data['position_id'] = $member['position'];
+        return $data;
+    }
 }
+
+
+

@@ -22,13 +22,13 @@ $(document).ready(function(){
     });
 
     //handel pagination by ajax
-    $(document).on('click','#btn-add-skill',function(){
-        addSkill(1);
+    $(document).on('click','#btn-add-skill',function(event){
+        addSkill($(this), 1);
     });
 
     //handel pagination by ajax
     $(document).on('click','#btn-edit-skill',function(event){
-        addSkill(0);
+        addSkill($(this), 0);
     });
 
     //handel pagination by ajax
@@ -101,6 +101,29 @@ $(document).ready(function(){
         deleteTeam(event);
     });
 
+    //import-file
+    $(document).on('click', '#import-file', function(event) {
+        // event.preventDefault();
+        $('#file-csv').click();
+        $('#file-csv').change(function(event) {
+            // $('#form-input-file').submit();
+            event.preventDefault();
+            var file = $(this).files;
+            console.log(file);
+            importFile(file);
+        });
+    });
+
+    $(document).on('click', '#cboxClose', function() {
+        $('.skill').prop('checked',false);
+        $('.team').prop('checked',false);
+    });
+
+    // save user
+    $(document).on('click', '#add-user',function(event) {
+        $('#form-save-user').submit();
+    });
+
 });
 
 function search(page) {
@@ -128,7 +151,7 @@ function search(page) {
     });
 }
 
-function addSkill(flag) {
+function addSkill(event, flag) {
     var skillId = $('#skillId-skill').val();
     var userId = $('#userId-skill').val();
     var exeper = $('.exeper').val();
@@ -157,7 +180,10 @@ function addSkill(flag) {
                          bootbox.alert('Edit skill succesfully');
                     } else {
                          bootbox.alert('Delete skill succesfully');
-                    }                }
+                    }
+                }
+
+                $('.skill:checked').parent().remove();
             } else {
                      bootbox.alert('Fail!');
             }
@@ -212,6 +238,7 @@ function addTeam(event,flag) {
 
                     $('#result-team').html();
                     $('#result-team').html(data.html);
+                    $('.team:checked').parent().remove();
 
                 } else {
                     if(flag == 1 ) {
@@ -221,7 +248,6 @@ function addTeam(event,flag) {
                     }
                 }
                 $.colorbox.close();
-
         }
     });
 }
@@ -305,3 +331,28 @@ function  getFormSkill(skillId, flag) {
 //         }
 //     });
 // }
+
+function importFile(file) {
+    var skillId = $('#skillId-skill').val();
+    var userId = $('#userId-skill').val();
+
+    $.ajax({
+        type: 'POST',
+        url: '/admin/users/import-file',
+        dataType: 'json',
+        data: file, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+        contentType: false,       // The content type used when sending data to the server.
+        cache: false,             // To unable request pages to be cached
+        processData:false,
+        success:function(data){
+            if (data.result) {
+                $('#result-skill').html();
+                $('#result-skill').html(data.html);
+                $.colorbox.close();
+                bootbox.alert('Delete skill succesfully');
+            } else {
+                     bootbox.alert('Fail!');
+            }
+        }
+    });
+}

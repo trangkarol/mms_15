@@ -24,6 +24,7 @@ return [
     'lbl-list-skill' => 'List Skill',
     'lbl-project' => 'List Project',
     'lbl-comfirm_password' => 'Comfirm Password',
+    'lbl-avartar' => 'Avatar',
     'msg' => [
         'email-required' => 'Please input email!',
         'email-format' => 'Email not accepted!',
@@ -33,6 +34,8 @@ return [
         'password-min' => 'The password must be at least 6 characters!',
         'birthday-required' => 'Please input birhtday!',
         'password-confirmed' => 'Invalid passwords!',
+        'avatar-required' => 'Please input avatar!',
+        //messages
         'insert-success' => 'Insert user seccessfuly!',
         'insert-fail' => 'Insert user fail!',
         'update-success' => 'Update user seccessfuly!',

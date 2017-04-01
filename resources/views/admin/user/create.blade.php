@@ -1,7 +1,7 @@
 @extends('admin.block.main')
 <!-- title off page -->
 @section('title')
-    {{trans('languages.title-insert-users')}}
+    {{trans('user.title-insert-users')}}
 @endsection
 <!-- css used for page -->
 <!-- content of page -->
@@ -25,7 +25,7 @@
                 </div>
                 <!--  -->
                 <div class="panel-body">
-                    {!! Form::open(['action' => 'Admin\UserController@store', 'method' => 'POST', 'class' => 'form-horizontal']) !!}
+                    {!! Form::open(['action' => 'Admin\UserController@store', 'method' => 'POST', 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
 
                         @include('admin.user.form_user')
                         <!-- button -->

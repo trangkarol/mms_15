@@ -30,6 +30,12 @@
     <div class="col-md-6">
         {{ Form::date('birthday', isset($user->birthday) ? $user->birthday : old('birthday'), ['class' => 'form-control', 'id' => 'birthday', 'required' => true]) }}
     </div>
+
+    @if ($errors->has('birthday'))
+        <span class="help-block">
+            <strong>{{ $errors->first('birthday') }}</strong>
+        </span>
+    @endif
 </div>
 
 <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">
@@ -49,7 +55,11 @@
 <div class="form-group">
     {{ Form::label('position', trans('user.lbl-avartar'), ['class' => 'col-md-4 control-label']) }}
     <div class="col-md-6">
-       {{ Form::file('image') }}
+       {{ Form::file('file') }}
+        <div class="col-md-6">
+            <img src="{{ isset($user->avatar)? url('/Upload', $user->avatar) : '' }}" width="200px" height="150px">
+        </div>
+
     </div>
 </div>
 

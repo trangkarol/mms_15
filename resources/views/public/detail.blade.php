@@ -5,7 +5,10 @@
     </div>
     <div class="panel panel-primary" style="margin-top:10px;">
             <div class="panel-body">
-                <div class="col-md-7 col-md-offset-2">
+                <div class="col-md-5">
+                    <img src="{{ isset($user->avatar)? url('/Upload', $user->avatar) : '' }}" width="300px" height="250px">
+                </div>
+                <div class="col-md-7">
                     <div class="row">
                         {{ Form::label('name', trans('user.lbl-name'), ['class' => 'col-md-4 control-label']) }}
                         {{ Form::label('name', $user->name, ['class' => 'col-md-8']) }}
