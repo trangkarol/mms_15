@@ -15,8 +15,8 @@ Route::get('/', function () {
         return view('welcome');
     })->middleware('auth');
 
-//admin
-Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admin'], function () {
+//admin , 'middleware' => 'admin'
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     // teams
     Route::group(['prefix' => 'teams'], function () {
         Route::resource('/', 'TeamController', ['only' => ['index', 'create', 'store']]);
