@@ -112,7 +112,6 @@ class UserController extends Controller
 
             return redirect()->action('Admin\UserController@edit', $this->user->id);
         } catch(\Exception $e) {
-            dd($e);
             $request->session()->flash('fail', trans('user.msg.insert-fail'));
             DB::rollback();
 
@@ -194,7 +193,7 @@ class UserController extends Controller
             DB::commit();
 
             return redirect()->action('Admin\UserController@edit', $request->userId);
-        } catch(\Exception $e) {            dd($e);
+        } catch(\Exception $e) {
             $request->session()->flash('fail', trans('user.msg.update-fail'));
             DB::rollback();
 
