@@ -1,14 +1,13 @@
 @include('admin.block.header')
     <div class="container-fluid">
         <!-- menu -->
-        @include('admin.block.menu')
         <!-- end menu -->
         <div class="container">
             <!-- container -->
             <div class="row">
                 <!-- leftbar -->
                 <div class="col-md-3">
-                    @include('admin.block.left_bar')
+
                 </div>
                 <!-- end left bar -->
                 <!-- content -->
