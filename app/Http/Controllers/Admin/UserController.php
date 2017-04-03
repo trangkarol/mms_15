@@ -194,6 +194,7 @@ class UserController extends Controller
 
             return redirect()->action('Admin\UserController@edit', $request->userId);
         } catch(\Exception $e) {
+            dd($e);
             $request->session()->flash('fail', trans('user.msg.update-fail'));
             DB::rollback();
 
