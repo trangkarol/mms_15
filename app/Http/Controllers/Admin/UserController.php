@@ -548,8 +548,8 @@ class UserController extends Controller
                 // dd($members);
                 // validate users
 
-                foreach ($members as $member) {
-                    foreach ($member as $user) {
+                foreach ($members as $user) {
+                    // foreach ($member as $user) {
                         $insert = $this->dataMember($user);
                         //insert password
                         $password = str_random(8);
@@ -560,7 +560,7 @@ class UserController extends Controller
                             $insert['password'] = bcrypt($password);
                             $this->user->create($insert);
                         }
-                    }
+                    // }
 
                 }
 
@@ -570,6 +570,7 @@ class UserController extends Controller
                 return redirect()->action('Admin\UserController@index');
             }catch(\Exception $e){
                 // dd($e['messages']);
+                dd($e);
                 $request->session()->flash('fail', trans('user.msg.import-fail'));
                 DB::rollback();
 
