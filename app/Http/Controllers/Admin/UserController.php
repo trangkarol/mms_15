@@ -570,7 +570,7 @@ class UserController extends Controller
                 DB::commit();
                 return redirect()->action('Admin\UserController@index');
             }catch(\Exception $e){
-                dd($e);
+                // dd($e);
                 $request->session()->flash('fail', trans('user.msg.import-fail'));
                 DB::rollback();
 
