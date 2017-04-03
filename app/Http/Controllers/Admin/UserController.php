@@ -165,7 +165,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(UpdateUserRequest $request)
     {
         DB::beginTransaction();
 
@@ -475,8 +475,6 @@ class UserController extends Controller
                 $skills = Library::getLibrarySkills();
                 $levels = Library::getLevel();
                 // project
-                // $projects = Library::getLibraryProjects();
-                // $projectTeams = Library::getLibraryProjects();
                 $html = view('admin.user.skill', compact('skills', 'levels', 'flag', 'userId', 'skillId', 'userSkill'))->render();
 
                 DB::commit();
@@ -497,9 +495,9 @@ class UserController extends Controller
                 $file = $request->file;
                 $nameFile = '';
                 if(isset($file)) {
-
                     $nameFile = Library::importFile($file);
                     $members = $report->importFileExcel($nameFile);
+                    unlink( move(base_path().'/public/Upload/', $nameFile ));
                      // dd($members);
                     $position = Library::getPositions();
                 }
@@ -516,20 +514,27 @@ class UserController extends Controller
         // }
     }
 
-    public function exportFile($type, $teamId, $position, $positionTeams)
+    public function exportFile(Request $request)
     {
         // if ($request->ajax()) {
             try{
                 $report = new Report;
                 $dt = new DateTime();
-                // dd($type,  $teamId, $position, $positionTeams);
+                // dd($request->all());
+
+                $type = $request->type;
+                $teamId = $request->teamId;
+                $position = $request->position;
+                $positionTeams = $request->positionTeams;
+
                 $user = $this->getMember($teamId, $position, $positionTeams);
                 $members = $user->get();
                 $nameFile = 'user'.$dt->format('Y-m-d-H-i-s');
                 $report->exportFileExcel($members, $type, $nameFile);
-                $urlFile = $nameFile.'.'.$type;
+                $request->session()->flash('success', trans('user.msg.import-success'));
+                return redirect()->action('Admin\UserController@index');
 
-                return response()->json(['result' => true, 'urlFile' => storage_path($urlFile)]);
+                // return response()->json(['result' => true, 'urlFile' => storage_path($urlFile)]);
             }catch(\Exception $e){
                 return response()->json('result', false);
             }
@@ -542,11 +547,9 @@ class UserController extends Controller
             DB::beginTransaction();
             try{
                 $report = new Report;
-                $when = Carbon::now()->addMinutes(10);
                 // dd($request->all());
                 $nameFile = $request->nameFile;
                 $members = $report->importFileExcel($nameFile)->toArray();
-                // dd($members);
                 // validate users
 
                 foreach ($members as $user) {
@@ -557,12 +560,11 @@ class UserController extends Controller
                         $insert['password'] = $password;
 
                         if(!$this->validator($insert)->validate()) {
-                            Mail::to($insert['email'])->later($when, new SendPassword($insert));
+                            Mail::to($insert['email'])->queue(new SendPassword($insert));
                             $insert['password'] = bcrypt($password);
                             $this->user->create($insert);
                         }
                     // }
-
                 }
 
                 $request->session()->flash('success', trans('user.msg.import-success'));
@@ -570,8 +572,7 @@ class UserController extends Controller
                 DB::commit();
                 return redirect()->action('Admin\UserController@index');
             }catch(\Exception $e){
-                // dd($e['messages']);
-                dd($e);
+
                 $request->session()->flash('fail', trans('user.msg.import-fail'));
                 DB::rollback();
 

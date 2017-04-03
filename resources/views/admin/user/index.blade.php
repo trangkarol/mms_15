@@ -26,8 +26,11 @@
 
             <div class="col-md-4">
                 <a href="#" class="btn btn-primary" id= "export-file"><i class="glyphicon glyphicon-export" ></i></a>
-                {!! Form::open(['action' => 'Admin\UserController@importFile', 'class' => 'form-horizontal', 'id' => 'form-input-file', 'enctype' => 'multipart/form-data']) !!}
-                    {{  Form::file('file', ['id' => 'file-csv', 'class' => 'hidden']) }}
+                {!! Form::open(['action' => 'Admin\UserController@exportFile', 'class' => 'form-horizontal', 'id' => 'form-export-user', 'enctype' => 'multipart/form-data']) !!}
+                    {{ Form::hidden('teamId',null, ['id' => 'teamId-export']) }}
+                    {{ Form::hidden('position',null, ['id' => 'position-export']) }}
+                    {{ Form::hidden('positionTeam',null, ['id' => 'positionTeam-export']) }}
+                    {{ Form::hidden('type',null, ['id' => 'type-export']) }}
 
                 {!! Form::close() !!}
             </div>

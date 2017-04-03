@@ -325,24 +325,36 @@ function  getFormSkill(skillId, flag) {
 }
 
 function exportFile(type) {
-    var teamId = $('#team').val();
-    var position = $('#position').val();
-    var positionTeams = $('#positionTeams').val();
-    $.ajax({
-        type: 'GET',
-        url: '/admin/users/export-file/'+type+'/'+teamId+'/'+position+'/'+positionTeams,
-        loading: true,
-        dataType: 'json',
-        success:function(data){
-            console.log(data);
-            $.colorbox.close();
-            if (data.result) {
-                bootbox.alert('Export file succesfully!', function() {
-                    window.location = data.urlFile;
-                });
-            } else {
-                    bootbox.alert('Export file fail!');
-            }
-        }
-    });
+    $('#teamId-export').attr('value', $('#team').val());
+    $('#position-export').attr('value', $('#position').val());
+    $('#positionTeam-export').attr('value', $('#positionTeams').val());
+    $('#type-export').attr('value', type);
+
+    $('#form-export-user').submit();
+    $.colorbox.close();
+    bootbox.alert('Export file succesfully!');
+    //                 window.location = data.urlFile;
+    //             });
+    // $('#type-exxport').prop('value', type);
+    // var teamId = $('#team').val();
+    // var position = $('#position').val();
+    // var positionTeams = $('#positionTeams').val();
+    // var url = '/admin/users/export-file/'+type+'/'+teamId+'/'+position+'/'+positionTeams;
+    // $.ajax({
+    //     type: 'GET',
+    //     url: url,
+    //     loading: true,
+    //     dataType: 'json',
+    //     success:function(data){
+    //         console.log(data);
+    //         $.colorbox.close();
+    //         if (data.result) {
+    //             bootbox.alert('Export file succesfully!', function() {
+    //                 window.location = data.urlFile;
+    //             });
+    //         } else {
+    //                 bootbox.alert('Export file fail!');
+    //         }
+    //     }
+    // });
 }

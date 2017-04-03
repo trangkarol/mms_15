@@ -48,7 +48,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
         Route::get('/delete-skill/{skillId}/{userId}', 'UserController@deleteSkill');
         Route::post('/import-file', 'UserController@importFile');
         Route::post('/save-file', 'UserController@saveImport');
-        Route::get('/export-file/{type}/{teamId}/{position}/{positionTeams}', 'UserController@exportFile');
+        // Route::get('/export-file/{type}/{teamId}/{position}/{positionTeams}', 'UserController@exportFile');
+        Route::post('/export-file', 'UserController@exportFile');
     });
 
     // position
