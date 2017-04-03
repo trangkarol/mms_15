@@ -270,21 +270,21 @@ class TeamController extends Controller
 
             $memberTeam = TeamUser::where('team_id', $teamId)->pluck('user_id')->toArray();
 
-            $users = new SkillUser;
+            $users = SkillUser::with('user');
 
             if(!is_null($skills) && !is_null($levels)) {
                 // $users = User::with(['skills' => function($query) use ($levels, $skills) {
                 //     $query->whereIn('level', $levels)->orWhereIn('skill_id', $skills);
                 // }]);
 
-                $users = SkillUser::with('user')->whereIn('level', $levels)->WhereIn('skill_id', $skills);
+                $users =  $users->whereIn('level', $levels)->WhereIn('skill_id', $skills);
 
             } elseif(!is_null($skills) && is_null($levels)) {
 
                     // $users = User::with(['skills' => function($query) use ( $skills) {
                     //     $query->whereIn('skill_id', $skills);
                     // }]);
-                    $users = SkillUser::with('user')->whereIn('skill_id', $skills);
+                    $users = $users->whereIn('skill_id', $skills);
 
                 } elseif(!is_null($levels) && is_null($skills)) {
 
@@ -292,7 +292,7 @@ class TeamController extends Controller
                     //     $query->whereIn('level', $levels);
                     // }]);
 
-                    $users = SkillUser::with('user')->whereIn('level', $levels);
+                    $users =  $users->whereIn('level', $levels);
 
                 }
 
@@ -301,7 +301,7 @@ class TeamController extends Controller
             }
 
             $userSkills = $users->get();
-            dd($userSkills->toArray());
+            // dd($userSkills->toArray());
             $html = view('admin.team.search_user', compact('userSkills'))->render();
 
             return response()->json(['result' => true, 'html' => $html]);
