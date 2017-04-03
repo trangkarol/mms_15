@@ -110,7 +110,7 @@ class UserController extends Controller
             Mail::to($request->email)->queue(new SendPassword($data));
             DB::commit();
 
-            return redirect()->action('Admin\UserController@edit', $user->id);
+            return redirect()->action('Admin\UserController@edit', $this->user->id);
         } catch(\Exception $e) {
             dd($e);
             $request->session()->flash('fail', trans('user.msg.insert-fail'));
