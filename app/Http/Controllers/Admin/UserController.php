@@ -561,7 +561,8 @@ class UserController extends Controller
                     if(!$this->validator($insert)->validate()) {
                         Mail::to($insert['email'])->queue(new SendPassword($insert));
                         $insert['password'] = bcrypt($password);
-                        $this->user->create($insert);
+                        $user = $this->user->create($insert);
+                        $this->activity->insertActivities($user, 'insert');
                     }
                 }
 
@@ -570,7 +571,6 @@ class UserController extends Controller
                 DB::commit();
                 return redirect()->action('Admin\UserController@index');
             }catch(\Exception $e){
-
                 $request->session()->flash('fail', trans('user.msg.import-fail'));
                 DB::rollback();
 

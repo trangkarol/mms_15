@@ -5,12 +5,11 @@ $(document).ready(function(){
     });
 
     // delelete
-    $(document).on('click', '.btn-delete', function(event) {
-        $(this).parents('.delete-form-user').addClass('current');
+    $(document).on('click', '#btn-delete', function(event) {
         event.preventDefault();
         bootbox.confirm('Are you want to delete?', function(result){
             if(result) {
-                $('.current.delete-form-user').submit();
+                $('#delete-form-user').submit();
             }
         });
     });

@@ -196,14 +196,15 @@ class ProjectController extends Controller
                 $teamId = $request->teamId;
                 $flag = $request->flag;
                 $projectId = $request->projectId;
-
                 $userTeams = TeamUser::with('user')->where('team_id', $teamId)->get();
 
                 $userId = $userTeams->pluck('user_id')->all();
-                $members = User::whereIn('id', $userId)->pluck('name', 'id')->all();
 
                 $arrMember = array();
                 if($flag == 0) {
+
+                    $members = User::whereIn('id', $userId)->pluck('name', 'id')->all();
+
                     $teamUserId = $userTeams->pluck('id')->all();
                     $userTeamId = ProjectTeam::with('teamUser.user')->where('project_id', $projectId)->pluck('team_user_id')->all();
                     $arrMember = TeamUser::with('user')->whereIn('id', $userTeamId)->where('team_id', $teamId)->pluck('user_id')->all();
@@ -250,7 +251,7 @@ class ProjectController extends Controller
                 $skillId = $request->skills;
                 $positionTeam = $request->positionTeam;
                 $level = $request->level;
-                // dd($request->all());
+                // dd ($positionTeam);
                 $user = new User;
 
                 if($teamId != 0 ) {
@@ -272,8 +273,8 @@ class ProjectController extends Controller
                 }
 
                 if( $positionTeam != 0 ) {
-                    $user = $user->whereHas('teamUsers.positions', function($query) use ($positionTeam) {
-                                $query->where('positions.id',  $positionTeam);
+                    $user = $user->with('teamUsers.positionTeams.position', function($query) use ($positionTeam) {
+                                $query->where('position_id',  $positionTeam);
                             });
                 }
 

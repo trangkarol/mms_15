@@ -16,6 +16,9 @@ $(document).ready(function(){
     });
     // click on search
     $(document).on('click','.team',function(){
+        $('.team').prop('checked', false);
+        $(this).prop('checked', true);
+
        var teamId = $(this).val();
        searchMember(teamId, 1);
     });
@@ -29,6 +32,7 @@ $(document).ready(function(){
     //delete member
     $(document).on('click','.btn-delete-team',function(event){
         var teamId = $(this).parents('tr').find('.teamMemberId').html().trim();
+        $(this).parents('tr').addClass('current-team');
         bootbox.confirm('Are you want to delete?', function(result){
             if(result) {
 
@@ -203,9 +207,11 @@ function deleteMember(teamId, event) {
     var projectId = $('#projectId').val();
     var members = [];
 
-    event.parents('tr').find('.members').each(function() {
+    $('.current-team').find('.members').each(function() {
         members.push($(this).val());
     });
+
+    $('tr').removeClass('.current-team');
     console.log(members);
 
     $.ajax({
