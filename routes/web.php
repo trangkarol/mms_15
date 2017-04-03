@@ -94,7 +94,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
 });
 
 //public
-Route::group(['prefix' => 'public' , 'middleware' => 'auth',  'namespace' => 'Member'], function () {
+Route::group(['prefix' => 'member' , 'middleware' => 'auth',  'namespace' => 'Member'], function () {
     Route::get('/', 'HomeController@index');
     Route::get('/list-team', 'HomeController@listTeam');
     Route::get('/list-member/{id}', 'HomeController@listMember');
