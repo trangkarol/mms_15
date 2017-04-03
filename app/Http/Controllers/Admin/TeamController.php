@@ -301,7 +301,7 @@ class TeamController extends Controller
             }
 
             $userSkills = $users->get();
-            dd($userSkills->toArray());
+            // dd($userSkills->toArray());
             $html = view('admin.team.search_user', compact('userSkills'))->render();
 
             return response()->json(['result' => true, 'html' => $html]);
