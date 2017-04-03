@@ -497,7 +497,6 @@ class UserController extends Controller
                 if(isset($file)) {
                     $nameFile = Library::importFile($file);
                     $members = $report->importFileExcel($nameFile);
-                    unlink( base_path().'/public/Upload/'.$nameFile );
                      // dd($members);
                     $position = Library::getPositions();
                 }
@@ -531,6 +530,7 @@ class UserController extends Controller
                 $members = $user->get();
                 $nameFile = 'user'.$dt->format('Y-m-d-H-i-s');
                 $report->exportFileExcel($members, $type, $nameFile);
+                unlink( base_path().'/public/Upload/'.$nameFile );
                 $request->session()->flash('success', trans('user.msg.import-success'));
                 return redirect()->action('Admin\UserController@index');
 
