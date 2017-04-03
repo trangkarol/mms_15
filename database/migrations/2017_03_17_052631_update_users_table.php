@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -32,7 +32,7 @@ class UpdateUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('birthday');
-            $table->dropColumn('avatar');
+            // $table->dropColumn('avatar');
             $table->dropColumn('role');
             $table->dropForeign(['position_id']);
             $table->dropColumn('position_id');
