@@ -270,7 +270,7 @@ class TeamController extends Controller
 
             $memberTeam = TeamUser::where('team_id', $teamId)->pluck('user_id')->toArray();
 
-            $users = SkillUser::with('user');
+            $users = new SkillUser;
 
             if(!is_null($skills) && !is_null($levels)) {
                 // $users = User::with(['skills' => function($query) use ($levels, $skills) {
