@@ -542,7 +542,7 @@ class UserController extends Controller
             DB::beginTransaction();
             try{
                 $report = new Report;
-                $when = Carbon\Carbon::now()->addMinutes(10);
+                $when = Carbon::now()->addMinutes(10);
                 // dd($request->all());
                 $nameFile = $request->nameFile;
                 $members = $report->importFileExcel($nameFile)->toArray();
@@ -557,7 +557,7 @@ class UserController extends Controller
                         $insert['password'] = $password;
 
                         if(!$this->validator($insert)->validate()) {
-                            Mail::to($insert['email'])->queue($when, new SendPassword($insert));
+                            Mail::to($insert['email'])->later($when, new SendPassword($insert));
                             $insert['password'] = bcrypt($password);
                             $this->user->create($insert);
                         }
