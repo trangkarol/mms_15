@@ -179,7 +179,7 @@ class UserController extends Controller
             if (isset($request->file)) {
                 if($user->avatar != "avatar.jpg" && !is_null($user->avatar)) {
                     $urlAvartar = base_path().'/public/Upload/'.$user->avatar;
-                    unlink($urlAvartar);
+                    // unlink($urlAvartar);
                 }
 
                 $user->avatar = Library::importFile($request->file);
