@@ -8,7 +8,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-3 sub-menu">
-            <h4>{{trans('position.title-positions')}}</h4>
+            <h4>{{ trans('position.title-positions' )}}</h4>
         </div>
 
         <div class="col-md-4 col-md-offset-3 paddingtop">
@@ -18,7 +18,7 @@
     <!-- content -->
     <div class="row">
          <div class="col-md-12 paddingtop">
-            @include('common.messages')
+            @include ('common.messages')
             <div class="panel panel-primary ">
                 <div class="panel-heading">
                     {{ trans('admin.lbl-result-search') }}
@@ -44,11 +44,13 @@
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td>{{ $position->name }}</td>
                                             <td>{{ $position->short_name }}</td>
-                                            @if($position->type_position == config('setting.type_position.position'))
-                                                <td>{{ trans('position.lbl-position') }}</td>
-                                            @else
-                                                <td>{{ trans('position.lbl-position-team') }}</td>
-                                            @endif
+                                            <td>
+                                                @if ($position->type_position == config('setting.type_position.position'))
+                                                    {{ trans('position.lbl-position') }}</td>
+                                                @else
+                                                    {{ trans('position.lbl-position-team') }}
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div class="col-md-6">
                                                     <a href ="{{ action('Admin\PositionController@edit', $position->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
