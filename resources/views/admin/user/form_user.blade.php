@@ -57,7 +57,7 @@
     <div class="col-md-6">
        {{ Form::file('file', ['id' => 'avatar']) }}
         <div class="col-md-6">
-            <img src="{{ isset($user->avatar)? url('/Upload', $user->avatar) : '' }}" width="200px" height="150px">
+            <img src="{{ isset($user->avatar)? url('/Upload', $user->avatar) : url('/Upload', 'avatar.jpg') }}" width="200px" height="150px">
         </div>
 
     </div>
