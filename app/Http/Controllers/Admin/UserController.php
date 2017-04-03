@@ -530,7 +530,7 @@ class UserController extends Controller
                 $members = $user->get();
                 $nameFile = 'user'.$dt->format('Y-m-d-H-i-s');
                 $report->exportFileExcel($members, $type, $nameFile);
-                unlink( base_path().'/public/Upload/'.$nameFile );
+                    unlink( base_path().'/public/Upload/'.$nameFile );
                 $request->session()->flash('success', trans('user.msg.import-success'));
                 return redirect()->action('Admin\UserController@index');
 
@@ -553,18 +553,16 @@ class UserController extends Controller
                 // validate users
 
                 foreach ($members as $user) {
-                    // foreach ($member as $user) {
-                        $insert = $this->dataMember($user);
-                        //insert password
-                        $password = str_random(8);
-                        $insert['password'] = $password;
+                    $insert = $this->dataMember($user);
+                    //insert password
+                    $password = str_random(8);
+                    $insert['password'] = $password;
 
-                        if(!$this->validator($insert)->validate()) {
-                            Mail::to($insert['email'])->queue(new SendPassword($insert));
-                            $insert['password'] = bcrypt($password);
-                            $this->user->create($insert);
-                        }
-                    // }
+                    if(!$this->validator($insert)->validate()) {
+                        Mail::to($insert['email'])->queue(new SendPassword($insert));
+                        $insert['password'] = bcrypt($password);
+                        $this->user->create($insert);
+                    }
                 }
 
                 $request->session()->flash('success', trans('user.msg.import-success'));
