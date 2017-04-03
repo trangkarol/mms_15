@@ -6,7 +6,6 @@
             <th>{{ trans('project.lbl-short-name') }}</th>
             <th>{{ trans('project.lbl-start-day') }}</th>
             <th>{{ trans('project.lbl-end-day') }}</th>
-            <th>{{ trans('project.lbl-leader') }}</th>
             <th>{{ trans('project.lbl-team') }}</th>
             <th></th>
         </tr>
