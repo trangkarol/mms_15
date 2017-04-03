@@ -36,16 +36,10 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        // $projects = ProjectTeam::with('teamUser.team', 'teamUser.user', 'project')->where('is_leader', '=', 1)->paginate(15);
         $projects = $this->project->with(['projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser.user','projectTeams'=> function($query) {
             $query->where('is_leader', '=', 1);
         }] )->paginate(15);
-        // $projects = $this->project->with('teamUsers.team', 'teamUsers.user', 'teamUsers')->orderBy('created_at', 'desc')->paginate(15);
-        // $projects = TeamUser::with('projects', 'user', 'team')->get();
-        // $projects = Project::all();
-        $teams = Library::getTeams();
-
-        // dd($projects);
+        $teams = Library::getLibraryTeams();
 
         return view('admin.project.index', compact('projects', 'teams'));
     }
@@ -202,7 +196,6 @@ class ProjectController extends Controller
                 $teamId = $request->teamId;
                 $flag = $request->flag;
                 $projectId = $request->projectId;
-                // dd($request->all());
 
                 $userTeams = TeamUser::with('user')->where('team_id', $teamId)->get();
 
@@ -214,16 +207,82 @@ class ProjectController extends Controller
                     $teamUserId = $userTeams->pluck('id')->all();
                     $userTeamId = ProjectTeam::with('teamUser.user')->where('project_id', $projectId)->pluck('team_user_id')->all();
                     $arrMember = TeamUser::with('user')->whereIn('id', $userTeamId)->where('team_id', $teamId)->pluck('user_id')->all();
+                    $members = User::whereHas('teamUsers.team', function($query) use ($teamId) {
+                                $query->where('team_id',  $teamId);
+                            })->with( ['teamUsers.projects' => function($query) use ($projectId) {
+                                $query->where('project_id', $projectId);
+                            }])->paginate(50);;
                 }
                 // dd($arrMember);
                 if(!$userTeams->isEmpty()) {
-                    $html = view('admin.project.list_members', compact('userTeams', 'projectId', 'members', 'teamId', 'arrMember', 'flag'))->render();
+
+                    $skills = Library::getLibrarySkills();
+                    $levels = Library::getLevel();
+                    $positionTeam =  array_prepend(Library::getPositionTeams(), 'All')  ;
+
+                    $html = view('admin.project.list_members', compact('userTeams', 'projectId', 'members', 'teamId', 'arrMember', 'flag', 'skills', 'levels', 'positionTeam'))->render();
                 } else {
                     $html = '';
                 }
 
 
                 return response()->json(['html' => $html]);
+
+            }catch(Exception $e){
+                return response()->json('result', 400);
+            }
+        }
+    }
+
+    /**
+     * save a user
+     *
+     * @param  User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function getListUser(Request $request)
+    {
+        if ($request->ajax()) {
+            try{
+                // dd($request->all());
+
+                $teamId = $request->teamId;
+                $skillId = $request->skills;
+                $positionTeam = $request->positionTeam;
+                $level = $request->level;
+                // dd($request->all());
+                $user = new User;
+
+                if($teamId != 0 ) {
+                    $user = $user->whereHas('teamUsers.team', function($query) use ($teamId) {
+                                $query->where('team_id',  $teamId);
+                            });
+                }
+
+                if( !empty($skillId) ) {
+                    $user = $user->whereHas('skillUsers.skill', function($query) use ($skillId) {
+                                $query->whereIn('skill_id',  $skillId);
+                            });
+                }
+
+                if( !empty($level)) {
+                    $user = $user->whereHas('skillUsers', function($query) use ($level) {
+                                $query->whereIn('level',  $level);
+                            });
+                }
+
+                if( $positionTeam != 0 ) {
+                    $user = $user->whereHas('teamUsers.positions', function($query) use ($positionTeam) {
+                                $query->where('positions.id',  $positionTeam);
+                            });
+                }
+
+                $members = $user->paginate(50);
+                // dd($members->toArray());
+
+                $html = view('admin.project.project_member', compact('members'))->render();
+
+                return response()->json(['result' => true,  'html' => $html]);
 
             }catch(Exception $e){
                 return response()->json('result', 400);
@@ -295,6 +354,7 @@ class ProjectController extends Controller
             DB::beginTransaction();
 
             try{
+                // dd($request->all());
                 $projectId = $request->projectId;
                 $members = $request->members;
                 $teamId = $request->teamId;
@@ -329,18 +389,21 @@ class ProjectController extends Controller
         if ($request->ajax()) {
             try{
                 $teamId = $request->teamId;
+                $startDay = $request->startDay;
+                $endDay = $request->endDay;
+
                 if($teamId != 0) {
-                    $projects = $this->project->with(['projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser' => function($query) use ($teamId) {
+                    $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team')->whereHas('projectTeams.teamUser', function($query) use ($teamId) {
                                 $query->where('team_id', '=', $teamId);
-                            }],'projectTeams.teamUser.user')
-                            ->with(['projectTeams'=> function($query) {
-                                $query->where('is_leader', '=', 1);
-                            }])->paginate(15);
+                            })->with('projectTeams.teamUser.user');
+
                 } else {
-                    $projects = $this->project->with(['projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser.user','projectTeams'=>function($query) {
-                        $query->where('is_leader', '=', 1);
-                    }] )->paginate(15);
+                    $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser.user');
                 }
+
+                $projects = $projects->with(['projectTeams'=> function($query) {
+                                $query->where('is_leader', '=', 1);
+                            }])->where('start_day', '>=', $startDay)->where('end_day', '<=', $endDay)->paginate(15);
 
                 $html = view('admin.project.table_result', compact('projects'))->render();
 

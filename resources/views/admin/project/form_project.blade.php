@@ -79,11 +79,13 @@
                         <td class="hidden teamMemberId">{{ $listTeam->id}}</td>
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                            {{ $listTeam->name }}
-
+                            @php $members = ''; @endphp
                             @foreach ($listTeam->users as $user)
+                                @php $members = $members.$user->name.' | '; @endphp
                                 {{ Form::hidden('members[]', $user->id, ['class' => 'form-control members', 'required' => true]) }}
                             @endforeach
+                            <a href="#" data-toggle="tooltip" data-placement="top" title="{{ rtrim($members,' | ') }}">{{ $listTeam->name }}</a>
+
                         </td>
                         <td>
                             <div class="col-md-6">

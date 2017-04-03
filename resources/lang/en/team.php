@@ -21,6 +21,7 @@ return [
     'lbl-senior' => 'Senior',
     'lbl-insert-position' => 'Insert Position',
     'lbl-list-team' => 'List team',
+    'lbl-detail' => 'Detail',
     'msg' => [
         'name-required' => 'Please input name!',
         'description-required' => 'Please input description!',

@@ -17,14 +17,6 @@ class Library {
         });
     }
 
-    public static function getTeams()
-    {
-        $teams = Cache::remember('teams', config('view.minutes'), function() {
-            return Team::pluck('name', 'id')->all();
-        });
-        return array_prepend($teams, '----');
-    }
-
 
     public static function getLibrarySkills()
     {

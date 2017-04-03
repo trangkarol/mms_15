@@ -21,13 +21,13 @@ class UsersTableSeeder extends Seeder
             'position_id' => 1,
             'remember_token' => str_random(10),
         ]);
-        // factory(App\Models\User::class, 10)->create();
-        factory(App\Models\User::class, 10)->create()->each(function ($user) {
-            foreach(range(1, 2) as $key) {
-                $activities[] = factory(App\Models\Activity::class)->make()->toArray();
-            }
+        factory(App\Models\User::class, 10)->create();
+        // factory(App\Models\User::class, 10)->create()->each(function ($user) {
+        //     foreach(range(1, 2) as $key) {
+        //         $activities[] = factory(App\Models\Activity::class)->make()->toArray();
+        //     }
 
-           $user->activities()->createMany($activities);
-        });
+        //    $user->activities()->createMany($activities);
+        // });
     }
 }

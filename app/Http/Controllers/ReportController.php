@@ -12,8 +12,19 @@ class ReportController extends Controller
     {
         $url = base_path().'/public/Upload/'.$nameFile;
 
-        return Excel::load($url, function($reader) {
+        return Excel::selectSheetsByIndex(0)->load($url, function($reader) {
             $reader->all();
         })->get();
+    }
+
+    public function exportFileExcel($data, $type, $nameFile)
+    {
+        return Excel::create($nameFile, function($excel) use ($data) {
+            $excel->sheet('mySheet', function($sheet) use ($data)
+            {
+                $sheet->loadView('admin.user.export_user', compact('data'));
+            });
+
+        })->export($type);
     }
 }

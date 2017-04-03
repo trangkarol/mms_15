@@ -26,6 +26,11 @@ class TeamUser extends Model
         return $this->belongsToMany(Project::class, 'project_teams')->withPivot('is_leader')->withTimestamps();
     }
 
+    public function projectTeams()
+    {
+        return $this->hasMany(ProjectTeam::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

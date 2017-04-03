@@ -7,14 +7,14 @@
         <div class="col-md-6">
             <label for="team" class="col-md-6">{{ trans('user.lbl-team') }}</label>
             <div class="col-md-6">
-                {{ Form::select('team', $teams, null, ['class' => 'form-control', 'id' => 'team']) }}
+                {{ Form::select('team', $teams, null, ['class' => 'form-control search', 'id' => 'team']) }}
             </div>
         </div>
 
          <div class="col-md-6">
             <label for="team" class="col-md-6">{{ trans('user.lbl-position') }}</label>
             <div class="col-md-6">
-                {{ Form::select('team', $position, null, ['class' => 'form-control', 'id' => 'position']) }}
+                {{ Form::select('team', $position, null, ['class' => 'form-control search', 'id' => 'position']) }}
             </div>
         </div>
      </div>
@@ -23,7 +23,7 @@
           <div class="col-md-6">
             <label for="team" class="col-md-6">{{ trans('user.lbl-position_team') }}</label>
             <div class="col-md-6">
-                {{ Form::select('team', $positionTeams, null, ['class' => 'form-control', 'id' => 'positionTeams']) }}
+                {{ Form::select('team', $positionTeams, null, ['class' => 'form-control search', 'id' => 'positionTeams']) }}
             </div>
         </div>
     </div>

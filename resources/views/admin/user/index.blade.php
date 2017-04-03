@@ -11,13 +11,27 @@
             <h4>{{trans('user.title-users')}}</h4>
         </div>
 
-        <div class="col-md-4 col-md-offset-3 paddingtop">
-            <a href="{{ action('Admin\UserController@create') }}" class="btn btn-primary"><i class="fa fa-user-plus " ></i></a>
-            <a href="#" class="btn btn-primary" id= "import-file"><i class="fa fa-file" ></i></a>
-            {!! Form::open(['class' => 'form-horizontal', 'id' => 'form-input-file', 'enctype' => 'multipart/form-data']) !!}
-                {{  Form::file('file', ['id' => 'file-csv', 'class' => 'hidden']) }}
+        <div class="col-md-4 col-md-offset-2 paddingtop">
+            <div class="col-md-4">
+                <a href="{{ action('Admin\UserController@create') }}" class="btn btn-primary"><i class="fa fa-user-plus " ></i></a>
+            </div>
 
-            {!! Form::close() !!}
+            <div class="col-md-4">
+                <a href="#" class="btn btn-primary" id= "import-file"><i class="glyphicon glyphicon-import" ></i></a>
+                {!! Form::open(['action' => 'Admin\UserController@importFile', 'class' => 'form-horizontal', 'id' => 'form-input-file', 'enctype' => 'multipart/form-data']) !!}
+                    {{  Form::file('file', ['id' => 'file-csv', 'class' => 'hidden']) }}
+
+                {!! Form::close() !!}
+            </div>
+
+            <div class="col-md-4">
+                <a href="#" class="btn btn-primary" id= "export-file"><i class="glyphicon glyphicon-export" ></i></a>
+                {!! Form::open(['action' => 'Admin\UserController@importFile', 'class' => 'form-horizontal', 'id' => 'form-input-file', 'enctype' => 'multipart/form-data']) !!}
+                    {{  Form::file('file', ['id' => 'file-csv', 'class' => 'hidden']) }}
+
+                {!! Form::close() !!}
+            </div>
+
         </div>
     </div>
     <!-- content -->

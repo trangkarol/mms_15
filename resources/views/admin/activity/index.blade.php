@@ -45,7 +45,13 @@
                                         <td>{{ $activity->created_at }}</td>
                                         <td>
                                             @if ( $activity->activitiable)
-                                                {{ $activity->description }}
+                                                @if ($activity->activitiable_type == 'App\Models\User' && $activity->action != 'login' && $activity->action != 'logout')
+                                                    <a href="{{ action('Member\HomeController@detailMember', $activity->activitiable_id) }}">{{ $activity->description }}</a>
+                                                @elseif ($activity->activitiable_type == 'App\Models\Team')
+                                                    <a href="{{ action('Admin\TeamController@show', $activity->activitiable_id) }}">{{ $activity->description }}</a>
+                                                @else
+                                                    <a href="">{{ $activity->description }}</a>
+                                                @endif
                                             @endif
                                         </td>
                                         <td>

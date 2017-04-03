@@ -25,7 +25,8 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users'.$this->get('id'),
+            'avatar' => 'mimes:jpeg,jpg|max:10000',
             'birthday' => 'required',
             'password' => 'min:6|confirmed',
         ];
@@ -45,6 +46,8 @@ class UpdateUserRequest extends FormRequest
             'birthday.required' => trans('user.msg.birthday-required'),
             'password.confirmed' => trans('user.msg.password-confirmed'),
             'password.min' => trans('user.msg.password-min'),
+
+
         ];
     }
 }

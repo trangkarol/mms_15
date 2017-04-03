@@ -93,7 +93,9 @@ class TeamController extends Controller
      */
     public function show($id)
     {
-        //
+        $teams = $this->team->with('leader','teamUsers.user', 'teamUsers.positions', 'teamUsers.projectTeams.project')->where('id', $id)->first();
+        // dd($teams->toArray());
+        return view('admin.team.detail', compact('teams'));
     }
 
     /**

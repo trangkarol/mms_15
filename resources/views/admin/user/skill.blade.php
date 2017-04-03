@@ -29,10 +29,6 @@
                     @if($flag == 0)
                         {{ Form::button(trans('admin.btn-edit'), ['class' => 'btn btn-primary ', 'id' => 'btn-edit-skill']) }}
                     @endif
-
-                    @if($flag == 2)
-                        {{ Form::button(trans('admin.btn-delete'), ['class' => 'btn btn-primary ', 'id' => 'btn-delete-skill-popup']) }}
-                    @endif
                 </div>
             </div>
         {{ Form::close() }}

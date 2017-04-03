@@ -41,4 +41,9 @@ class Position extends Model
     {
         return $this->belongsToMany(TeamUser::class, 'position_teams');
     }
+
+    public function positionTeam()
+    {
+        return $this->hasMany(PositionTeam::class);
+    }
 }

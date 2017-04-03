@@ -47,15 +47,15 @@
 
                             <tbody>
                                 @if (isset($members))
-                                    @foreach ($members as $member)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $member->name }}</td>
-                                            <td>{{ $member->email }}</td>
-                                            <td>{{ $member->birthday }}</td>
-                                            <td>@if($member->role == config('settind.role.admin')) {{ trans('admin.lbl-admin') }} @else {{ trans('admin.lbl-user') }} @endif</td>
-                                            <td>{{ $member->position }}</td>
-                                        </tr>
+                                    @foreach ($members as $user)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $user->name }}</td>
+                                                <td>{{ $user->email }}</td>
+                                                <td>{{ $user->birthday }}</td>
+                                                <td>@if($user->role == config('settind.role.admin')) {{ trans('admin.lbl-admin') }} @else {{ trans('admin.lbl-user') }} @endif</td>
+                                                <td>{{ $user->position }}</td>
+                                            </tr>
                                     @endforeach
                                 @endif
                             </tbody>

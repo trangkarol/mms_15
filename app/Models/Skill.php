@@ -35,6 +35,11 @@ class Skill extends Model
         return $this->morphMany(Activity::class, 'activitiable');
     }
 
+    public function skillUsers()
+    {
+       return $this->hasMany(SkillUser::class);
+    }
+
     public function scopeSkillId($query, $arrSkillId)
     {
         return $query->whereIn('id', $arrSkillId);

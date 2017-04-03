@@ -14,15 +14,9 @@
 
                 <div class="col-md-12">
                     @foreach ($positions as $key => $position)
-                        @if(in_array($key, $arrPosition))
-                            <div class="col-md-6">
-                                {{ Form::checkbox('position[]', $key, true, ['class' => 'position' ]) }} {{ $position }}
-                            </div>
-                        @else
-                            <div class="col-md-6">
-                                {{ Form::checkbox('position[]', $key, null, ['class' => 'position' ]) }} {{ $position }}
-                            </div>
-                        @endif
+                        <div class="col-md-6">
+                            {{ Form::checkbox('position[]', $key, in_array($key, $arrPosition), ['class' => 'position' ]) }} {{ $position }}
+                        </div>
                     @endforeach
                 </div>
             </div>

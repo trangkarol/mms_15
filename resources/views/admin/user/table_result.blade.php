@@ -9,10 +9,6 @@
         </tr>
     </thead>
     <tbody>
-        @php
-            $index =0;
-        @endphp
-
         @if (!empty($members))
             @foreach ($members as $member)
                 <tr>

@@ -27,7 +27,7 @@
                                     {!! Form::button(trans('admin.lbl-edit'), ['class' => 'btn btn-primary btn-edit-skill', 'id' => '']) !!}
                                 </div>
                                 <div class="col-md-6">
-                                    {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary btn-delete-skill', 'id' => '']) !!}
+                                    {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary btn-delete-skill-popup', 'id' => '']) !!}
                                 </div>
                             </td>
                         </tr>

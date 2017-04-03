@@ -16,7 +16,6 @@ return [
     'lbl-role' => 'Role',
     'lbl-position' => 'Postion',
     'lbl-skill' => 'Skill',
-    'lbl-stt' => 'Postion',
     'lbl-remember' => 'Remember Me',
     'lbl-level' => 'Level',
     'lbl-experiensive' => 'Experiensive',
@@ -52,6 +51,10 @@ return [
         'add-skill-sucess' => 'Add Skill Success!',
         'edit-skill-sucess' => 'Edit Skill Success!',
         'delete-skill-sucess' => 'Delete Skill Success!',
+        'import-fail' => 'Import Users Fail!',
+        'import-success' => 'Import Users Success!',
+        'export-success' => 'Export Users Success!',
+        'export-fail' => 'Export Users Fail!',
         'fail' => 'The process has failed!',
     ],
 ];

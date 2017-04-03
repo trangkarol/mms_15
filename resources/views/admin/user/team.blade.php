@@ -12,25 +12,16 @@
             </thead>
 
             <tbody>
-            @php
-                $index = 0;
-            @endphp
             @foreach ($positionTeams as $positionTeam)
-
                 @if($positionTeam->team)
-                    @php
-                        $index = $index + 1;
-                    @endphp
                     <tr>
                         <td class="hidden teamId">{{ $positionTeam->team->id}}</td>
-                        <td class="text-center">{{ $index }}</td>
+                        <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $positionTeam->team->name }}</td>
                         <td>
-                            @if ($positionTeam->position)
-                                @foreach ($positionTeam->positions as $positon)
-                                    {{ $positon->name }} @php echo ',' @endphp
-                                @endforeach
-                            @endif
+                            @foreach ($positionTeam->positions as $positon)
+                                {{ $positon->name.' | ' }}
+                            @endforeach
                         </td>
                         <td>
                             <div class="col-md-6">

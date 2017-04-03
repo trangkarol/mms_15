@@ -24,6 +24,7 @@ use App\Models\Activity;
 use Carbon\Carbon;
 use App\Mail\SendPassword;
 use Mail, DB;
+use DateTime;
 
 
 class UserController extends Controller
@@ -51,9 +52,9 @@ class UserController extends Controller
     {
         // Mail::to('thientrang2808@gmail.com')->send(new SendPassword());
         // dd('hello');
-        $teams = Library::getTeams();
-        $position = array_prepend(Library::getPositions(), '------');
-        $positionTeams = array_prepend(Library::getPositionTeams(), '-------');
+        $teams = Library::getLibraryTeams();
+        $position = Library::getPositions();
+        $positionTeams = Library::getPositionTeams();
         $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team')->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.user.index', compact('members', 'teams', 'position', 'positionTeams'));
@@ -106,7 +107,7 @@ class UserController extends Controller
                 'password' => $password,
             ];
 
-            Mail::to($request->email)->send(new SendPassword($data));
+            Mail::to($request->email)->queue(new SendPassword($data));
             DB::commit();
 
             return redirect()->action('Admin\UserController@edit', $this->user->id);
@@ -127,7 +128,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -164,7 +165,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(UpdateUserRequest $request)
     {
         DB::beginTransaction();
 
@@ -177,8 +178,8 @@ class UserController extends Controller
             $user->role = $request->role;
 
             if (isset($request->file)) {
-                $urlAvartar = base_path().'/public/Upload/'.$user->avatar;
-                if($user->avatar != 'avatar.jpg') {
+                if($user->avatar != "avatar.jpg" && !is_null($user->avatar)) {
+                    $urlAvartar = base_path().'/public/Upload/'.$user->avatar;
                     unlink($urlAvartar);
                 }
 
@@ -213,9 +214,7 @@ class UserController extends Controller
 
         try {
             $userId = $request->userId;
-
             $user = $this->user->findOrFail($userId);
-
             //get team user id ->pluck('id')->all()
             $teamUsers = TeamUser::getUser($userId);
             $teamUserId = $teamUsers->pluck('id')->all();
@@ -248,55 +247,20 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             try{
-                dd($request->all());
+                // dd($request->all());
                 $teamId = $request->teamId;
                 $position = $request->position;
                 $positionTeams = $request->positionTeams;
-                // dd($teamId);
-                $members = $this->user;
-                if($teamId == 0 && $position == 0 && $positionTeams == 0) {
-                    $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team');
-                }
+                $user = $this->getMember($teamId, $position, $positionTeams);
 
-                if($teamId != 0 && $position != 0) {
-                    $members  = $this->user->whereHas('teamUsers.team', function($query) use($teamId) {
-                        $query->where('team_id', '=', $teamId);
-                    })->with('position', 'teamUsers.positions')->where('position_id', $position);
-                }
-
-                if($teamId != 0 && $positionTeams != 0) {
-                    $members  = $this->user->whereHas('teamUsers.team', function($query) use($teamId) {
-                        $query->where('team_id', '=', $teamId);
-                    })->with('position')>whereHas('teamUsers.positions', function($query) use($positionTeams) {
-                        $query->where('position_id', '=', $positionTeams);
-                    });
-                }
-
-                if($position != 0 && $positionTeams != 0) {
-                    $members  = $this->user->whereHas('teamUsers.team', function($query) use($teamId) {
-                        $query->where('team_id', '=', $teamId);
-                    })->with('position')>whereHas('teamUsers.positions', function($query) use($positionTeams) {
-                        $query->where('position_id', '=', $positionTeams);
-                    });
-                }
-
-                if($teamId != 0) {
-                    $members->whereHas('teamUsers.team', function($query) use($teamId) {
-                        $query->where('team_id', '=', $teamId);
-                    })->with('position', 'teamUsers.positions')->paginate(15);
-                    // $members  = $this->user->with('position', 'teamUsers.positions', 'teamUsers.team', 'teamUsers')->where('teamUsers.team_id', '=', $teamId)->paginate(15);
-                    // dd($members->toArray());
-
-                } else {
-                    $members  = $this->user->with('position', 'teamUsers', 'teamUsers.positions', 'teamUsers.team')->orderBy('created_at', 'desc')->paginate(15);
-                }
-
+                $members  = $user->orderBy('created_at', 'desc')->paginate(15);
+                // dd($members->toArray());
 
                 $html = view('admin.user.table_result', compact('members'))->render();
 
-                return response()->json(['html' => $html]);
+                return response()->json(['result' => true, 'html' => $html]);
             }catch(Exception $e){
-                return response()->json('result', 400);
+                return response()->json('false', false);
             }
         }
     }
@@ -319,7 +283,7 @@ class UserController extends Controller
                 $level = $request->level;
                 $flag = $request->flag;
 
-                if($flag == 0 || $flag == 2) {//insert user skill
+                if($flag == 0) {//insert user skill
                     $userSkill = SkillUser::where('skill_id', $skill)->where('user_id', $userId)->delete();
                 }
 
@@ -344,6 +308,32 @@ class UserController extends Controller
             }
         }
     }
+
+
+    /**
+     * add skill
+     *
+     * @param  User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteSkill($skillId, $userId)
+    {
+        DB::beginTransaction();
+        try {
+            $userSkill = SkillUser::where('skill_id', $skillId)->where('user_id', $userId)->delete();
+            $skillUsers = SkillUser::skillUsers($userId)->get();
+
+            $levels = Library::getLevel();
+            $html = view('admin.user.list_skill', compact('skillUsers', 'levels'))->render();
+            DB::commit();
+
+            return response()->json(['result' => true, 'html' => $html]);
+        } catch (Exception $e){
+            DB::rollback();
+            return response()->json('result', false);
+        }
+    }
+
 
     /**
      * positionTeam
@@ -431,40 +421,33 @@ class UserController extends Controller
      * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function deleteTeam(Request $request)
+    public function deleteTeam($teamId, $userId)
     {
-        if ($request->ajax()) {
-            DB::beginTransaction();
-            try{
-                $userId = $request->userId;
-                $teamId = $request->teamId;
-                $positions = $request->positions;
-                $flag = $request->flag;
-                //
-                $teamUser = TeamUser::getTeam($teamId)->getUser($userId)->pluck('id')->all();
-                // delete position team
-                $teamUser = TeamUser::find($teamUser[0])->positions()->detach($positions);
-                // delete project team
-                $projectId = ProjectTeam::where('team_user_id', $teamUser[0])->pluck('project_id')->all();
+        DB::beginTransaction();
+        try{
+            $teamUser = TeamUser::getTeam($teamId)->getUser($userId)->pluck('id')->all();
+            // delete position team
+            PositionTeam::whereIn('team_user_id', $teamUser)->delete();
+            // delete project team
+            $projectId = ProjectTeam::where('team_user_id', $teamUser[0])->pluck('project_id')->all();
 
-                if (!empty($projectId)) {
-                    $teamUser = TeamUser::find($teamUser[0])->projects()->detach($projectId);
-                }
-
-                //delete team user
-                $team = $this->user->find($userId)->teams()->detach($teamId);
-
-                $teamUserId = TeamUser::getUser($userId)->pluck('id')->all();
-                $positionTeams = TeamUser::with('team', 'positions')->teamUserId($teamUserId)->get();
-
-                $html = view('admin.user.team', compact('positionTeams'))->render();
-                DB::commit();
-
-                return response()->json(['result' => true, 'html' => $html]);
-            }catch(Exception $e){
-                DB::rollback();
-                return response()->json('result', false);
+            if (!empty($projectId)) {
+                $teamUser = TeamUser::find($teamUser[0])->projects()->detach($projectId);
             }
+
+            //delete team user
+            $team = $this->user->find($userId)->teams()->detach($teamId);
+
+            $teamUserId = TeamUser::getUser($userId)->pluck('id')->all();
+            $positionTeams = TeamUser::with('team', 'positions')->teamUserId($teamUserId)->get();
+
+            $html = view('admin.user.team', compact('positionTeams'))->render();
+            DB::commit();
+
+            return response()->json([ 'result' => true, 'html' => $html ]);
+        }catch(Exception $e){
+            DB::rollback();
+            return response()->json('result', false);
         }
     }
 
@@ -507,16 +490,17 @@ class UserController extends Controller
 
     public function importFile(Request $request)
     {
-        if ($request->ajax()) {
+        // if ($request->ajax()) {
             try{
-                dd($request->all());
+                // dd($request->all());
                 $report = new Report;
                 $file = $request->file;
-
+                $nameFile = '';
                 if(isset($file)) {
 
                     $nameFile = Library::importFile($file);
                     $members = $report->importFileExcel($nameFile);
+                     // dd($members);
                     $position = Library::getPositions();
                 }
 
@@ -529,7 +513,27 @@ class UserController extends Controller
                 DB::rollback();
                 return response()->json('result', false);
             }
-        }
+        // }
+    }
+
+    public function exportFile($type, $teamId, $position, $positionTeams)
+    {
+        // if ($request->ajax()) {
+            try{
+                $report = new Report;
+                $dt = new DateTime();
+                // dd($type,  $teamId, $position, $positionTeams);
+                $user = $this->getMember($teamId, $position, $positionTeams);
+                $members = $user->get();
+                $nameFile = 'user'.$dt->format('Y-m-d-H-i-s');
+                $report->exportFileExcel($members, $type, $nameFile);
+                $urlFile = $nameFile.'.'.$type;
+
+                return response()->json(['result' => true, 'urlFile' => storage_path($urlFile)]);
+            }catch(\Exception $e){
+                return response()->json('result', false);
+            }
+        // }
     }
 
     public function saveImport(Request $request)
@@ -545,24 +549,31 @@ class UserController extends Controller
                 // validate users
 
                 foreach ($members as $member) {
-
-                        $insert = $this->dataMember($member);
+                    foreach ($member as $user) {
+                        $insert = $this->dataMember($user);
                         //insert password
                         $password = str_random(8);
                         $insert['password'] = $password;
 
-                    if(!$this->validator($insert)->validate()) {
-                        Mail::to($insert['email'])->queue(new SendPassword($insert));
-                        $insert['password'] = bcrypt($password);
-                        $this->user->create($insert);
+                        if(!$this->validator($insert)->validate()) {
+                            Mail::to($insert['email'])->queue(new SendPassword($insert));
+                            $insert['password'] = bcrypt($password);
+                            $this->user->create($insert);
+                        }
                     }
+
                 }
+
+                $request->session()->flash('success', trans('user.msg.import-success'));
+
                 DB::commit();
                 return redirect()->action('Admin\UserController@index');
-            }catch(Exception $e){
-                dd($e);
+            }catch(\Exception $e){
+                // dd($e['messages']);
+                $request->session()->flash('fail', trans('user.msg.import-fail'));
                 DB::rollback();
-                return response()->json('result', false);
+
+                return redirect()->action('Admin\UserController@index');
             }
         // }
     }
@@ -573,7 +584,7 @@ class UserController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    public function validator(array $data)
     {
         return Validator::make($data, [
             'name' => 'required',
@@ -591,18 +602,46 @@ class UserController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function dataMember($member)
+    public function dataMember($member)
     {
         $data = [];
         $data['name'] = $member['name'];
         $data['email'] = $member['email'];
         $data['role']= $member['role'];
-        $data['avatar']= 'avatar.jpg';
+        $data['avatar']= "avatar.jpg";
         $data['birthday'] = $member['birthday'];
         $data['position_id'] = $member['position'];
         return $data;
     }
+
+    public function getMember($teamId, $position, $positionTeams)
+    {
+        $user = $this->user;
+        // team
+        if ($teamId != 0) {
+            $user = $user->whereHas('teamUsers.team', function($query) use ($teamId) {
+                        $query->where('team_id',  $teamId);
+                    });
+        } else {
+            $user = $user->with('teamUsers.team');
+        }
+
+        // position
+        if($position != 0) {
+            $user = $user->with('position')->where('position_id', $position);
+        } else {
+            $user = $user->with('position');
+        }
+
+        //positionTeams
+        if($positionTeams != 0) {
+            $user = $user->whereHas('teamUsers.positions', function($query) use($positionTeams) {
+                $query->where('position_id', $positionTeams);
+            });
+        } else {
+            $user = $user->with('teamUsers.positions');
+        }
+
+        return $user;
+    }
 }
-
-
-

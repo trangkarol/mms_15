@@ -38,7 +38,7 @@ $(document).ready(function(){
     });
 
     // add tab
-    $(document).on('click','#btn-add',function(){
+    $(document).on('click','#btn-add-member',function(){
        addMember(1);
     });
 
@@ -54,11 +54,18 @@ $(document).ready(function(){
         search(page);
     });
 
+    // project members
+    $(document).on('click','#btn-search-member',function(){
+       projectMembers();
+    });
 
 });
 
 function search(page) {
     var teamId = $('#team').val();
+    var startDay = $('#start-day').val();
+    var endDay = $('#end-day').val();
+
     url = '/admin/projects/search';
     if(page != 0){
         url = '/admin/projects/search?page='+page;
@@ -69,7 +76,9 @@ function search(page) {
         url: url,
         dataType: 'json',
         data: {
-            teamId:teamId
+            teamId: teamId,
+            startDay: startDay,
+            endDay: endDay
         },
         success:function(data){
             $('#result-projects').html();
@@ -106,14 +115,48 @@ function searchMember(teamId, flag) {
     });
 }
 
+function projectMembers() {
+    var teamId = $('#teamId-member').val();
+    var positionTeam = $('#position-team').val();
+
+    var skills = [];
+    $('.skills:checked').each(function() {
+        skills.push($(this).val());
+    });
+
+    var level = [];
+    $('.levels:checked').each(function() {
+        level.push($(this).val());
+    });
+    // var level = $('.levels').val();
+
+    $.ajax({
+        type: 'POST',
+        url: '/admin/projects/project-member',
+        dataType: 'json',
+        data: {
+            teamId : teamId,
+            positionTeam : positionTeam,
+            skills : skills,
+            level : level,
+        },
+        success:function(data){
+            if(data.result) {
+               $('#result-members').html();
+               $('#result-members').html(data.html);
+            }
+
+        }
+    });
+}
 
 function addMember(flag) {
-    var projectId = $('#projectId-member').val();
+    var projectId = $('#projectId').val();
     var teamId = $('#teamId-member').val();
     var userId = [];
-    var leader = $('#leader').val();
+    var leader = $('.leader').val();
 
-    $('.users:checked').each(function() {
+    $('.add_user:checked').each(function() {
         userId.push($(this).val());
     });
 
@@ -131,13 +174,17 @@ function addMember(flag) {
         success:function(data){
             if(data.result) {
                 if(flag == 1 ) {
-                    bootbox.alert('Insert successfuly!');
+                    $.colorbox.close();
+                    bootbox.alert('Insert successfuly!', function() {
+                        location.reload();
+                    });
                 } else {
-                    bootbox.alert('Update successfuly!');
+                    bootbox.alert('Update successfuly!', function() {
+                        location.reload();
+                    });
                 }
 
-                $.colorbox.close();
-                location.reload();
+
             } else {
                 if(flag == 1 ) {
                     bootbox.alert(trans['Insert fail!']);

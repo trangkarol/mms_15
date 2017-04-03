@@ -81,4 +81,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(TeamUser::class);
     }
+
+    public function skillUsers()
+    {
+        return $this->hasMany(SkillUser::class);
+    }
 }

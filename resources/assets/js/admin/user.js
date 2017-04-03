@@ -192,24 +192,12 @@ function addTeam(event,flag) {
     });
 }
 
-function deleteTeam(event) {
-    var teamId = $('#teamId-postion').val();
-    var userId = $('#userId-postion').val();
-
-    var positions = [];
-    $('.position:checked').each(function() {
-        positions.push($(this).val());
-    });
-
+function deleteTeam(teamId) {
+    var userId = $('#userId').val();
     $.ajax({
-        type : 'POST',
-        url : '/admin/users/delete-team',
+        type : 'GET',
+        url : '/admin/users/delete-team/'+teamId+'/'+userId,
         dataType : 'json',
-        data : {
-            teamId : teamId,
-            userId : userId,
-            positions : positions,
-        },
         success:function(data) {
             console.log('trang');
             if(data.result) {

@@ -55,7 +55,7 @@
 <div class="form-group">
     {{ Form::label('position', trans('user.lbl-avartar'), ['class' => 'col-md-4 control-label']) }}
     <div class="col-md-6">
-       {{ Form::file('file') }}
+       {{ Form::file('file', ['id' => 'avatar']) }}
         <div class="col-md-6">
             <img src="{{ isset($user->avatar)? url('/Upload', $user->avatar) : '' }}" width="200px" height="150px">
         </div>

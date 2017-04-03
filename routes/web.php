@@ -20,6 +20,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
     // teams
     Route::group(['prefix' => 'teams'], function () {
         Route::resource('/', 'TeamController', ['only' => ['index', 'create', 'store']]);
+        Route::get('/detail/{id}', 'TeamController@show');
         Route::post('/destroy', 'TeamController@destroy');
         Route::post('/update', 'TeamController@update');
         Route::get('/add-member', 'TeamController@addMember');
@@ -34,7 +35,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
 
     // user
     Route::group(['prefix' => 'users'], function () {
-        Route::resource('/', 'UserController', ['only' => ['index', 'create', 'store']]);
+        Route::resource('/', 'UserController', ['only' => ['index', 'create', 'store', 'show']]);
         Route::post('/search', 'UserController@search');
         Route::post('/destroy', 'UserController@destroy');
         Route::post('/update', 'UserController@update');
@@ -42,10 +43,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
         Route::post('/add-skill', 'UserController@addSkill');
         Route::post('/position-team', 'UserController@positionTeam');
         Route::post('/add-team', 'UserController@addTeam');
-        Route::post('/delete-team', 'UserController@deleteTeam');
+        Route::get('/delete-team/{teamId}/{userId}', 'UserController@deleteTeam');
         Route::post('/get-skill', 'UserController@getSkill');
+        Route::get('/delete-skill/{skillId}/{userId}', 'UserController@deleteSkill');
         Route::post('/import-file', 'UserController@importFile');
         Route::post('/save-file', 'UserController@saveImport');
+        Route::get('/export-file/{type}/{teamId}/{position}/{positionTeams}', 'UserController@exportFile');
     });
 
     // position
@@ -65,6 +68,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
         Route::post('/search-member', 'ProjectController@searchMember');
         Route::post('/add-member', 'ProjectController@addMember');
         Route::post('/delete-member', 'ProjectController@deleteMember');
+        Route::post('/project-member', 'ProjectController@getListUser');
         Route::get('/{id}/edit', 'ProjectController@edit');
     });
 
@@ -82,6 +86,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
         Route::post('/destroy', 'ActivityController@destroy');
     });
 
+    //common
+    Route::group(['prefix' => 'common'], function () {
+        Route::get('/comfirm-export', 'CommonController@getComfirmExport');
+    });
 });
 
 //public
