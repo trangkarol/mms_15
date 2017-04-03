@@ -558,7 +558,7 @@ class UserController extends Controller
                     $insert['password'] = $password;
 
                     if(!$this->validator($insert)->validate()) {
-                        Mail::to($insert['email'])->queue(new SendPassword($insert));
+                        // Mail::to($insert['email'])->queue(new SendPassword($insert));
                         $insert['password'] = bcrypt($password);
                         $user = $this->user->create($insert);
                         $this->activity->insertActivities($user, 'insert');
