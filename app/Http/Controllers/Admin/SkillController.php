@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Skill\InserSkillRequest;
 use App\Helpers\Library;
 use App\Models\Skill;
+use App\Models\SkillUser;
 use App\Models\Activity;
 use DB;
 
