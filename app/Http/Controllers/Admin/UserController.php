@@ -95,7 +95,7 @@ class UserController extends Controller
             $this->user->avatar = Library::importFile($request->file);
 
             $this->user->position()->associate($request->position);
-            $this->user->save();
+            $user = $this->user->save();
 
             $this->activity->insertActivities($this->user, 'insert');
             $request->session()->flash('success', trans('user.msg.insert-success'));
@@ -110,7 +110,7 @@ class UserController extends Controller
             Mail::to($request->email)->queue(new SendPassword($data));
             DB::commit();
 
-            return redirect()->action('Admin\UserController@edit', $this->user->id);
+            return redirect()->action('Admin\UserController@edit', $user->id);
         } catch(\Exception $e) {
             dd($e);
             $request->session()->flash('fail', trans('user.msg.insert-fail'));
