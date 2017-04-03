@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Requests\User\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Activity;
 
 class LoginController extends Controller
 {
@@ -29,15 +30,17 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = '/home';
+    protected $activity;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Activity $activity)
     {
         $this->middleware('guest', ['except' => 'logout']);
+        $this->activity = $activity;
     }
 
     /**
@@ -66,10 +69,12 @@ class LoginController extends Controller
             $request->session()->flash('success', trans('user.msg.login-success'));
 
             if (Auth::user()->isAdmin()) {
+                $this->activity->insertActivities(Auth::user(), 'login');
                 return redirect()->action('Admin\UserController@index');
             }
 
-            return redirect()->action('User\HomeController@index');
+            $this->activity->insertActivities(Auth::user(), 'login');
+            return redirect()->action('Member\HomeController@index');
         }
 
         $request->session()->flash('fail', trans('user.msg.login-fail'));
@@ -83,6 +88,22 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        $this->activity->insertActivities(Auth::user(), 'logout');
+        Auth::guard()->logout();
+        $request->session()->flush();
+        $request->session()->regenerate();
+
+        return redirect()->action('Auth\LoginController@index');
+    }
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function changePassword(Request $request)
+    {
+        $this->activity->insertActivities(Auth::user(), 'logout');
         Auth::guard()->logout();
         $request->session()->flush();
         $request->session()->regenerate();

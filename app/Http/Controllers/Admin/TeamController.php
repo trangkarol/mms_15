@@ -156,6 +156,7 @@ class TeamController extends Controller
             $team->delete();
             $this->activity->insertActivities($team, 'delete');
             $request->session()->flash('success', trans('team.msg.delete-success'));
+
             DB::commit();
             return redirect()->action('Admin\TeamController@index');
         } catch (\Exception $e) {
@@ -218,6 +219,7 @@ class TeamController extends Controller
         $userId = $request->userId;
         DB::beginTransaction();
         try {
+
             $teamUser = TeamUser::where('team_id', $teamId)->where('user_id', $userId)->with('positions')->pluck('id')->first();
             $arrPosition = [];
             if(!empty($teamUser)) {
@@ -399,3 +401,5 @@ class TeamController extends Controller
         return $data;
     }
 }
+
+

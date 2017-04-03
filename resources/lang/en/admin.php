@@ -11,11 +11,32 @@ return [
     'title-activities' => 'Management Activity',
     'title-singin' => 'Signin',
     'title-login' => 'Login',
+    'title-logout' => 'Logout',
+    'title-change-password' => 'Change Password',
     //
     'lbl-search' => 'Search',
     'lbl-result-search' => 'Result Search',
+    'lbl-delete' => '<i class = "fa fa-trash-o"></i>',
+    'lbl-add' => '<i class = "fa fa-plus"></i>',
+    'lbl-edit' => '<i class = "fa fa-pencil-square-o"></i>',
+    'lbl-stt' => 'No.',
+    'lbl-admin' => 'Admin',
+    'lbl-user' => 'User',
     // button
     'btn-insert' => 'Insert',
     'btn-reset' => 'Reset',
     'btn-update' => 'Update',
+    'btn-add' => 'Add',
+    'btn-edit' => 'Edit',
+    'btn-delete' => 'Delete',
+    'btn-change' => 'Change',
+    'btn-ok' => 'OK',
+    // comfirm
+    'form-comfirm' => [
+        'title' => 'Confirm Export',
+        'csv' => 'CSV',
+        'Excel2003' => 'Excel2003: .xls',
+        'Excel2010' => 'Excel2010: .xlsx',
+        'question' => 'Would you want to export this file in format: ',
+    ],
 ];

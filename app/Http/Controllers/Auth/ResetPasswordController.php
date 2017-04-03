@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use App\Http\Requests\User\ChangePasswordRequest;
+use Illuminate\Http\Request;
+use App\Models\User;
+use Auth;
+use DB;
 
 class ResetPasswordController extends Controller
 {
@@ -34,6 +39,44 @@ class ResetPasswordController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        // $this->middleware('guest');
+    }
+
+    /**
+     * change password.
+     *
+     * @param  array  $data
+     * @return User
+     */
+    public function index()
+    {
+        return view('common.change_password');
+    }
+
+    /**
+     * change password.
+     *
+     * @param  array  $data
+     * @return User
+     */
+    public function changePassWord(ChangePasswordRequest $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $user = User::find(Auth::user()->id);
+            $user->password = bcrypt($request->password);
+            $user->save();
+            DB::commit();
+            Auth::logout();
+            $request->session()->flash('success', trans('user.msg.change-password-success'));
+
+            return redirect()->action('Auth\LoginController@login');
+        } catch(\Exception $e) {
+            $request->session()->flash('fail', trans('user.msg.change-password-fail'));
+            DB::rollback();
+
+            return redirect()->back();
+        }
     }
 }

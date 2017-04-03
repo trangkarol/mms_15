@@ -44,6 +44,7 @@
                             <div class="col-md-5">
                                 {{ Form::checkbox('levels[]', config('setting.level.senior'), null, ['class' => 'levels'] ) }} {{ trans('team.lbl-senior') }}
                             </div>
+
                         </div>
                     </div>
 

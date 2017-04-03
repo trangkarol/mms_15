@@ -50,7 +50,7 @@ class Activity extends Model
     public function insertActivities($model, $action)
     {
         $model->activities()->create([
-            'user_id' => Auth::user()->id,
+            'user_id' => 1,//Auth::user()->id,
             'action' => $action,
         ]);
     }

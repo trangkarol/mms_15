@@ -6,15 +6,17 @@
         <!-- information of user -->
         @if (Auth::guard()->check())
             <ul class="nav  navbar-right col-md-3">
-                <li class="col-md-6">
-                    <a href="#">{{ Auth::user()->name }}</a>
+                <li class="col-md-8">
+                    <a href="{{ action('Member\HomeController@index') }}">
+                            <img src="{{ url('/Upload', Auth::user()->avatar) }}" width="70px" height="50px">{{ Auth::user()->name }}
+                    </a>
                 </li>
 
                 <li class="col-md-4">
                     <a href="{{ action('Auth\LoginController@logout') }}" id="btn-logout">
                         {{ trans('admin.title-logout') }}
                     </a>
-                    {!! Form::open(['action' => 'Auth\LoginController@logout', 'method' => 'POST', 'class' => 'form-horizontal']) !!}
+                    {!! Form::open(['action' => 'Auth\LoginController@logout', 'class' => 'form-horizontal', 'id' => 'logout-form']) !!}
                     {{ Form::close() }}
                 </li>
             </ul>

@@ -12,7 +12,9 @@
         {{ Html::style('/bower_components/bootstrap/dist/css/bootstrap.min.css') }}
         {{ Html::style('/bower_components/components-font-awesome/css/font-awesome.min.css') }}
         {{ Html::style('/css/app.css') }}
+        {{ Html::style('/jquery-colorbox/example3/colorbox.css') }}
         @show
         <!-- end csss -->
+        {{ Html::script('/bower_components/jquery/dist/jquery.js') }}
     </head>
     <body>

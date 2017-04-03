@@ -76,7 +76,8 @@
                     @endif
                 </div>
             @endif
-
+            {{ action('Admin\TeamController@destroy') }}
+            {{ Request::url() }}
             <div class="content">
                 <div class="title m-b-md">
                     Laravel
