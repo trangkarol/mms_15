@@ -40,10 +40,10 @@
                         </div>
 
                         <div class="col-md-6">
-                            {{ Form::open(['action' => 'Admin\UserController@destroy', 'method' => 'POST', 'id' => 'delete-form-user']) }}
+                            {{ Form::open(['action' => 'Admin\UserController@destroy', 'method' => 'POST', 'class' => 'delete-form-user']) }}
 
                             {{ Form::hidden('userId',$member->id) }}
-                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete', 'type' => 'button']) !!}
+                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary btn-delete', 'id' => '', 'type' => 'button']) !!}
                             {{ Form::close() }}
                         </div>
                     </td>
