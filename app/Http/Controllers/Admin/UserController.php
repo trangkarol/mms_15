@@ -165,7 +165,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserRequest $request)
+    public function update(Request $request)
     {
         DB::beginTransaction();
 
