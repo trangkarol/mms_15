@@ -125,7 +125,7 @@ $(document).ready(function(){
 
     // export file
     $(document).on('click', '#btn-add-export', function() {
-        var type = $('.type_export').val();
+        var type = $('.type_export:checked').val();
         exportFile(type);
     });
 
