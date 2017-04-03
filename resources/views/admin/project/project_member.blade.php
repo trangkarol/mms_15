@@ -48,7 +48,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{ Form::radio('leader', $member->id, in_array($member->id, $arrMember), ['class' => 'leader' ]) }}
+                                    {{ Form::radio('leader', $member->id, null, ['class' => 'leader' ]) }}
                                 </td>
                                 <td>
                                     <div class="col-md-6">
