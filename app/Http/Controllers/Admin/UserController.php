@@ -497,7 +497,7 @@ class UserController extends Controller
                 if(isset($file)) {
                     $nameFile = Library::importFile($file);
                     $members = $report->importFileExcel($nameFile);
-                    unlink( move(base_path().'/public/Upload/', $nameFile ));
+                    unlink( base_path().'/public/Upload/'.$nameFile );
                      // dd($members);
                     $position = Library::getPositions();
                 }
