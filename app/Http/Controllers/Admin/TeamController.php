@@ -392,11 +392,11 @@ class TeamController extends Controller
             $nameFile = 'team'.$dt->format('Y-m-d-H-i-s');
             $report->exportTeamFileExcel($teams, $type, $nameFile);
                 unlink( base_path().'/public/Upload/'.$nameFile );
-            $request->session()->flash('success', trans('user.msg.import-success'));
+            $request->session()->flash('success', trans('team.msg.import-success'));
             return redirect()->action('Admin\TeamController@index');
         }catch(\Exception $e){
                 dd($e);
-            $request->session()->flash('fail', trans('user.msg.import-fail'));
+            $request->session()->flash('fail', trans('team.msg.import-fail'));
             return redirect()->action('Admin\TeamController@index');
         }
     }
@@ -419,12 +419,12 @@ class TeamController extends Controller
                 }
             }
 
-            $request->session()->flash('success', trans('user.msg.import-success'));
+            $request->session()->flash('success', trans('team.msg.import-success'));
 
             DB::commit();
             return redirect()->action('Admin\TeamController@index');
         }catch(\Exception $e){
-            $request->session()->flash('fail', trans('user.msg.import-fail'));
+            $request->session()->flash('fail', trans('team.msg.import-fail'));
             DB::rollback();
 
             return redirect()->action('Admin\TeamController@index');

@@ -466,11 +466,11 @@ class ProjectController extends Controller
                 $nameFile = 'project_'.$dt->format('Y-m-d-H-i-s');
                 $report->exportFileProjectExcel($projects, $type, $nameFile);//
                 unlink( base_path().'/public/Upload/'.$nameFile );
-                $request->session()->flash('success', trans('user.msg.export-success'));
+                $request->session()->flash('success', trans('project.msg.export-success'));
                 return redirect()->action('Admin\ProjectController@index');
             }catch(\Exception $e){
                 dd($e);
-                $request->session()->flash('fail', trans('user.msg.export-fail'));
+                $request->session()->flash('fail', trans('project.msg.export-fail'));
                 return redirect()->action('Admin\ProjectController@index');
             }
     }
@@ -497,12 +497,12 @@ class ProjectController extends Controller
                     }
                 }
 
-                $request->session()->flash('success', trans('user.msg.import-success'));
+                $request->session()->flash('success', trans('project.msg.import-success'));
                 DB::commit();
                 return redirect()->action('Admin\ProjectController@index');
             }catch(\Exception $e){
                 dd($e);
-                $request->session()->flash('fail', trans('user.msg.import-fail'));
+                $request->session()->flash('fail', trans('project.msg.import-fail'));
                 DB::rollback();
 
                 return redirect()->action('Admin\ProjectController@index');

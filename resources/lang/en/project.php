@@ -34,5 +34,9 @@ return [
         'insert-member-fail' => 'Insert member fail!',
         'positions-required' => 'Please choose a position!',
         'empty-member' => 'Empty',
+        'import-fail' => 'Import Projects Fail!',
+        'import-success' => 'Import Projects Success!',
+        'export-success' => 'Export Projects Success!',
+        'export-fail' => 'Export Projects Fail!'
     ],
 ];

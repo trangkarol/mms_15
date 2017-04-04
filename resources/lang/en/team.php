@@ -37,6 +37,10 @@ return [
         'update-member-fail' => 'Update member fail!',
         'insert-member-fail' => 'Insert member fail!',
         'delete-member-fail' => 'Delete member fail!',
-        'positions-required' => 'Please choose a position!'
+        'positions-required' => 'Please choose a position!',
+        'import-fail' => 'Import Teams Fail!',
+        'import-success' => 'Import Teams Success!',
+        'export-success' => 'Export Teams Success!',
+        'export-fail' => 'Export Teams Fail!'
     ],
 ];
