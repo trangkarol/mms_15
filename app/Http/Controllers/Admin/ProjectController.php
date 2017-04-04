@@ -11,7 +11,9 @@ use App\Models\TeamUser;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\Activity;
-use DB;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\ReportController as Report;
+use DB, DateTime;
 
 class ProjectController extends Controller
 {
@@ -114,6 +116,8 @@ class ProjectController extends Controller
              $arrTeam = $arrTeam->toArray();
 
             $listTeams = Team::with('users')->whereIn('id', $arrTeam)->get();
+             // $listTeams = TeamUser::with('user', 'positions', 'team')->whereIn('team_id', $arrTeam)->get();
+             // dd($listTeams->toArray());
         }
 
         // dd($listTeam);
@@ -202,12 +206,6 @@ class ProjectController extends Controller
 
                 $arrMember = array();
                 if($flag == 0) {
-
-                    $members = User::whereIn('id', $userId)->pluck('name', 'id')->all();
-
-                    $teamUserId = $userTeams->pluck('id')->all();
-                    $userTeamId = ProjectTeam::with('teamUser.user')->where('project_id', $projectId)->pluck('team_user_id')->all();
-                    $arrMember = TeamUser::with('user')->whereIn('id', $userTeamId)->where('team_id', $teamId)->pluck('user_id')->all();
                     $members = User::whereHas('teamUsers.team', function($query) use ($teamId) {
                                 $query->where('team_id',  $teamId);
                             })->with( ['teamUsers.projects' => function($query) use ($projectId) {
@@ -245,13 +243,12 @@ class ProjectController extends Controller
     {
         if ($request->ajax()) {
             try{
-                // dd($request->all());
-
                 $teamId = $request->teamId;
                 $skillId = $request->skills;
                 $positionTeam = $request->positionTeam;
                 $level = $request->level;
-                // dd ($positionTeam);
+                $projectId = $request->projectId;
+
                 $user = new User;
 
                 if($teamId != 0 ) {
@@ -273,15 +270,21 @@ class ProjectController extends Controller
                 }
 
                 if( $positionTeam != 0 ) {
-                    $user = $user->with('teamUsers.positionTeams.position', function($query) use ($positionTeam) {
+                    $user = $user->with(['teamUsers.positionTeams' => function($query) use ($positionTeam) {
                                 $query->where('position_id',  $positionTeam);
-                            });
+                            }]);
                 }
 
                 $members = $user->paginate(50);
+
+                // get member exits
+
+                $teamUserId = $userTeams->pluck('id')->all();
+                $userTeamId = ProjectTeam::with('teamUser.user')->where('project_id', $projectId)->pluck('team_user_id')->all();
+                $arrMember = TeamUser::with('user')->whereIn('id', $userTeamId)->where('team_id', $teamId)->pluck('user_id')->all();
                 // dd($members->toArray());
 
-                $html = view('admin.project.project_member', compact('members'))->render();
+                $html = view('admin.project.project_member', compact('members', 'arrMember'))->render();
 
                 return response()->json(['result' => true,  'html' => $html]);
 
@@ -413,5 +416,130 @@ class ProjectController extends Controller
                 return response()->json('result', 400);
             }
         }
+    }
+
+     public function importFile(Request $request)
+    {
+        try{
+            // dd($request->all());
+            $report = new Report;
+            $file = $request->file;
+            $nameFile = '';
+            if(isset($file)) {
+                $nameFile = Library::importFile($file);
+                $projects = $report->importFileExcel($nameFile);
+            }
+
+            $request->session()->flash('success', trans('user.msg.import-success'));
+            return view('admin.export.project.import_data', compact('projects', 'nameFile'));
+            } catch(\Exception $e) {
+                $request->session()->flash('fail', trans('user.msg.import-fail'));
+                DB::rollback();
+                return redirect()->action('Admin\UserController@index');
+            }
+    }
+
+    public function exportFile(Request $request)
+    {
+            try{
+                // dd($request->all());
+                $report = new Report;
+                $dt = new DateTime();
+
+                $type = $request->type;
+                $teamId = $request->teamId;
+                $startDay = $request->startDay;
+                $endDay = $request->endDay;
+
+                if($teamId != 0) {
+                    $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team')->whereHas('projectTeams.teamUser', function($query) use ($teamId) {
+                                $query->where('team_id', '=', $teamId);
+                            })->with('projectTeams.teamUser.user');
+
+                } else {
+                    $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser.user');
+                }
+
+                $projects = $projects->with(['projectTeams'=> function($query) {
+                                $query->where('is_leader', '=', 1);
+                            }])->where('start_day', '>=', $startDay)->where('end_day', '<=', $endDay)->get();
+                $nameFile = 'project_'.$dt->format('Y-m-d-H-i-s');
+                $report->exportFileProjectExcel($projects, $type, $nameFile);//
+                unlink( base_path().'/public/Upload/'.$nameFile );
+                $request->session()->flash('success', trans('user.msg.export-success'));
+                return redirect()->action('Admin\ProjectController@index');
+            }catch(\Exception $e){
+                dd($e);
+                $request->session()->flash('fail', trans('user.msg.export-fail'));
+                return redirect()->action('Admin\ProjectController@index');
+            }
+    }
+
+    public function saveImport(Request $request)
+    {
+
+            DB::beginTransaction();
+            try{
+                $report = new Report;
+                // dd($request->all());
+                $nameFile = $request->nameFile;
+                $projects = $report->importFileExcel($nameFile)->toArray();
+                // validate users
+
+                foreach ($projects as $project) {
+                    // dd($project);
+                    $insert = $this->dataProject($project);
+
+                    if(!$this->validator($insert)->validate()) {
+
+                        $project = $this->project->create($insert);
+                        $this->activity->insertActivities($project, 'insert');
+                    }
+                }
+
+                $request->session()->flash('success', trans('user.msg.import-success'));
+                DB::commit();
+                return redirect()->action('Admin\ProjectController@index');
+            }catch(\Exception $e){
+                dd($e);
+                $request->session()->flash('fail', trans('user.msg.import-fail'));
+                DB::rollback();
+
+                return redirect()->action('Admin\ProjectController@index');
+            }
+        // }
+    }
+
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required',
+            'short_name' => 'required',
+            'start_day' => 'required',
+            'end_day' => 'required',
+        ]);
+    }
+
+    /**
+     *data Member.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function dataProject($project)
+    {
+        $data = [];
+        $data['name'] = $project['name'];
+        $data['short_name'] = $project['short_name'];
+        $data['start_day']= $project['startday'];
+        $data['end_day'] = $project['enday'];
+        return $data;
     }
 }

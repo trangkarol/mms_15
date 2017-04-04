@@ -84,7 +84,7 @@
                                 @php $members = $members.$user->name.' | '; @endphp
                                 {{ Form::hidden('members[]', $user->id, ['class' => 'form-control members']) }}
                             @endforeach
-                            <a href="#" data-toggle="tooltip" data-placement="top" title="{{ rtrim($members,' | ') }}">{{ $listTeam->name }}</a>
+                            <a href="#" data-toggle="tooltip" data-placement="top" title="{{ rtrim($members, ' | ') }}">{{ $listTeam->name }}</a>
 
                         </td>
                         <td>

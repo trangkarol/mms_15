@@ -13,8 +13,10 @@ use App\Models\SkillUser;
 use App\Models\Position;
 use App\Models\PositionTeam;
 use App\Models\ProjectTeam;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\ReportController as Report;
 use App\Http\Requests\Team\InsertRequest;
-use DB;
+use DB, DateTime;
 use Carbon\Carbon;
 
 class TeamController extends Controller
@@ -360,6 +362,102 @@ class TeamController extends Controller
             dd($e);
            return response()->json(['result' => false]);
         }
+    }
+
+    public function importFile(Request $request)
+    {
+        try{
+            $report = new Report;
+            $file = $request->file;
+            $nameFile = '';
+            if(isset($file)) {
+                $nameFile = Library::importFile($file);
+                $teams = $report->importFileExcel($nameFile);
+            }
+            return view('admin.export.team.import_data', compact('teams', 'nameFile'));
+        }catch(\Exception $e){
+            dd($e);
+            return redirect()->action('Admin\TeamController@index');
+        }
+    }
+
+    public function exportFile(Request $request)
+    {
+        try{
+            $report = new Report;
+            $dt = new DateTime();
+
+            $type = $request->type;
+            $teams = Team::all();
+            $nameFile = 'team'.$dt->format('Y-m-d-H-i-s');
+            $report->exportTeamFileExcel($teams, $type, $nameFile);
+                unlink( base_path().'/public/Upload/'.$nameFile );
+            $request->session()->flash('success', trans('user.msg.import-success'));
+            return redirect()->action('Admin\TeamController@index');
+        }catch(\Exception $e){
+                dd($e);
+            $request->session()->flash('fail', trans('user.msg.import-fail'));
+            return redirect()->action('Admin\TeamController@index');
+        }
+    }
+
+    public function saveImport(Request $request)
+    {
+
+        DB::beginTransaction();
+        try{
+            $report = new Report;
+            $nameFile = $request->nameFile;
+            $teams = $report->importFileExcel($nameFile)->toArray();
+            // validate users
+            foreach ($teams as $team) {
+                $insert = $this->dataTeam($team);
+
+                if(!$this->validator($insert)->validate()) {
+                    $team = $this->team->create($insert);
+                    $this->activity->insertActivities($team, 'insert');
+                }
+            }
+
+            $request->session()->flash('success', trans('user.msg.import-success'));
+
+            DB::commit();
+            return redirect()->action('Admin\TeamController@index');
+        }catch(\Exception $e){
+            $request->session()->flash('fail', trans('user.msg.import-fail'));
+            DB::rollback();
+
+            return redirect()->action('Admin\TeamController@index');
+        }
+    }
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required',
+            'user_id' => 'required',
+        ]);
+    }
+
+    /**
+     *data Member.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function dataTeam($team)
+    {
+        $data = [];
+        $data['name'] = $team['name'];
+        $data['user_id'] = $team['leader'];
+        $data['description'] = $team['description'];
+        return $data;
     }
 }
 

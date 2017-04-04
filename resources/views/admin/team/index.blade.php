@@ -12,8 +12,26 @@
         </div>
 
         <div class="col-md-4 col-md-offset-3 paddingtop">
-            <a href="{{ action('Admin\TeamController@create') }}" class="btn btn-primary"><i class="fa fa-plus " ></i></a>
-            <a href="{{ action('Admin\TeamController@addMember') }}" class="btn btn-primary"><i class="fa fa-user-plus " ></i></a>
+            <div class="col-md-6">
+                <a href="{{ action('Admin\TeamController@create') }}" class="btn btn-primary"><i class="fa fa-plus " ></i></a>
+                <a href="{{ action('Admin\TeamController@addMember') }}" class="btn btn-primary"><i class="fa fa-user-plus " ></i></a>
+            </div>
+
+            <div class="col-md-3">
+                <a href="#" class="btn btn-primary" id= "import-file"><i class="glyphicon glyphicon-import" ></i></a>
+                {!! Form::open(['action' => 'Admin\TeamController@importFile', 'class' => 'form-horizontal', 'id' => 'form-input-file', 'enctype' => 'multipart/form-data']) !!}
+                    {{  Form::file('file', ['id' => 'file-csv', 'class' => 'hidden']) }}
+
+                {!! Form::close() !!}
+            </div>
+
+            <div class="col-md-3">
+                <a href="#" class="btn btn-primary" id= "export-file"><i class="glyphicon glyphicon-export" ></i></a>
+                {!! Form::open(['action' => 'Admin\TeamController@exportFile', 'class' => 'form-horizontal', 'id' => 'form-export-user', 'enctype' => 'multipart/form-data']) !!}
+                    {{ Form::hidden('type',null, ['id' => 'type-export']) }}
+
+                {!! Form::close() !!}
+            </div>
         </div>
     </div>
     <!-- content -->

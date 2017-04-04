@@ -31,6 +31,11 @@ class TeamUser extends Model
         return $this->hasMany(ProjectTeam::class);
     }
 
+    public function positionTeams()
+    {
+        return $this->hasMany(PositionTeam::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

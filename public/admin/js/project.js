@@ -63,6 +63,31 @@ $(document).ready(function(){
        projectMembers();
     });
 
+    // /import-file
+    $(document).on('click', '#import-file', function(event) {
+        // event.preventDefault();
+        $('#file-csv').click();
+        $('#file-csv').change(function(event) {
+            $('#form-input-file').submit();
+        });
+    });
+
+    // comfirm export
+    $(document).on('click', '#export-file', function(event) {
+        getComfirmExport();
+    });
+
+     // save project
+    $(document).on('click', '#add-project',function(event) {
+        $('#form-save-project').submit();
+    });
+
+    // export file
+    $(document).on('click', '#btn-add-export', function() {
+        var type = $('.type_export:checked').val();
+        exportFile(type);
+    });
+
 });
 
 function search(page) {
@@ -120,6 +145,7 @@ function searchMember(teamId, flag) {
 }
 
 function projectMembers() {
+    var projectId = $('#projectId').val();
     var teamId = $('#teamId-member').val();
     var positionTeam = $('#position-team').val();
 
@@ -143,6 +169,7 @@ function projectMembers() {
             positionTeam : positionTeam,
             skills : skills,
             level : level,
+            projectId: projectId,
         },
         success:function(data){
             if(data.result) {
@@ -261,4 +288,16 @@ function addTab() {
 
         }
     });
+}
+
+function exportFile(type) {
+    console.log($('#start-day').val());
+    $('#teamId-export').attr('value', $('#team').val());
+    $('#startDay-export').attr('value', $('#start-day').val());
+    $('#endDay-export').attr('value', $('#end-day').val());
+    $('#type-export').attr('value', type);
+
+    $('#form-export-project').submit();
+    $.colorbox.close();
+    bootbox.alert('Export file succesfully!');
 }

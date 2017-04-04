@@ -255,6 +255,7 @@ class UserController extends Controller
                 $members  = $user->orderBy('created_at', 'desc')->paginate(15);
                 // dd($members->toArray());
 
+
                 $html = view('admin.user.table_result', compact('members'))->render();
 
                 return response()->json(['result' => true, 'html' => $html]);
@@ -558,7 +559,7 @@ class UserController extends Controller
                     $insert['password'] = $password;
 
                     if(!$this->validator($insert)->validate()) {
-                        Mail::to($insert['email'])->queue(new SendPassword($insert));
+                        // Mail::to($insert['email'])->queue(new SendPassword($insert));
                         $insert['password'] = bcrypt($password);
                         $user = $this->user->create($insert);
                         $this->activity->insertActivities($user, 'insert');

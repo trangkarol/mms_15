@@ -27,4 +27,27 @@ class ReportController extends Controller
 
         })->export($type);
     }
+
+    public function exportTeamFileExcel($data, $type, $nameFile)
+    {
+        return Excel::create($nameFile, function($excel) use ($data) {
+            $excel->sheet('mySheet', function($sheet) use ($data)
+            {
+                $sheet->loadView('admin.export.team.export_data', compact('data'));
+            });
+
+        })->export($type);
+    }
+
+    public function exportFileProjectExcel($data, $type, $nameFile)
+    {
+        return Excel::create($nameFile, function($excel) use ($data) {
+            $excel->sheet('mySheet', function($sheet) use ($data)
+            {
+                $sheet->loadView('admin.export.project.export_data', compact('data'));
+            });
+
+        })->export($type);
+    }
+
 }

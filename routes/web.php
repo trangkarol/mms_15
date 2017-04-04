@@ -31,6 +31,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
         Route::post('/delete-member', 'TeamController@deleteMember');
         Route::get('/{id}/edit', 'TeamController@edit');
         Route::post('/position-team', 'TeamController@positionTeam');
+        Route::post('/import-file', 'TeamController@importFile');
+        Route::post('/save-file', 'TeamController@saveImport');
+        Route::post('/export-file', 'TeamController@exportFile');
     });
 
     // user
@@ -48,7 +51,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
         Route::get('/delete-skill/{skillId}/{userId}', 'UserController@deleteSkill');
         Route::post('/import-file', 'UserController@importFile');
         Route::post('/save-file', 'UserController@saveImport');
-        // Route::get('/export-file/{type}/{teamId}/{position}/{positionTeams}', 'UserController@exportFile');
         Route::post('/export-file', 'UserController@exportFile');
     });
 
@@ -71,6 +73,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
         Route::post('/delete-member', 'ProjectController@deleteMember');
         Route::post('/project-member', 'ProjectController@getListUser');
         Route::get('/{id}/edit', 'ProjectController@edit');
+        Route::post('/import-file', 'ProjectController@importFile');
+        Route::post('/save-file', 'ProjectController@saveImport');
+        Route::post('/export-file', 'ProjectController@exportFile');
     });
 
     // skill

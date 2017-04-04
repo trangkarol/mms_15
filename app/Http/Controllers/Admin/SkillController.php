@@ -65,13 +65,10 @@ class SkillController extends Controller
             $this->activity->insertActivities($this->skill, 'insert');
             $request->session()->flash('success', trans('skill.msg.insert-success'));
             DB::commit();
-
             return redirect()->action('Admin\SkillController@index');
         } catch(\Exception $e) {
             $request->session()->flash('fail', trans('skill.msg.insert-fail'));
             DB::rollback();
-            dd($e);
-
             return redirect()->back();
         }
     }
@@ -100,19 +97,15 @@ class SkillController extends Controller
         DB::beginTransaction();
         try {
             $skill = $this->skill->findOrFail($request->skillId);
-
             $skill->name = $request->name;
             $skill->update();
-
             $this->activity->insertActivities($skill, 'update');
             $request->session()->flash('success', trans('skill.msg.update-success'));
             DB::commit();
-
             return redirect()->action('Admin\SkillController@index');
         } catch(\Exception $e) {
             $request->session()->flash('fail', trans('skill.msg.update-fail'));
             DB::rollback();
-
             return redirect()->action(['Admin\SkillController@edit',  $request->skillId]);
         }
     }
@@ -135,12 +128,10 @@ class SkillController extends Controller
             $skill->delete();
             $request->session()->flash('success', trans('skill.msg.delete-success'));
             DB::commit();
-
             return redirect()->action('Admin\SkillController@index');
         } catch(Exception $e) {
             $request->session()->flash('fail', trans('skill.msg.delete-fail'));
             DB::rollback();
-
             return redirect()->action('Admin\SkillController@index');
         }
     }

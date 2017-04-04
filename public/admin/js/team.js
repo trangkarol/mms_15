@@ -66,6 +66,32 @@ $(document).ready(function() {
         var page = $(this).attr('href').split('page=')[1];
         search(page);
     });
+
+    //import-file
+    $(document).on('click', '#import-file', function(event) {
+        // event.preventDefault();
+        $('#file-csv').click();
+        $('#file-csv').change(function(event) {
+            $('#form-input-file').submit();
+        });
+    });
+
+    // comfirm export
+    $(document).on('click', '#export-file', function(event) {
+        getComfirmExport();
+    });
+
+     // save team
+    $(document).on('click', '#add-team',function(event) {
+        alert('team');
+        $('#form-save-team').submit();
+    });
+
+    // export file
+    $(document).on('click', '#btn-add-export', function() {
+        var type = $('.type_export:checked').val();
+        exportFile(type);
+    });
 });
 
 function search(page) {
@@ -202,4 +228,12 @@ function deleteMember(userId) {
             }
         }
     });
+}
+
+function exportFile(type) {
+    $('#type-export').attr('value', type);
+
+    $('#form-export-user').submit();
+    $.colorbox.close();
+    bootbox.alert('Export file succesfully!');
 }

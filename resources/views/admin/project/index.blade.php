@@ -12,7 +12,29 @@
         </div>
 
         <div class="col-md-4 col-md-offset-3 paddingtop">
-            <a href="{{ action('Admin\ProjectController@create') }}" class="btn btn-primary"><i class="fa fa-plus " ></i></a>
+
+             <div class="col-md-4">
+               <a href="{{ action('Admin\ProjectController@create') }}" class="btn btn-primary"><i class="fa fa-plus " ></i></a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="#" class="btn btn-primary" id= "import-file"><i class="glyphicon glyphicon-import" ></i></a>
+                {!! Form::open(['action' => 'Admin\ProjectController@importFile', 'class' => 'form-horizontal', 'id' => 'form-input-file', 'enctype' => 'multipart/form-data']) !!}
+                    {{  Form::file('file', ['id' => 'file-csv', 'class' => 'hidden']) }}
+
+                {!! Form::close() !!}
+            </div>
+
+            <div class="col-md-4">
+                <a href="#" class="btn btn-primary" id= "export-file"><i class="glyphicon glyphicon-export" ></i></a>
+                {!! Form::open(['action' => 'Admin\ProjectController@exportFile', 'class' => 'form-horizontal', 'id' => 'form-export-project', 'enctype' => 'multipart/form-data']) !!}
+                    {{ Form::hidden('teamId',null, ['id' => 'teamId-export']) }}
+                    {{ Form::hidden('startDay',null, ['id' => 'startDay-export']) }}
+                    {{ Form::hidden('endDay',null, ['id' => 'endDay-export']) }}
+                    {{ Form::hidden('type',null, ['id' => 'type-export']) }}
+
+                {!! Form::close() !!}
+            </div>
         </div>
     </div>
     <!-- content -->
