@@ -310,7 +310,7 @@ class ProjectController extends Controller
                 $teamId = $request->teamId;
                 $flag = $request->flag;
 
-                dd($request->all());
+                // dd($request->all());
                 $teamUsers = TeamUser::whereIn('user_id', $userId)->getTeam($teamId)->pluck('id','user_id')->all();
 
                 $arr_teamUserId = [];

@@ -49,7 +49,7 @@
                                     </td>
                                     <td>
                                         <div class="col-md-6">
-                                            {{ Form::checkbox('add_user[]', $member->id, null, ['class' => '' ]) }}
+                                            {{ Form::checkbox('add_user[]', $member->id, null, ['class' => 'add_user' ]) }}
                                         </div>
                                     </td>
                                 </tr>
