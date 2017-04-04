@@ -279,7 +279,7 @@ class TeamController extends Controller
                 //     $query->whereIn('level', $levels)->orWhereIn('skill_id', $skills);
                 // }]);
 
-                $users =  $users->whereIn('level', $levels)->WhereIn('skill_id', $skills);
+                $users =  $users->whereIn('level', $levels)->whereIn('skill_id', $skills);
 
             } elseif(!is_null($skills) && is_null($levels)) {
 

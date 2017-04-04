@@ -62,5 +62,7 @@
 @section('contentJs')
     @parent
     {{ Html::script('admin/js/project.js') }}
+    <!-- add trans and action used in file ptoject.js -->
+    @include('library.project_trans_javascript')
 @endsection
 
