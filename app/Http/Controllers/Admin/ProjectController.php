@@ -278,8 +278,6 @@ class ProjectController extends Controller
                 $members = $user->paginate(50);
 
                 // get member exits
-
-                $teamUserId = $userTeams->pluck('id')->all();
                 $userTeamId = ProjectTeam::with('teamUser.user')->where('project_id', $projectId)->pluck('team_user_id')->all();
                 $arrMember = TeamUser::with('user')->whereIn('id', $userTeamId)->where('team_id', $teamId)->pluck('user_id')->all();
                 // dd($members->toArray());
