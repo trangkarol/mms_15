@@ -2,7 +2,6 @@
     <div class="panel-heading">
         {{ trans('team.lbl-insert-position') }}
     </div>
-
     <div class="panel-body">
         {!! Form::open(['class' => 'form-horizontal']) !!}
             {{ Form::hidden('teamId', $teamId, ['id' => 'teamId-postion']) }}
@@ -11,7 +10,6 @@
                 <div class="col-md-12">
                     {{ trans('team.lbl-position') }}
                 </div>
-
                 <div class="col-md-12">
                     @foreach ($positions as $key => $position)
                         <div class="col-md-6">
@@ -20,7 +18,6 @@
                     @endforeach
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-3 col-md-offset-8">
                     @if($flag == 1)

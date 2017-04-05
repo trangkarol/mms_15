@@ -23,8 +23,7 @@
                     <td>{{ $member->name }}</td>
                     <td>{{ $member->email }}</td>
                     <td>{{ $member->birthday }}</td>
-                    <td> @if ($member->position) {{ $member->position->name }} @endif</td>
-                    <!-- <td>  </td>-->
+                    <td>{{ $member->position->name ?: '' }}</td>
                     <td>
                         @if ($member->teamUsers)
                             @foreach ($member->teamUsers as $temUser)
@@ -35,11 +34,11 @@
                                 @if ($temUser->positions)
                                     @foreach ($temUser->positions as $positon)
                                         @php
-                                            $position = $position.$positon->name.' | ';
+                                            $position = $position . $positon->name . ' | ';
                                         @endphp
                                     @endforeach
                                 @endif
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="{{ rtrim($position,' | ') }}">{{ $temUser->team->name.'('. rtrim($position,' | ').')<br /> ' }}</a>
+                                {{ $temUser->team->name . '(' . rtrim($position, ' | ') . ' | ' }}
                             @endforeach
                         @endif
                     </td>

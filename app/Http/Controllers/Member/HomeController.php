@@ -20,11 +20,11 @@ class HomeController extends Controller
     public function index()
     {
         $userId = Auth::user()->id;
-        $user = User::with('skills', 'position')->findOrFail($userId);//->where('id', $userId)->first();
+        $user = User::with('skills', 'position')->findOrFail($userId);
         $teamUsers = TeamUser::with('team', 'user', 'positions')->where('team_users.user_id', $userId )->get();
         $teamUserId = $teamUsers->pluck('id')->all();
         $projects = ProjectTeam::with('teamUser.team', 'project')->whereIn('team_user_id', $teamUserId)->get();
-        // dd($user->toArray());
+
         return view('public.index', compact('user', 'teamUsers', 'projects'));
     }
 
@@ -48,6 +48,7 @@ class HomeController extends Controller
     {
         $nameTeam = Team::findOrFail($teamId)->pluck('name')->all();
         $members = TeamUser::with('positions', 'user')->where('team_users.team_id', $teamId)->paginate(15);
+
         return view('public.list_member', compact('members', 'nameTeam'));
     }
 
@@ -62,7 +63,7 @@ class HomeController extends Controller
         $teamUsers = TeamUser::with('team', 'user', 'positions')->where('team_users.user_id', $userId )->get();
         $teamUserId = $teamUsers->pluck('id')->all();
         $projects = ProjectTeam::with('teamUser.team', 'project')->whereIn('team_user_id', $teamUserId)->get();
-        // dd($user->toArray());
+
         return view('public.index', compact('user', 'teamUsers', 'projects'));
     }
 }

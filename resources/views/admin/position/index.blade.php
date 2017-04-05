@@ -36,7 +36,6 @@
                                     <th ></th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 @if (!empty($positions))
                                     @foreach ($positions as $position)
@@ -57,9 +56,8 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     {{ Form::open(['action' => 'Admin\PositionController@destroy', 'class' => 'form-delete-position']) }}
-
-                                                    {{ Form::hidden('positionId', $position->id) }}
-                                                    {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary btn-delete-position', 'id' => '', 'type' => 'button']) !!}
+                                                        {{ Form::hidden('positionId', $position->id) }}
+                                                        {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary btn-delete-position', 'id' => '', 'type' => 'button']) !!}
                                                     {{ Form::close() }}
                                                 </div>
                                             </td>

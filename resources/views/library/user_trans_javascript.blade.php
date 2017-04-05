@@ -19,10 +19,9 @@
     var action = {
             'user_search': "{{ action('Admin\UserController@search') }}",
             'user_add_skill': "{{ action('Admin\UserController@addSkill') }}",
-            // 'user_delete_skill': "{{ action('Admin\UserController@deleteSkill') }}",
             'user_position_team': "{{ action('Admin\UserController@positionTeam') }}",
             'user_add_team': "{{ action('Admin\UserController@addTeam') }}",
-            // 'user_delete_team': "{{ action('Admin\UserController@deleteTeam') }}",
             'user_get_skill': "{{ action('Admin\UserController@getSkill') }}",
         };
 </script>
+

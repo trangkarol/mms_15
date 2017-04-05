@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
             'position_id' => 1,
             'remember_token' => str_random(10),
         ]);
-        factory(App\Models\User::class, 10)->create();
+
         // factory(App\Models\User::class, 10)->create()->each(function ($user) {
         //     foreach(range(1, 2) as $key) {
         //         $activities[] = factory(App\Models\Activity::class)->make()->toArray();
@@ -29,5 +29,6 @@ class UsersTableSeeder extends Seeder
 
         //    $user->activities()->createMany($activities);
         // });
+        factory(App\Models\User::class, 10)->create();
     }
 }

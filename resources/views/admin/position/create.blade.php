@@ -8,7 +8,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-3 sub-menu">
-            <h4>{{trans('position.title-positions')}}</h4>
+            <h4>{{ trans('position.title-positions') }}</h4>
         </div>
         <div class="col-md-4 col-md-offset-3 paddingtop">
             <a href="{{ action('Admin\PositionController@index') }}" class="btn btn-primary"><i class="fa fa-list " ></i></a>
@@ -22,16 +22,13 @@
                 <div class="panel-heading">
                     {{ trans('position.title-insert-positions') }}
                 </div>
-                <!--  -->
                 <div class="panel-body">
                 {!! Form::open(['action' => 'Admin\PositionController@store', 'class' => 'form-horizontal']) !!}
-
                     @include('admin.position.form_position')
                     <!-- button -->
                     <div class="form-group">
                         <div class="col-md-6 col-md-offset-4">
                             {{ Form::reset(trans('admin.btn-reset'), ['class' => 'btn btn-primary']) }}
-
                             {{ Form::submit(trans('admin.btn-insert'), ['class' => 'btn btn-primary']) }}
                         </div>
                     </div>

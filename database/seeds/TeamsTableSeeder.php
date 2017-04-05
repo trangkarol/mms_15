@@ -18,6 +18,7 @@ class TeamsTableSeeder extends Seeder
 
         //    $team->activities()->createMany($activities);
         // });
+
         factory(App\Models\Team::class, 10)->create();
     }
 }

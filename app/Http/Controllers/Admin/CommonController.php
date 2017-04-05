@@ -14,7 +14,6 @@ class CommonController extends Controller
 
             return response()->json(['result' => true, 'html' => $html]);
        } catch (\Exception $e) {
-        dd($e);
             return response()->json(['result' => false]);
        }
     }

@@ -46,8 +46,6 @@ class UpdateUserRequest extends FormRequest
             'birthday.required' => trans('user.msg.birthday-required'),
             'password.confirmed' => trans('user.msg.password-confirmed'),
             'password.min' => trans('user.msg.password-min'),
-
-
         ];
     }
 }

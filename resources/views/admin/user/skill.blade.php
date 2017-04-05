@@ -12,23 +12,15 @@
                     {{ Form::select('level', $levels, isset($userSkill->level) ? $userSkill->level : null, ['class' => 'form-control level']) }}
                 </div>
             </div>
-
             <div class="col-cd-12">
                 {{ Form::label('exper', trans('user.lbl-experiensive'), ['class' => 'col-md-4 control-label']) }}
                 <div class="col-md-6">
                     {{ Form::textarea('exeper', isset($userSkill->experiensive) ? $userSkill->experiensive : null, ['class' => 'form-control exeper']) }}
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-3 col-md-offset-8">
-                    @if($flag == 1)
-                        {{ Form::button(trans('admin.btn-add'), ['class' => 'btn btn-primary', 'id' => 'btn-add-skill']) }}
-                    @endif
-
-                    @if($flag == 0)
-                        {{ Form::button(trans('admin.btn-edit'), ['class' => 'btn btn-primary ', 'id' => 'btn-edit-skill']) }}
-                    @endif
+                    {{ Form::button($flag ? trans('admin.btn-add') : trans('admin.btn-edit'), ['class' => 'btn btn-primary', 'id' => 'btn-add-skill']) }}
                 </div>
             </div>
         {{ Form::close() }}

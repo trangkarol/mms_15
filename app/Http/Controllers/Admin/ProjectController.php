@@ -25,7 +25,10 @@ class ProjectController extends Controller
      *
      * @return void
      */
-    public function __construct(Project $project, Activity $activity)
+    public function __construct(
+        Project $project,
+        Activity $activity
+    )
     {
         $this->project = $project;
         $this->activity = $activity;
@@ -88,17 +91,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -107,20 +99,14 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $project = Project::findOrFail($id);
-
         $userTeams = ProjectTeam::with('teamUser.team','teamUser.user')->where('project_id', $id)->where('is_leader', 1)->get();
         if(!empty($userTeams)) {
             $arrTeam = $userTeams->map(function ($item, $key) {
                 return $item->teamUser->team->id;
             });
-             $arrTeam = $arrTeam->toArray();
-
+            $arrTeam = $arrTeam->toArray();
             $listTeams = Team::with('users')->whereIn('id', $arrTeam)->get();
-             // $listTeams = TeamUser::with('user', 'positions', 'team')->whereIn('team_id', $arrTeam)->get();
-             // dd($listTeams->toArray());
         }
-
-        // dd($listTeam);
 
         $teams = Library::getLibraryTeams();
 
@@ -136,14 +122,19 @@ class ProjectController extends Controller
      */
     public function update(Request $request)
     {
+        $projectId = $request->projectId;
+        $name = $request->name;
+        $short_name = $request->short_name;
+        $start_day = $request->start_day;
+        $end_day = $request->end_day;
         DB::beginTransaction();
 
         try {
-            $project = Project::findOrFail($request->projectId);
-            $project->name = $request->name;
-            $project->short_name = $request->short_name;
-            $project->start_day = $request->start_day;
-            $project->end_day = $request->end_day;
+            $project = Project::findOrFail($projectId);
+            $project->name = $name;
+            $project->short_name = $short_name;
+            $project->start_day = $start_day;
+            $project->end_day = $end_day;
             $project->update();
             $this->activity->insertActivities($project, 'update');
             $request->session()->flash('success', trans('project.msg.update-success'));
@@ -153,6 +144,7 @@ class ProjectController extends Controller
         } catch(\Exception $e) {
             $request->session()->flash('fail', trans('project.msg.update-fail'));
             DB::rollback();
+
             return redirect()->back();
         }
     }
@@ -165,21 +157,19 @@ class ProjectController extends Controller
      */
     public function destroy(Request $request)
     {
+        $projectId = $request->projectId;
         DB::beginTransaction();
 
         try {
-            $id = $request->projectId;
-            $projectTeam = ProjectTeam::where('project_id', $id)->delete();
-            $project = $this->project->findOrFail($id);
+            $projectTeam = ProjectTeam::where('project_id', $projectId)->delete();
+            $project = $this->project->findOrFail($projectId);
             $project->delete();
-
             $this->activity->insertActivities($project, 'delete');
             $request->session()->flash('success', trans('project.msg.delete-success'));
             DB::commit();
 
             return redirect()->action('Admin\ProjectController@index');
         } catch(\Exception $e) {
-            dd($e);
             $request->session()->flash('fail', trans('project.msg.delete-fail'));
             DB::rollback();
 
@@ -195,41 +185,35 @@ class ProjectController extends Controller
      */
     public function searchMember(Request $request)
     {
-        if ($request->ajax()) {
-            try{
-                $teamId = $request->teamId;
-                $flag = $request->flag;
-                $projectId = $request->projectId;
-                $userTeams = TeamUser::with('user')->where('team_id', $teamId)->get();
+        $teamId = $request->teamId;
+        $flag = $request->flag;
+        $projectId = $request->projectId;
 
-                $userId = $userTeams->pluck('user_id')->all();
-
-                $arrMember = array();
-                if($flag == 0) {
-                    $members = User::whereHas('teamUsers.team', function($query) use ($teamId) {
-                                $query->where('team_id',  $teamId);
-                            })->with( ['teamUsers.projects' => function($query) use ($projectId) {
-                                $query->where('project_id', $projectId);
-                            }])->paginate(50);;
-                }
-                // dd($arrMember);
-                if(!$userTeams->isEmpty()) {
-
-                    $skills = Library::getLibrarySkills();
-                    $levels = Library::getLevel();
-                    $positionTeam =  array_prepend(Library::getPositionTeams(), 'All')  ;
-
-                    $html = view('admin.project.list_members', compact('userTeams', 'projectId', 'members', 'teamId', 'arrMember', 'flag', 'skills', 'levels', 'positionTeam'))->render();
-                } else {
-                    $html = '';
-                }
-
-
-                return response()->json(['html' => $html]);
-
-            }catch(Exception $e){
-                return response()->json('result', 400);
+        try{
+            $userTeams = TeamUser::with('user')->where('team_id', $teamId)->get();
+            $userId = $userTeams->pluck('user_id')->all();
+            $arrMember = array();
+            if(!$flag) {
+                $members = User::whereHas('teamUsers.team', function($query) use ($teamId) {
+                            $query->where('team_id',  $teamId);
+                        })->with( ['teamUsers.projects' => function($query) use ($projectId) {
+                            $query->where('project_id', $projectId);
+                        }])->paginate(50);
             }
+
+            if(!$userTeams->isEmpty()) {
+                $skills = Library::getLibrarySkills();
+                $levels = Library::getLevel();
+                $positionTeam = Library::getPositionTeams();
+                $html = view('admin.project.list_members', compact('userTeams', 'projectId', 'members', 'teamId', 'arrMember', 'flag', 'skills', 'levels', 'positionTeam'))->render();
+            } else {
+                $html = '';
+            }
+
+            return response()->json(['result' => true,'html' => $html]);
+
+        }catch(\Exception $e){
+            return response()->json('result', false);
         }
     }
 
@@ -241,56 +225,48 @@ class ProjectController extends Controller
      */
     public function getListUser(Request $request)
     {
-        if ($request->ajax()) {
-            try{
-                $teamId = $request->teamId;
-                $skillId = $request->skills;
-                $positionTeam = $request->positionTeam;
-                $level = $request->level;
-                $projectId = $request->projectId;
-
-                $user = new User;
-
-                if($teamId != 0 ) {
-                    $user = $user->whereHas('teamUsers.team', function($query) use ($teamId) {
-                                $query->where('team_id',  $teamId);
-                            });
-                }
-
-                if( !empty($skillId) ) {
-                    $user = $user->whereHas('skillUsers.skill', function($query) use ($skillId) {
-                                $query->whereIn('skill_id',  $skillId);
-                            });
-                }
-
-                if( !empty($level)) {
-                    $user = $user->whereHas('skillUsers', function($query) use ($level) {
-                                $query->whereIn('level',  $level);
-                            });
-                }
-
-                if( $positionTeam != 0 ) {
-                    $user = $user->with(['teamUsers.positionTeams' => function($query) use ($positionTeam) {
-                                $query->where('position_id',  $positionTeam);
-                            }]);
-                }
-
-                $members = $user->paginate(50);
-
-                // get member exits
-                $userTeamId = ProjectTeam::with('teamUser.user')->where('project_id', $projectId)->pluck('team_user_id')->all();
-                $arrMember = TeamUser::with('user')->whereIn('id', $userTeamId)->where('team_id', $teamId)->pluck('user_id')->all();
-                // dd($members->toArray());
-
-                $html = view('admin.project.project_member', compact('members', 'arrMember'))->render();
-
-                return response()->json(['result' => true,  'html' => $html]);
-
-            }catch(Exception $e){
-                return response()->json('result', 400);
+        $teamId = $request->teamId;
+        $skillId = $request->skills;
+        $positionTeam = $request->positionTeam;
+        $level = $request->level;
+        $projectId = $request->projectId;
+        try{
+            if($teamId != 0 ) {
+                $user = User::whereHas('teamUsers.team', function($query) use ($teamId) {
+                            $query->where('team_id',  $teamId);
+                        });
             }
+
+            if( !empty($skillId) ) {
+                $user = User::whereHas('skillUsers.skill', function($query) use ($skillId) {
+                            $query->whereIn('skill_id',  $skillId);
+                        });
+            }
+
+            if( !empty($level)) {
+                $user = User::whereHas('skillUsers', function($query) use ($level) {
+                            $query->whereIn('level',  $level);
+                        });
+            }
+
+            if( $positionTeam != 0 ) {
+                $user = User::with(['teamUsers.positionTeams' => function($query) use ($positionTeam) {
+                            $query->where('position_id',  $positionTeam);
+                        }]);
+            }
+
+            $members = $user->paginate(50);
+            // get member exits
+            $userTeamId = ProjectTeam::with('teamUser.user')->where('project_id', $projectId)->pluck('team_user_id')->all();
+            $arrMember = TeamUser::with('user')->whereIn('id', $userTeamId)->where('team_id', $teamId)->pluck('user_id')->all();
+            $html = view('admin.project.project_member', compact('members', 'arrMember'))->render();
+
+            return response()->json(['result' => true,  'html' => $html]);
+
+        }catch(Exception $e){
+            return response()->json('result', 400);
         }
-    }
+}
 
     /**
      * save a user
@@ -300,47 +276,39 @@ class ProjectController extends Controller
      */
     public function addMember(Request $request)
     {
-        if ($request->ajax()) {
-            DB::beginTransaction();
-
-            try{
-                $projectId = $request->projectId;
-                $userId = isset($request->userId) ? $request->userId : [];
-                $leaderId = $request->leader;
-                $teamId = $request->teamId;
-                $flag = $request->flag;
-
-                // dd($request->all());
-                $teamUsers = TeamUser::whereIn('user_id', $userId)->getTeam($teamId)->pluck('id','user_id')->all();
-
-                $arr_teamUserId = [];
-
-                foreach ($teamUsers as $key => $value) {
-                    if($key == $leaderId) {
-                        $arr_teamUserId[] = ['is_leader' => 1, 'team_user_id' => $value];
-                    } else {
-                        $arr_teamUserId[] = ['is_leader' => 0, 'team_user_id' => $value];
-                    }
-                }
-                $project = $this->project->find($projectId);
-                if($flag == 1) {
-                    $project->teamUsers()->attach($arr_teamUserId);
+        $projectId = $request->projectId;
+        $userId = isset($request->userId) ? $request->userId : [];
+        $leaderId = $request->leader;
+        $teamId = $request->teamId;
+        $flag = $request->flag;
+        DB::beginTransaction();
+        try{
+            $teamUsers = TeamUser::whereIn('user_id', $userId)->getTeam($teamId)->pluck('id','user_id')->all();
+            $arr_teamUserId = [];
+            foreach ($teamUsers as $key => $value) {
+                if($key == $leaderId) {
+                    $arr_teamUserId[] = ['is_leader' => 1, 'team_user_id' => $value];
                 } else {
-                    $teamUserId = TeamUser::where('team_id',$teamId)->pluck('id')->all();
-                    $projectId = ProjectTeam::where('project_id', $projectId)->whereIn('team_user_id', $teamUserId)->delete();
-                    // dd($projectId);
-                    $project->teamUsers()->attach($arr_teamUserId);
+                    $arr_teamUserId[] = ['is_leader' => 0, 'team_user_id' => $value];
                 }
-
-
-                DB::commit();
-
-                return response()->json(['result' => true]);
-            }catch(Exception $e){
-                DB::rollback();
-
-                return response()->json('result', false);
             }
+
+            $project = $this->project->find($projectId);
+            if($flag) {
+                $project->teamUsers()->attach($arr_teamUserId);
+            } else {
+                $teamUserId = TeamUser::where('team_id',$teamId)->pluck('id')->all();
+                $projectId = ProjectTeam::where('project_id', $projectId)->whereIn('team_user_id', $teamUserId)->delete();
+                $project->teamUsers()->attach($arr_teamUserId);
+            }
+
+            DB::commit();
+
+            return response()->json(['result' => true]);
+        }catch(\Exception $e){
+            DB::rollback();
+
+            return response()->json('result', false);
         }
     }
 
@@ -352,31 +320,22 @@ class ProjectController extends Controller
      */
     public function deleteMember(Request $request)
     {
-        if ($request->ajax()) {
-            DB::beginTransaction();
+        $projectId = $request->projectId;
+        $members = $request->members;
+        $teamId = $request->teamId;
+        DB::beginTransaction();
 
-            try{
-                // dd($request->all());
-                $projectId = $request->projectId;
-                $members = $request->members;
-                $teamId = $request->teamId;
+        try{
+            $userTeamId = TeamUser::where('team_id', $teamId)->whereIn('user_id', $members)->pluck('id')->all();
+            $project = $this->project->findOrFail($projectId);
+            $delete = $project->teamUsers()->detach($userTeamId);
+            DB::commit();
 
-                $userTeamId = TeamUser::where('team_id', $teamId)->whereIn('user_id', $members)->pluck('id')->all();
-                // $projectTeam = ProjectTeam::where('project_id', $projectId)->whereIn('team_user_id', $userTeamId)->pluck('id')->all();//->delete();
+            return response()->json('result', true);
+        }catch(\Exception $e){
+            DB::rollback();
 
-                $project = $this->project->findOrFail($projectId);
-
-                $delete = $project->teamUsers()->detach($userTeamId);
-                // dd($projectTeam);
-                // $this->activity->insertActivities($project, 'delete members');
-                DB::commit();
-
-                return response()->json(['result' => true]);
-            }catch(Exception $e){
-                DB::rollback();
-
-                return response()->json('result', false);
-            }
+            return response()->json('result', false);
         }
     }
 
@@ -388,124 +347,108 @@ class ProjectController extends Controller
      */
     public function search(Request $request)
     {
-        if ($request->ajax()) {
-            try{
-                $teamId = $request->teamId;
-                $startDay = $request->startDay;
-                $endDay = $request->endDay;
+        $teamId = $request->teamId;
+        $startDay = $request->startDay;
+        $endDay = $request->endDay;
 
-                if($teamId != 0) {
-                    $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team')->whereHas('projectTeams.teamUser', function($query) use ($teamId) {
-                                $query->where('team_id', '=', $teamId);
-                            })->with('projectTeams.teamUser.user');
+        try{
+            if($teamId != 0) {
+                $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team')->whereHas('projectTeams.teamUser', function($query) use ($teamId) {
+                            $query->where('team_id', '=', $teamId);
+                        })->with('projectTeams.teamUser.user');
 
-                } else {
-                    $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser.user');
-                }
-
-                $projects = $projects->with(['projectTeams'=> function($query) {
-                                $query->where('is_leader', '=', 1);
-                            }])->where('start_day', '>=', $startDay)->where('end_day', '<=', $endDay)->paginate(15);
-
-                $html = view('admin.project.table_result', compact('projects'))->render();
-
-                return response()->json(['html' => $html]);
-            }catch(Exception $e){
-                return response()->json('result', 400);
+            } else {
+                $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser.user');
             }
+
+            $projects = $projects->with(['projectTeams'=> function($query) {
+                            $query->where('is_leader', '=', 1);
+                        }])->where('start_day', '>=', $startDay)->where('end_day', '<=', $endDay)->paginate(15);
+            $html = view('admin.project.table_result', compact('projects'))->render();
+
+            return response()->json(['result' => true, 'html' => $html]);
+        }catch(\Exception $e){
+            return response()->json('result', false);
         }
     }
 
      public function importFile(Request $request)
     {
+        $file = $request->file;
         try{
-            // dd($request->all());
-            $report = new Report;
-            $file = $request->file;
             $nameFile = '';
             if(isset($file)) {
                 $nameFile = Library::importFile($file);
-                $projects = $report->importFileExcel($nameFile);
+                $projects = Report::importFileExcel($nameFile);
             }
 
             $request->session()->flash('success', trans('user.msg.import-success'));
+
             return view('admin.export.project.import_data', compact('projects', 'nameFile'));
             } catch(\Exception $e) {
                 $request->session()->flash('fail', trans('user.msg.import-fail'));
                 DB::rollback();
+
                 return redirect()->action('Admin\UserController@index');
             }
     }
 
     public function exportFile(Request $request)
     {
-            try{
-                // dd($request->all());
-                $report = new Report;
-                $dt = new DateTime();
+        $type = $request->type;
+        $teamId = $request->teamId;
+        $startDay = $request->startDay;
+        $endDay = $request->endDay;
+        try{
+            $dt = new DateTime();
+            if($teamId != 0) {
+                $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team')->whereHas('projectTeams.teamUser', function($query) use ($teamId) {
+                            $query->where('team_id', '=', $teamId);
+                        })->with('projectTeams.teamUser.user');
 
-                $type = $request->type;
-                $teamId = $request->teamId;
-                $startDay = $request->startDay;
-                $endDay = $request->endDay;
-
-                if($teamId != 0) {
-                    $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team')->whereHas('projectTeams.teamUser', function($query) use ($teamId) {
-                                $query->where('team_id', '=', $teamId);
-                            })->with('projectTeams.teamUser.user');
-
-                } else {
-                    $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser.user');
-                }
-
-                $projects = $projects->with(['projectTeams'=> function($query) {
-                                $query->where('is_leader', '=', 1);
-                            }])->where('start_day', '>=', $startDay)->where('end_day', '<=', $endDay)->get();
-                $nameFile = 'project_'.$dt->format('Y-m-d-H-i-s');
-                $report->exportFileProjectExcel($projects, $type, $nameFile);//
-                unlink( base_path().'/public/Upload/'.$nameFile );
-                $request->session()->flash('success', trans('project.msg.export-success'));
-                return redirect()->action('Admin\ProjectController@index');
-            }catch(\Exception $e){
-                dd($e);
-                $request->session()->flash('fail', trans('project.msg.export-fail'));
-                return redirect()->action('Admin\ProjectController@index');
+            } else {
+                $projects = $this->project->with('projectTeams.user','projectTeams.teamUser.team','projectTeams.teamUser.user');
             }
+
+            $projects = $projects->with(['projectTeams'=> function($query) {
+                            $query->where('is_leader', '=', 1);
+                        }])->where('start_day', '>=', $startDay)->where('end_day', '<=', $endDay)->get();
+            $nameFile = 'project_'.$dt->format('Y-m-d-H-i-s');
+            Report::exportFileProjectExcel($projects, $type, $nameFile);//
+            unlink( base_path().'/public/Upload/'.$nameFile );
+            $request->session()->flash('success', trans('project.msg.export-success'));
+            return redirect()->action('Admin\ProjectController@index');
+        }catch(\Exception $e){
+            dd($e);
+            $request->session()->flash('fail', trans('project.msg.export-fail'));
+            return redirect()->action('Admin\ProjectController@index');
+        }
     }
 
     public function saveImport(Request $request)
     {
-
-            DB::beginTransaction();
-            try{
-                $report = new Report;
-                // dd($request->all());
-                $nameFile = $request->nameFile;
-                $projects = $report->importFileExcel($nameFile)->toArray();
-                // validate users
-
-                foreach ($projects as $project) {
-                    // dd($project);
-                    $insert = $this->dataProject($project);
-
-                    if(!$this->validator($insert)->validate()) {
-
-                        $project = $this->project->create($insert);
-                        $this->activity->insertActivities($project, 'insert');
-                    }
+        DB::beginTransaction();
+        try{
+            $nameFile = $request->nameFile;
+            $projects = Report::importFileExcel($nameFile)->toArray();
+            foreach ($projects as $project) {
+                $insert = $this->dataProject($project);
+                if(!$this->validator($insert)->validate()) {
+                    $project = $this->project->create($insert);
+                    $this->activity->insertActivities($project, 'insert');
                 }
-
-                $request->session()->flash('success', trans('project.msg.import-success'));
-                DB::commit();
-                return redirect()->action('Admin\ProjectController@index');
-            }catch(\Exception $e){
-                dd($e);
-                $request->session()->flash('fail', trans('project.msg.import-fail'));
-                DB::rollback();
-
-                return redirect()->action('Admin\ProjectController@index');
             }
-        // }
+
+            $request->session()->flash('success', trans('project.msg.import-success'));
+            DB::commit();
+
+            return redirect()->action('Admin\ProjectController@index');
+        }catch(\Exception $e){
+            $request->session()->flash('fail', trans('project.msg.import-fail'));
+            DB::rollback();
+
+            return redirect()->action('Admin\ProjectController@index');
+        }
     }
 
 

@@ -2,7 +2,6 @@
       {{ Form::label('name', trans('user.lbl-name'), ['class' => 'col-md-4 control-label']) }}
     <div class="col-md-6">
         {{ Form::text('name', isset($user->name) ? $user->name : old('name'), ['class' => 'form-control', 'id' => 'name', 'required' => true, 'autofocus' => true]) }}
-
         @if ($errors->has('name'))
             <span class="help-block">
                 <strong>{{ $errors->first('name') }}</strong>
@@ -13,7 +12,6 @@
 
 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
     {{ Form::label('email', trans('user.lbl-email'), ['class' => 'col-md-4 control-label']) }}
-
     <div class="col-md-6">
         {{ Form::text('email', isset($user->email) ? $user->email : old('email'), ['class' => 'form-control',  'id' => 'email', 'required' => true]) }}
 
@@ -69,13 +67,12 @@
         <div class="panel panel-heading">
             {{ trans('user.lbl-skill') }}
         </div>
-
         <div class="panel panel-body table-result">
             <div class="form-group">
-                @foreach ($skills as $key => $skill)
-                    @if(!in_array($key, $skillId))
+                @foreach ($skills as $skill)
+                    @if(!in_array($loop->iteration, $skillId))
                         <div class="col-md-6">
-                            {{ Form::checkbox('skill[]', $key, null, ['class' => 'skill', 'id' => 'skill']) }} {{ $skill }}
+                            {{ Form::checkbox('skill[]', $loop->iteration, null, ['class' => 'skill', 'id' => 'skill']) }} {{ $skill }}
                         </div>
                     @endif
                 @endforeach
@@ -90,13 +87,12 @@
         <div class="panel panel-heading">
             {{ trans('project.lbl-team') }}
         </div>
-
         <div class="panel panel-body table-result">
             <div class="form-group">
-                @foreach ($teams as $key => $team)
-                    @if(!in_array($key, $arrTeam))
+                @foreach ($teams as $team)
+                    @if(!in_array($loop->iteration, $arrTeam))
                         <div class="col-md-6">
-                            {{ Form::checkbox('teams[]', $key, null, ['class' => 'team', 'id' => 'team']) }} {{ $team }}
+                            {{ Form::checkbox('teams[]', $loop->iteration, null, ['class' => 'team', 'id' => 'team']) }} {{ $team }}
                         </div>
                     @endif
                 @endforeach

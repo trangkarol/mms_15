@@ -22,7 +22,6 @@
                 <div class="panel-heading">
                     {{ trans('position.title-update-positions') }}
                 </div>
-                <!--  -->
                 <div class="panel-body">
                 {!! Form::open(['action' => 'Admin\PositionController@update', 'class' => 'form-horizontal']) !!}
                     {{ Form::hidden('positionId', $position->id) }}
@@ -31,7 +30,6 @@
                     <div class="form-group">
                         <div class="col-md-6 col-md-offset-4">
                             {{ Form::reset(trans('admin.btn-reset'), ['class' => 'btn btn-primary']) }}
-
                             {{ Form::submit(trans('admin.btn-update'), ['class' => 'btn btn-primary']) }}
                         </div>
                     </div>

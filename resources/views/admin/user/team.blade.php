@@ -10,7 +10,6 @@
                     <th ></th>
                 </tr>
             </thead>
-
             <tbody>
             @foreach ($positionTeams as $positionTeam)
                 @if($positionTeam->team)
@@ -20,7 +19,7 @@
                         <td>{{ $positionTeam->team->name }}</td>
                         <td>
                             @foreach ($positionTeam->positions as $positon)
-                                {{ $positon->name.' | ' }}
+                                {{ $positon->name .' | ' }}
                             @endforeach
                         </td>
                         <td>

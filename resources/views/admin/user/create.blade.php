@@ -1,7 +1,7 @@
 @extends('admin.block.main')
 <!-- title off page -->
 @section('title')
-    {{trans('user.title-insert-users')}}
+    {{ trans('user.title-insert-users') }}
 @endsection
 <!-- css used for page -->
 <!-- content of page -->
@@ -23,23 +23,18 @@
                 <div class="panel-heading">
                     {{ trans('user.title-insert-users') }}
                 </div>
-                <!--  -->
                 <div class="panel-body">
                     {!! Form::open(['action' => 'Admin\UserController@store', 'method' => 'POST', 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
-
                         @include('admin.user.form_user')
                         <!-- button -->
                        <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 {{ Form::reset(trans('admin.btn-reset'), ['class' => 'btn btn-primary']) }}
-
                                  {{ Form::submit(trans('admin.btn-insert'), ['class' => 'btn btn-primary']) }}
                             </div>
                         </div>
                     {!! Form::close() !!}
                 </div>
-                <!-- Pagination -->
-
             </div>
         </div>
     </div>
