@@ -8,7 +8,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-3 sub-menu">
-            <h4>{{trans('team.title-teams')}}</h4>
+            <h4>{{ trans('team.title-teams') }}</h4>
         </div>
         <div class="col-md-4 col-md-offset-3 paddingtop">
             <a href="{{ action('Admin\TeamController@index') }}" class="btn btn-primary"><i class="fa fa-list " ></i></a>
@@ -44,7 +44,6 @@
                             <div class="col-md-5">
                                 {{ Form::checkbox('levels[]', config('setting.level.senior'), null, ['class' => 'levels'] ) }} {{ trans('team.lbl-senior') }}
                             </div>
-
                         </div>
                     </div>
 
@@ -61,15 +60,15 @@
                 <div class="panel-heading">
                     {{ trans('team.title-members-teams') }}
                 </div>
-                <!--  -->
+
                 <div class="panel-body">
                     <div class="col-md-5">
                         {{ Form::select('teamId', $teams, null, ['class' => 'form-control', 'id' => 'teamId']) }}
                     </div>
                 </div>
-                <!--  -->
+
                 <div class="panel-body" id="result-member">
-                    @if(isset($users))
+                    @if (isset($users))
                         @include('admin.team.search_user')
                     @endif
                 </div>
@@ -82,9 +81,9 @@
                 <div class="panel-heading">
                     {{ trans('team.title-list-member') }}
                 </div>
-                <!--  -->
+
                 <div class="panel-body" id="result-list-member">
-                    @if(isset($members))
+                    @if (isset($members))
                         @include('admin.team.list_member')
                     @endif
                 </div>
@@ -96,18 +95,7 @@
 <!-- js used for page -->
 @section('contentJs')
     @parent
-      <!-- message -->
-    <script type="text/javascript">
-        var trans = {
-                'msg_emty_member' : '{{ trans('public.msg.empty-member') }}',
-                'msg_update_success' : '{{ trans('public.msg.update-success') }}',
-                'msg_delete_success' : '{{ trans('public.msg.delete-success') }}',
-                'msg_update_fail' : '{{ trans('public.msg.update-fail') }}',
-                'msg_delete_fail' : '{{ trans('public.msg.delete-fail') }}',
-                'msg_insert_fail' : '{{ trans('public.msg.insert-fail') }}',
-                'msg_insert_success' : '{{ trans('public.msg.insert-success') }}',
-            }
-    </script>
-    {{ Html::script('/admin/js/team.js') }}
-
+    {{ Html::script('admin/js/team.js') }}
+    <!-- add trans and action used in file team.js -->
+    @include('library.team_trans_javascript')
 @endsection

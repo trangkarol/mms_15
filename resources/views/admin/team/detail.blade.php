@@ -44,29 +44,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                            @foreach ($teams->teamUsers as $teams->teamUser)
-                                <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td><a href="{{ action('Member\HomeController@detailMember', $teams->teamUser->user->id) }}">{{ $teams->teamUser->user->name }}</a></td>
-                                    <!-- <td>  </td>-->
-                                    <td>
-                                        @if ($teams->teamUser->positions)
-                                            @php
-                                                $position = '';
-                                            @endphp
+                        @foreach ($teams->teamUsers as $teamUser)
+                            <tr>
+                                <td class="text-center">{{ $loop->iteration }}</td>
+                                <td><a href="{{ action('Member\HomeController@detailMember', $teams->teamUser->user->id) }}">{{ $teamUser->user->name }}</a></td>
+                                <td>
+                                    @if ($teamUser->positions)
+                                        @php
+                                            $position = '';
+                                        @endphp
 
-                                             @if ($teams->teamUser->positions)
-                                                @foreach ($teams->teamUser->positions as $positon)
-                                                    @php
-                                                        $position = $position.$positon->name.' | ';
-                                                    @endphp
-                                                @endforeach
-                                            @endif
-                                            {{ rtrim($position,' | ') }}
+                                        @if ($teamUser->positions)
+                                            @foreach ($teamUser->positions as $positon)
+                                                @php
+                                                    $position = $position.$positon->name .' | ';
+                                                @endphp
+                                            @endforeach
                                         @endif
-                                    </td>
-                                </tr>
-                            @endforeach
+                                        {{ rtrim($position, ' | ') }}
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

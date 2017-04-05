@@ -15,12 +15,12 @@
             </thead>
 
             <tbody>
-                @if (isset($teams))
-                    @foreach ($teams as $team)
+                @if (isset($data))
+                    @foreach ($data as $team)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $team->name }}</td>
-                            <td>{{ $team->leader }}</td>
+                            <td>{{ $team->leader->name }}</td>
                             <td>{{ $team->description }}</td>
                         </tr>
                     @endforeach

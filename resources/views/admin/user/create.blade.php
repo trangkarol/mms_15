@@ -48,5 +48,7 @@
 @section('contentJs')
     @parent
     {{ Html::script('/admin/js/user.js') }}
+    <!-- add trans and action used in file user.js -->
+    @include('library.user_trans_javascript')
 @endsection
 

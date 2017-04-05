@@ -88,10 +88,6 @@ $(document).ready(function() {
 
 function search(page) {
     var teamId = $('#team').val();
-    url = '/admin/teams/search';
-    if (page) {
-        url = '/admin/teams/search?page=' + page;
-    }
 
     var skills = [];
     $('.skills:checked').each(function() {
@@ -102,6 +98,11 @@ function search(page) {
     $('.levels:checked').each(function() {
         levels.push($(this).val());
     });
+
+    var url = action['team_search'];
+    if (page) {
+        url += '?page=' + page;
+    }
 
     $.ajax({
         type: 'POST',
@@ -131,7 +132,7 @@ function addMember(flag) {
 
     $.ajax({
         type: 'POST',
-        url: '/admin/teams/store-member',
+        url: action['team_store_member'],
         dataType: 'json',
         data: {
             teamId: teamId,
@@ -143,15 +144,15 @@ function addMember(flag) {
             $.colorbox.close();
             var messages;
             if (data.result) {
-                messages =
+                messages = trans['msg_update_success'];
                 if (flag) {
-                    messages = ;
+                    messages = trans['msg_insert_success'];;
                 }
                 searchMember();
             } else {
-                messages =
+                messages = trans['msg_update_fail'];
                 if (flag) {
-                    messages = ;
+                    messages = trans['msg_insert_fail'];
                 }
             }
         }
@@ -162,7 +163,7 @@ function positionTeam(userId) {
     var teamId = $('#teamId').val();
     $.ajax({
         type: 'POST',
-        url: '/admin/teams/position-team',
+        url: action['team_position_member'],
         dataType: 'json',
         data: {
             teamId: teamId,
@@ -179,7 +180,7 @@ function searchMember() {
     var teamId = $('#teamId').val();
     $.ajax({
         type: 'POST',
-        url: '/admin/teams/search-member',
+        url: action['team_search_member'],
         dataType: 'json',
         data: {
             teamId: teamId,
@@ -194,20 +195,19 @@ function deleteMember(userId) {
     var teamId = $('#teamId').val();
     $.ajax({
         type: 'POST',
-        url: '/admin/teams/delete-member',
+        url: action['team_delete_member'],
         dataType: 'json',
         data: {
             teamId: teamId,
             userId: userId,
         },
         success:function(data) {
-            var messages;
             if (data.result) {
-                bootbox.alert('Delete successfully!');
+                bootbox.alert(trans['msg_delete_success']);
                 $.colorbox.close();
                 searchMember();
             } else {
-                bootbox.alert('Delete fail!');
+                bootbox.alert(trans['msg_delete_fail']);
             }
         }
     });
@@ -217,5 +217,5 @@ function exportFile(type) {
     $('#type-export').attr('value', type);
     $('#form-export-user').submit();
     $.colorbox.close();
-    bootbox.alert('Export file succesfully!');
+    bootbox.alert(trans['msg_export_success']);
 }

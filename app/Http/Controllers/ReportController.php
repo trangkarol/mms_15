@@ -8,7 +8,7 @@ use Excel;
 
 class ReportController extends Controller
 {
-    public function importFileExcel($nameFile)
+    public static function importFileExcel($nameFile)
     {
         $url = base_path().'/public/Upload/'.$nameFile;
 
@@ -17,7 +17,7 @@ class ReportController extends Controller
         })->get();
     }
 
-    public function exportFileExcel($data, $type, $nameFile)
+    public static function exportFileExcel($data, $type, $nameFile)
     {
         return Excel::create($nameFile, function($excel) use ($data) {
             $excel->sheet('mySheet', function($sheet) use ($data)
@@ -28,7 +28,7 @@ class ReportController extends Controller
         })->export($type);
     }
 
-    public function exportTeamFileExcel($data, $type, $nameFile)
+    public static function exportTeamFileExcel($data, $type, $nameFile)
     {
         return Excel::create($nameFile, function($excel) use ($data) {
             $excel->sheet('mySheet', function($sheet) use ($data)
@@ -39,7 +39,7 @@ class ReportController extends Controller
         })->export($type);
     }
 
-    public function exportFileProjectExcel($data, $type, $nameFile)
+    public static function exportFileProjectExcel($data, $type, $nameFile)
     {
         return Excel::create($nameFile, function($excel) use ($data) {
             $excel->sheet('mySheet', function($sheet) use ($data)

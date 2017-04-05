@@ -50,8 +50,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        // Mail::to('thientrang2808@gmail.com')->send(new SendPassword());
-        // dd('hello');
         $teams = Library::getLibraryTeams();
         $position = Library::getPositions();
         $positionTeams = Library::getPositionTeams();
@@ -82,24 +80,18 @@ class UserController extends Controller
         DB::beginTransaction();
 
         try {
-            // dd($request->all());
             $this->user->name = $request->name;
             $this->user->email = $request->email;
             $this->user->birthday = date_create($request->birthday);
-            $password = str_random(8);
-
-            $this->user->password = bcrypt($password);
             $this->user->role = $request->role;
-
+            $password = str_random(8);
+            $this->user->password = bcrypt($password);
             //images
             $this->user->avatar = Library::importFile($request->file);
-
             $this->user->position()->associate($request->position);
             $user = $this->user->save();
-
             $this->activity->insertActivities($this->user, 'insert');
             $request->session()->flash('success', trans('user.msg.insert-success'));
-
             // send password to user
             $data = [
                 'name' => $request->name,
@@ -109,25 +101,12 @@ class UserController extends Controller
 
             Mail::to($request->email)->queue(new SendPassword($data));
             DB::commit();
-
             return redirect()->action('Admin\UserController@edit', $this->user->id);
         } catch(\Exception $e) {
             $request->session()->flash('fail', trans('user.msg.insert-fail'));
             DB::rollback();
-
             return redirect()->back();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-
     }
 
     /**
@@ -179,7 +158,7 @@ class UserController extends Controller
             if (isset($request->file)) {
                 if($user->avatar != "avatar.jpg" && !is_null($user->avatar)) {
                     $urlAvartar = base_path().'/public/Upload/'.$user->avatar;
-                    // unlink($urlAvartar);
+                    unlink($urlAvartar);
                 }
 
                 $user->avatar = Library::importFile($request->file);
@@ -191,12 +170,10 @@ class UserController extends Controller
             $this->activity->insertActivities($user, 'update');
             $request->session()->flash('success', trans('user.msg.update-success'));
             DB::commit();
-
             return redirect()->action('Admin\UserController@edit', $request->userId);
         } catch(\Exception $e) {
             $request->session()->flash('fail', trans('user.msg.update-fail'));
             DB::rollback();
-
             return redirect()->action('Admin\UserController@edit', $request->userId);
         }
     }
@@ -225,13 +202,10 @@ class UserController extends Controller
             $this->activity->insertActivities($user, 'delete');
             $request->session()->flash('success', trans('user.msg.delete-success'));
             DB::commit();
-
             return redirect()->action('Admin\UserController@index');
         } catch(\Exception $e) {
-            dd($e);
             $request->session()->flash('fail', trans('user.msg.delete-fail'));
             DB::rollback();
-
             return redirect()->back();
         }
     }
@@ -259,7 +233,7 @@ class UserController extends Controller
                 $html = view('admin.user.table_result', compact('members'))->render();
 
                 return response()->json(['result' => true, 'html' => $html]);
-            }catch(Exception $e){
+            }catch(\Exception $e){
                 return response()->json('false', false);
             }
         }
@@ -296,12 +270,10 @@ class UserController extends Controller
                 }
 
                 $skillUsers = SkillUser::skillUsers($userId)->get();
-
                 $levels = Library::getLevel();
                 $html = view('admin.user.list_skill', compact('skillUsers', 'levels'))->render();
-
                 DB::commit();
-                return response()->json(['result' => true, 'html' => $html]);
+                return response()->json(['result' => true, 'html' => $html, 'flag' => $flag]);
             }catch(Exception $e){
                 DB::rollback();
                 return response()->json('result', false);
@@ -326,7 +298,6 @@ class UserController extends Controller
             $levels = Library::getLevel();
             $html = view('admin.user.list_skill', compact('skillUsers', 'levels'))->render();
             DB::commit();
-
             return response()->json(['result' => true, 'html' => $html]);
         } catch (Exception $e){
             DB::rollback();
@@ -344,11 +315,11 @@ class UserController extends Controller
     public function positionTeam(Request $request)
     {
         if ($request->ajax()) {
+            $userId = $request->userId;
+            $teamId = $request->teamId;
+            $flag = $request->flag;
             DB::beginTransaction();
-            try{
-                $userId = $request->userId;
-                $teamId = $request->teamId;
-                $flag = $request->flag;
+            try {
                 $arrPosition = [];
                 // $arrProject = [];
 
@@ -384,14 +355,12 @@ class UserController extends Controller
     public function addTeam(Request $request)
     {
         if ($request->ajax()) {
+            $userId = $request->userId;
+            $teamId = $request->teamId;
+            $positions = $request->positions;
+            $flag = $request->flag;
             DB::beginTransaction();
             try{
-
-                $userId = $request->userId;
-                $teamId = $request->teamId;
-                $positions = $request->positions;
-                $flag = $request->flag;
-                // dd($request->all());
                 if($flag == 1) {
                     $team = $this->user->find($userId)->teams()->attach($teamId);
                 }
@@ -460,11 +429,11 @@ class UserController extends Controller
     public function getSkill(Request $request)
     {
         if ($request->ajax()) {
+            $userId = $request->userId;
+            $skillId = $request->skillId;
+            $flag = $request->flag;
             DB::beginTransaction();
             try{
-                $userId = $request->userId;
-                $skillId = $request->skillId;
-                $flag = $request->flag;
                 $arrPosition = [];
                 // $arrProject = [];
 
@@ -488,43 +457,38 @@ class UserController extends Controller
 
     public function importFile(Request $request)
     {
-        // if ($request->ajax()) {
-            try{
-                // dd($request->all());
-                $report = new Report;
-                $file = $request->file;
-                $nameFile = '';
-                if(isset($file)) {
-                    $nameFile = Library::importFile($file);
-                    $members = $report->importFileExcel($nameFile);
-                     // dd($members);
-                    $position = Library::getPositions();
-                }
-
-                // $html = view('admin.user.table_scv', compact('members', 'position'))->render();
-                return view('admin.user.table_scv', compact('members', 'position', 'nameFile'));
-
-                DB::commit();
-                return response()->json(['result' => true, 'html' => $html]);
-            }catch(Exception $e){
-                DB::rollback();
-                return response()->json('result', false);
+        $file = $request->file;
+        try{
+            // dd($request->all());
+            $report = new Report;
+            $nameFile = '';
+            if(isset($file)) {
+                $nameFile = Library::importFile($file);
+                $members = $report->importFileExcel($nameFile);
+                 // dd($members);
+                $position = Library::getPositions();
             }
-        // }
+
+            // $html = view('admin.user.table_scv', compact('members', 'position'))->render();
+            return view('admin.user.table_scv', compact('members', 'position', 'nameFile'));
+
+            DB::commit();
+            return response()->json(['result' => true, 'html' => $html]);
+        }catch(Exception $e){
+            DB::rollback();
+            return response()->json('result', false);
+        }
     }
 
     public function exportFile(Request $request)
     {
-        // if ($request->ajax()) {
+            $type = $request->type;
+            $teamId = $request->teamId;
+            $position = $request->position;
+            $positionTeams = $request->positionTeams;
             try{
                 $report = new Report;
                 $dt = new DateTime();
-                // dd($request->all());
-
-                $type = $request->type;
-                $teamId = $request->teamId;
-                $position = $request->position;
-                $positionTeams = $request->positionTeams;
 
                 $user = $this->getMember($teamId, $position, $positionTeams);
                 $members = $user->get();
@@ -543,41 +507,38 @@ class UserController extends Controller
 
     public function saveImport(Request $request)
     {
+        $nameFile = $request->nameFile;
+        DB::beginTransaction();
+        try{
+            $report = new Report;
+            $members = $report->importFileExcel($nameFile)->toArray();
+            // validate users
 
-            DB::beginTransaction();
-            try{
-                $report = new Report;
-                // dd($request->all());
-                $nameFile = $request->nameFile;
-                $members = $report->importFileExcel($nameFile)->toArray();
-                // validate users
+            foreach ($members as $user) {
+                $insert = $this->dataMember($user);
+                //insert password
+                $password = str_random(8);
+                $insert['password'] = $password;
 
-                foreach ($members as $user) {
-                    $insert = $this->dataMember($user);
-                    //insert password
-                    $password = str_random(8);
-                    $insert['password'] = $password;
-
-                    if(!$this->validator($insert)->validate()) {
-                        // Mail::to($insert['email'])->queue(new SendPassword($insert));
-                        $insert['password'] = bcrypt($password);
-                        $user = $this->user->create($insert);
-                        $this->activity->insertActivities($user, 'insert');
-                    }
+                if(!$this->validator($insert)->validate()) {
+                    // Mail::to($insert['email'])->queue(new SendPassword($insert));
+                    $insert['password'] = bcrypt($password);
+                    $user = $this->user->create($insert);
+                    $this->activity->insertActivities($user, 'insert');
                 }
-
-                $request->session()->flash('success', trans('user.msg.import-success'));
-
-                DB::commit();
-                return redirect()->action('Admin\UserController@index');
-            }catch(\Exception $e){
-                // dd($e);
-                $request->session()->flash('fail', trans('user.msg.import-fail'));
-                DB::rollback();
-
-                return redirect()->action('Admin\UserController@index');
             }
-        // }
+
+            $request->session()->flash('success', trans('user.msg.import-success'));
+
+            DB::commit();
+            return redirect()->action('Admin\UserController@index');
+        }catch(\Exception $e){
+            // dd($e);
+            $request->session()->flash('fail', trans('user.msg.import-fail'));
+            DB::rollback();
+
+            return redirect()->action('Admin\UserController@index');
+        }
     }
 
     /**

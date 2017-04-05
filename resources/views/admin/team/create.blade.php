@@ -8,8 +8,9 @@
 @section('content')
     <div class="row">
         <div class="col-md-3 sub-menu">
-            <h4>{{trans('team.title-teams')}}</h4>
+            <h4>{{ trans('team.title-teams') }}</h4>
         </div>
+
         <div class="col-md-4 col-md-offset-3 paddingtop">
             <a href="{{ action('Admin\TeamController@index') }}" class="btn btn-primary"><i class="fa fa-list " ></i></a>
         </div>
@@ -22,16 +23,14 @@
                 <div class="panel-heading">
                     {{ trans('team.title-insert-teams') }}
                 </div>
-                <!--  -->
-                <div class="panel-body">
-                {!! Form::open(['action' => 'Admin\TeamController@store', 'method' => 'POST', 'class' => 'form-horizontal']) !!}
 
+                <div class="panel-body">
+                {!! Form::open(['action' => 'Admin\TeamController@store', 'class' => 'form-horizontal']) !!}
                     @include('admin.team.form_team')
                     <!-- button -->
                     <div class="form-group">
                         <div class="col-md-6 col-md-offset-4">
                             {{ Form::reset(trans('admin.btn-reset'), ['class' => 'btn btn-primary']) }}
-
                             {{ Form::submit(trans('admin.btn-insert'), ['class' => 'btn btn-primary']) }}
                         </div>
                     </div>
@@ -42,3 +41,9 @@
     </div>
 @endsection
 <!-- js used for page -->
+@section('contentJs')
+    @parent
+    {{ Html::script('admin/js/team.js') }}
+    <!-- add trans and action used in file team.js -->
+    @include('library.team_trans_javascript')
+@endsection

@@ -1,54 +1,54 @@
-$(document).ready(function(){
+$(document).ready(function() {
 	// click on search
-    $(document).on('click','#btn-search',function(){
+    $(document).on('click', '#btn-search', function(){
         search(0);
     });
 
     // delelete
     $(document).on('click', '#btn-delete', function(event) {
         event.preventDefault();
-        bootbox.confirm('Are you want to delete?', function(result){
-            if(result) {
+        bootbox.confirm('Are you want to delete?', function(result) {
+            if (result) {
                 $('#delete-form-user').submit();
             }
         });
     });
 
     //handel pagination by ajax
-    $(document).on('click','.search.pagination a',function(event){
+    $(document).on('click', '.search.pagination a', function(event) {
         event.preventDefault();
         var page = $(this).attr('href').split('page=')[1];
         search(page);
     });
 
     //handel pagination by ajax
-    $(document).on('click','#btn-add-skill',function(event){
+    $(document).on('click', '#btn-add-skill', function(event) {
         addSkill($(this), 1);
     });
 
     //handel pagination by ajax
-    $(document).on('click','#btn-edit-skill',function(event){
+    $(document).on('click', '#btn-edit-skill', function(event) {
         addSkill($(this), 0);
     });
 
     // get skill
-    $(document).on('click', '.skill',function(event) {
+    $(document).on('click', '.skill', function(event) {
         // $(this).addClass('users-current');
         var skillId = $(this).val();
         getFormSkill(skillId, 1);
     });
 
     // edit skill
-    $(document).on('click', '.btn-edit-skill',function(event) {
+    $(document).on('click', '.btn-edit-skill', function(event) {
         // $(this).addClass('users-current');
         var skillId = $(this).parents('tr').find('.skillId').html().trim();
         getFormSkill(skillId, 0);
     });
 
     // delete skill
-    $(document).on('click', '.btn-delete-skill-popup',function(event) {
+    $(document).on('click', '.btn-delete-skill-popup', function(event) {
         var skillId = $(this).parents('tr').find('.skillId').html().trim();
-        bootbox.confirm('Are you want to delete?', function(result){
+        bootbox.confirm(trans['msg_comfirm_delete'], function(result){
             if(result) {
                  deleteSkill(skillId);
             }
@@ -56,23 +56,23 @@ $(document).ready(function(){
     });
 
     // position team
-    $(document).on('click', '.team',function(event) {
+    $(document).on('click', '.team', function(event) {
         // $(this).addClass('users-current');
         var teamId = $(this).val();
         positionTeam(teamId, 1);
     });
 
     // position team
-    $(document).on('click', '.btn-edit-team',function(event) {
+    $(document).on('click', '.btn-edit-team', function(event) {
         // $(this).addClass('users-current');
         var teamId = $(this).parents('tr').find('.teamId').html().trim();
         positionTeam(teamId, 0);
     });
 
     // position team
-    $(document).on('click', '.btn-delete-team',function(event) {
+    $(document).on('click', '.btn-delete-team', function(event) {
         var teamId = $(this).parents('tr').find('.teamId').html().trim();
-        bootbox.confirm('Are you want to delete?', function(result){
+        bootbox.confirm(trans['msg_comfirm_delete'], function(result){
             if(result) {
                 deleteTeam(teamId, 2);
             }
@@ -81,17 +81,17 @@ $(document).ready(function(){
 
 
     // position team
-    $(document).on('click', '#btn-add-team',function(event) {
+    $(document).on('click', '#btn-add-team', function(event) {
         addTeam(event, 1);
     });
 
     // position team
-    $(document).on('click', '#btn-update-team',function(event) {
+    $(document).on('click', '#btn-update-team', function(event) {
         addTeam(event, 0);
     });
 
     // position team
-    $(document).on('click', '#btn-delete-team',function(event) {
+    $(document).on('click', '#btn-delete-team', function(event) {
         deleteTeam(event);
     });
 
@@ -110,7 +110,7 @@ $(document).ready(function(){
     });
 
     // save user
-    $(document).on('click', '#add-user',function(event) {
+    $(document).on('click', '#add-user', function(event) {
         $('#form-save-user').submit();
     });
 
@@ -132,9 +132,9 @@ function search(page) {
     var position = $('#position').val();
     var positionTeams = $('#positionTeams').val();
 
-	url = '/admin/users/search';
-	if(page != 0){
-		url = '/admin/users/search?page='+page;
+	url = action['user_search'];
+	if (page) {
+		url += '?page=' + page;
 	}
 
 	$.ajax({
@@ -146,11 +146,11 @@ function search(page) {
             position: position,
             positionTeams: positionTeams,
         },
-       	success:function(data){
+       	success:function(data) {
           	$('#result-users').html();
           	$('#result-users').html(data.html);
           	$('.pagination').addClass('search');
-          	if(page != 0){
+          	if (page){
           		location.hash='?page='+page;
           	}
         }
@@ -165,7 +165,7 @@ function addSkill(event, flag) {
 
     $.ajax({
         type: 'POST',
-        url: '/admin/users/add-skill',
+        url: action['user_add_skill'],
         dataType: 'json',
         data: {
             skillId : skillId,
@@ -178,20 +178,16 @@ function addSkill(event, flag) {
             if (data.result) {
                 $('#result-skill').html();
                 $('#result-skill').html(data.html);
-                 $.colorbox.close();
+                $.colorbox.close();
+                var messages = trans['msg_add_skill_sucess'];
                 if (flag == 1) {
-                     bootbox.alert('Add skill succesfully');
-                } else {
-                    if (flag == 0) {
-                         bootbox.alert('Edit skill succesfully');
-                    } else {
-                         bootbox.alert('Delete skill succesfully');
-                    }
+                    messages = trans['msg_edit_skill_sucess'];
                 }
 
+                bootbox.alert(messages);
                 $('.skill:checked').parent().remove();
             } else {
-                     bootbox.alert('Fail!');
+                bootbox.alert(trans['msg_fail']);
             }
         }
     });
@@ -203,13 +199,13 @@ function deleteSkill(skillId) {
 
     $.ajax({
         type: 'GET',
-        url: '/admin/users/delete-skill/'+skillId+'/'+userId,
+        url: action['user_delete_skill'] + skillId + '/' + userId,
         dataType: 'json',
-        success:function(data){
+        success:function(data) {
             if (data.result) {
-                bootbox.alert('Delete skill succesfully', function() {
-                        $('#result-skill').html();
-                        $('#result-skill').html(data.html);
+                bootbox.alert(trans['msg_delete_skill_sucess'], function() {
+                    $('#result-skill').html();
+                    $('#result-skill').html(data.html);
                 });
 
             } else {
@@ -224,7 +220,7 @@ function positionTeam(teamId, flag) {
 
     $.ajax({
         type : 'POST',
-        url : '/admin/users/position-team',
+        url : action['user_position_team'],
         dataType : 'json',
         data : {
             teamId : teamId,
@@ -232,7 +228,7 @@ function positionTeam(teamId, flag) {
             flag : flag,
         },
         success:function(data) {
-            $.colorbox({html : data.html});
+            $.colorbox({ html: data.html });
         }
     });
 }
@@ -248,7 +244,7 @@ function addTeam(event,flag) {
 
     $.ajax({
         type : 'POST',
-        url : '/admin/users/add-team',
+        url : action['user_add_team'],
         dataType : 'json',
         data : {
             teamId : teamId,
@@ -257,25 +253,26 @@ function addTeam(event,flag) {
             flag : flag,
         },
         success:function(data) {
-            if(data.result) {
-                    if(flag == 1 ) {
-                        bootbox.alert('Insert succesfully!');
-                    } else {
-                        bootbox.alert('Update succesfully!');
-                    }
-
-                    $('#result-team').html();
-                    $('#result-team').html(data.html);
-                    $('.team:checked').parent().remove();
-
-                } else {
-                    if(flag == 1 ) {
-                        bootbox.alert('Insert fail!');
-                    } else {
-                        bootbox.alert('Update fail!');
-                    }
+            $.colorbox.close();
+            if (data.result) {
+                var messages = trans['msg_update_success'];
+                if (data.flag) {
+                    messages = trans['msg_insert_success'];
                 }
-                $.colorbox.close();
+
+                bootbox.alert(messages);
+                $('#result-team').html();
+                $('#result-team').html(data.html);
+                $('.team:checked').parent().remove();
+
+            } else {
+                var messages = trans['msg_update_fail'];
+                if (data.flag) {
+                    messages = trans['msg_insert_fail'];
+                }
+
+                bootbox.alert(messages);
+            }
         }
     });
 }
@@ -285,19 +282,19 @@ function deleteTeam(teamId) {
 
     $.ajax({
         type : 'GET',
-        url : '/admin/users/delete-team/'+teamId+'/'+userId,
+        url : action['user_delete_team'] + teamId + '/' + userId,
         dataType : 'json',
         success:function(data) {
-            if(data.result) {
+            if (data.result) {
                     $.colorbox.close();
-                    bootbox.alert('Delete succesfully', function() {
+                    bootbox.alert(trans['msg_delete_success'], function() {
                         $('#result-team').html();
                         $('#result-team').html(data.html);
                     });
                 } else {
-                    bootbox.alert('Delete fail');
+                    bootbox.alert(trans['msg_delete_fail']);
                 }
-        }
+            }
     });
 }
 
@@ -307,7 +304,7 @@ function  getFormSkill(skillId, flag) {
 
     $.ajax({
         type : 'POST',
-        url : '/admin/users/get-skill',
+        url : action['user_get_skill'],
         dataType : 'json',
         data : {
             skillId : skillId,
@@ -315,7 +312,7 @@ function  getFormSkill(skillId, flag) {
             flag : flag,
         },
         success:function(data) {
-            $.colorbox({html : data.html});
+            $.colorbox({ html: data.html });
         }
     });
 }
@@ -328,5 +325,4 @@ function exportFile(type) {
 
     $('#form-export-user').submit();
     $.colorbox.close();
-    bootbox.alert('Export file succesfully!');
 }
