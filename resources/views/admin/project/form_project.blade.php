@@ -43,7 +43,7 @@
         {{ Form::label('team', trans('project.lbl-team'), ['class' => 'col-md-4 control-label']) }}
         <div class="col-md-6 table-result">
             @foreach ($teams as $team)
-                @if (!in_array($loop->iteration, $arrTeam))
+                @if (!in_array($loop->iteration, $teamIds))
                     <div class="col-md-6">
                         {{ Form::checkbox('teams[]', $loop->iteration, null, ['class' => 'team', 'id' => 'team']) }} {{ $team }}
                     </div>
