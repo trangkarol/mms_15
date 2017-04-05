@@ -18,4 +18,21 @@ class SkillUser extends Model
         'level',
         'experiensive',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function skill()
+    {
+        return $this->belongsTo(Skill::class);
+    }
+
+    public function scopeSkillUsers($query, $user_id)
+    {
+        return $query->with('skill')->where('user_id', $user_id);
+    }
+
+
 }

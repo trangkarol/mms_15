@@ -23,6 +23,13 @@ class Activity extends Model
         'action',
     ];
 
+    // Relation::morphMap([
+    //     'user' => User::class,
+    //     'teams' => Teams::class,
+    // ]);
+
+    protected $appends = ['description'];
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -35,17 +42,21 @@ class Activity extends Model
         return $this->morphTo();
     }
 
-    /**
-     * Insert the specified resource from storage.
-     *
-     * @param  string  $action , model
-     * @return \Illuminate\Http\Response
-     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function insertActivities($model, $action)
     {
         $model->activities()->create([
             'user_id' => Auth::user()->id,
             'action' => $action,
         ]);
+    }
+
+    public function getDescriptionAttribute()
+    {
+        return $this->user->name.' '.$this->action.' '.$this->activitiable_type.' have name is '.$this->activitiable->name.' at '.$this->created_at;
     }
 }

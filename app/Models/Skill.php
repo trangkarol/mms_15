@@ -27,11 +27,21 @@ class Skill extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'skill_users')->withPivot('level', 'experiensive')->withTimestamps();
     }
 
     public function activities()
     {
-        return $this->morphMany(Activity::class, 'activitytable');
+        return $this->morphMany(Activity::class, 'activitiable');
+    }
+
+    public function skillUsers()
+    {
+       return $this->hasMany(SkillUser::class);
+    }
+
+    public function scopeSkillId($query, $SkillIds)
+    {
+        return $query->whereIn('id', $SkillIds);
     }
 }

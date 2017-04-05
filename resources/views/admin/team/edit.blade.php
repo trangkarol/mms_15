@@ -8,7 +8,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-3 sub-menu">
-            <h4>{{trans('team.title-teams')}}</h4>
+            <h4>{{ trans('team.title-teams') }}</h4>
         </div>
         <div class="col-md-4 col-md-offset-3 paddingtop">
             <a href="{{ action('Admin\TeamController@index') }}" class="btn btn-primary"><i class="fa fa-list " ></i></a>
@@ -43,3 +43,7 @@
     </div>
 @endsection
 <!-- js used for page -->
+@section('contentJs')
+    @parent
+    {{ Html::script('admin/js/team.js') }}
+@endsection
