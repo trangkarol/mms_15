@@ -76,10 +76,12 @@ class TeamController extends Controller
             $this->activity->insertActivities($this->team, 'insert');
             $request->session()->flash('success', trans('team.msg.insert-success'));
             DB::commit();
+
             return redirect()->action('Admin\TeamController@index');
         } catch(\Exception $e) {
             $request->session()->flash('fail', trans('team.msg.insert-fail'));
             DB::rollback();
+
             return redirect()->back();
         }
     }
@@ -93,6 +95,7 @@ class TeamController extends Controller
     public function show($id)
     {
         $teams = $this->team->with('leader', 'teamUsers.user', 'teamUsers.positions', 'teamUsers.projectTeams.project')->where('id', $id)->first();
+
         return view('admin.team.detail', compact('teams'));
     }
 
@@ -106,6 +109,7 @@ class TeamController extends Controller
     {
         $team = $this->team->findOrFail($id);
         $leader = Library::getLibraryUsers();
+
         return view('admin.team.edit', compact('leader', 'team'));
     }
 
@@ -128,10 +132,12 @@ class TeamController extends Controller
             $this->activity->insertActivities($team, 'update');
             $request->session()->flash('success', trans('team.msg.update-success'));
             DB::commit();
+
             return redirect()->action('Admin\TeamController@index');
         } catch (\Exception $e) {
             $request->session()->flash('fail', trans('team.msg.update-fail'));
             DB::rollback();
+
             return redirect()->action('Admin\TeamController@index');
         }
     }
@@ -157,10 +163,12 @@ class TeamController extends Controller
             $this->activity->insertActivities($team, 'delete');
             $request->session()->flash('success', trans('team.msg.delete-success'));
             DB::commit();
+
             return redirect()->action('Admin\TeamController@index');
         } catch (\Exception $e) {
             $request->session()->flash('fail', trans('team.msg.delete-fail'));
             DB::rollback();
+
             return redirect()->action('Admin\TeamController@index');
         }
     }
@@ -200,9 +208,11 @@ class TeamController extends Controller
             $teamUserId = TeamUser::where('team_id', $teamId)->where('user_id', $userId)->with('positions')->pluck('id')->first();
             $positionTeam = TeamUser::findOrFail($teamUserId)->positions()->sync($positions);
             DB::commit();
+
             return response()->json('result', true);
         } catch (\Exception $e) {
             DB::rollback();
+
            return response()->json('result', false);
         }
     }
@@ -225,9 +235,11 @@ class TeamController extends Controller
             }
             $positions = Library::getPositionTeams();
             $html = view('admin.team.insert_positon_teams', compact('positions', 'teamId', 'userId', 'teamUser', 'arrPosition', 'positions'))->render();
+
             return response()->json(['result' => true, 'html' => $html]);
         } catch (\Exception $e) {
             DB::rollback();
+
            return response()->json('result', false);
         }
     }
@@ -264,6 +276,7 @@ class TeamController extends Controller
 
             $userSkills = $users->get();
             $html = view('admin.team.search_user', compact('userSkills'))->render();
+
             return response()->json(['result' => true, 'html' => $html]);
         } catch (\Exception $e) {
            return response()->json('result', false);
@@ -282,6 +295,7 @@ class TeamController extends Controller
             $teamId = $request->teamId;
             $members = TeamUser::with('positions', 'team', 'user')->where('team_users.team_id', '=', $teamId)->get();
             $html = view('admin.team.list_member', compact('members'))->render();
+
             return response()->json(['result' => true, 'html' => $html]);
         } catch (\Exception $e) {
            return response()->json('result', false);
@@ -306,9 +320,11 @@ class TeamController extends Controller
             $team->users()->detach($userId);
             $this->activity->insertActivities($team, 'delete members to team');
             DB::commit();
+
             return response()->json('result', true);
         } catch (\Exception $e) {
             DB::rollback();
+
            return response()->json('result', false);
         }
     }
@@ -322,6 +338,7 @@ class TeamController extends Controller
                 $nameFile = Library::importFile($file);
                 $teams = Report::importFileExcel($nameFile);
             }
+
             return view('admin.export.team.import_data', compact('teams', 'nameFile'));
         } catch(\Exception $e) {
             return redirect()->action('Admin\TeamController@index');
@@ -338,6 +355,7 @@ class TeamController extends Controller
             Report::exportTeamFileExcel($teams, $type, $nameFile);
             unlink( base_path() . '/public/Upload/' . $nameFile );
             $request->session()->flash('success', trans('team.msg.import-success'));
+
             return redirect()->action('Admin\TeamController@index');
         } catch (\Exception $e) {
             $request->session()->flash('fail', trans('team.msg.import-fail'));
@@ -362,10 +380,12 @@ class TeamController extends Controller
 
             $request->session()->flash('success', trans('team.msg.import-success'));
             DB::commit();
+
             return redirect()->action('Admin\TeamController@index');
         } catch(\Exception $e) {
             $request->session()->flash('fail', trans('team.msg.import-fail'));
             DB::rollback();
+
             return redirect()->action('Admin\TeamController@index');
         }
     }
