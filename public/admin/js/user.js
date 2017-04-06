@@ -179,9 +179,9 @@ function addSkill(event, flag) {
                 $('#result-skill').html();
                 $('#result-skill').html(data.html);
                 $.colorbox.close();
-                var messages = trans['msg_add_skill_sucess'];
+                var messages = trans['msg_edit_skill_sucess'];
                 if (flag == 1) {
-                    messages = trans['msg_edit_skill_sucess'];
+                    messages = trans['msg_add_skill_sucess'];
                 }
 
                 bootbox.alert(messages);
@@ -189,6 +189,12 @@ function addSkill(event, flag) {
             } else {
                 bootbox.alert(trans['msg_fail']);
             }
+
+            $('.err-exeper').html();
+        },
+        error: function(data){
+            var errors = data.responseJSON;
+           $('.err-exeper').text(errors.exeper);
         }
     });
 }
@@ -198,9 +204,13 @@ function deleteSkill(skillId) {
     var userId = $('#userId').val();
 
     $.ajax({
-        type: 'GET',
-        url: action['user_delete_skill'] + skillId + '/' + userId,
+        type: 'POST',
+        url: action['user_delete_skill'],
         dataType: 'json',
+        data: {
+            skillId : skillId,
+            userId : userId,
+        },
         success:function(data) {
             if (data.result) {
                 bootbox.alert(trans['msg_delete_skill_sucess'], function() {
@@ -273,6 +283,13 @@ function addTeam(event,flag) {
 
                 bootbox.alert(messages);
             }
+
+            $('.err-position').html();
+        },
+        error: function(data){
+            var errors = data.responseJSON;
+            console.log(errors);
+            $('.err-position').text(errors.position);
         }
     });
 }
@@ -281,9 +298,13 @@ function deleteTeam(teamId) {
     var userId = $('#userId').val();
 
     $.ajax({
-        type : 'GET',
-        url : action['user_delete_team'] + teamId + '/' + userId,
+        type : 'POST',
+        url : action['user_delete_team'],
         dataType : 'json',
+        data: {
+            teamId : teamId,
+            userId : userId,
+        },
         success:function(data) {
             if (data.result) {
                     $.colorbox.close();

@@ -16,5 +16,6 @@
             'project_search_member': "{{ action('Admin\ProjectController@searchMember') }}",
             'project_member': "{{ action('Admin\ProjectController@getListUser') }}",
             'project_add_member': "{{ action('Admin\ProjectController@addMember') }}",
+            'project_delete_member': "{{ action('Admin\ProjectController@deleteMember') }}",
         };
 </script>

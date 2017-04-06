@@ -31,14 +31,14 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            <a href ="{{ action('Admin\ProjectController@edit', $project->id ) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
+                            <a href ="{{ action('Admin\ProjectController@edit', $project->id ) }}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Edit project"><i class="fa fa-pencil-square-o"></i></a>
                         </div>
 
                         <div class="col-md-6">
                             {{ Form::open(['action' => 'Admin\ProjectController@destroy', 'method' => 'POST']) }}
 
                             {{ Form::hidden('projectId',$project->id) }}
-                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit']) !!}
+                            {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'updateFeature', 'type' => 'submit', 'data-toggle' => 'tooltip', 'title' => 'Delete project']) !!}
                             {{ Form::close() }}
                         </div>
                     </td>

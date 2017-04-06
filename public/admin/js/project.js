@@ -48,7 +48,7 @@ $(document).ready(function() {
     });
 
     // edit member
-    $(document).on('click', '#btn-update', function() {
+    $(document).on('click', '#btn-update-member', function() {
         addMember(0);
     });
 
@@ -114,6 +114,15 @@ function search(page) {
             if (page) {
                 location.hash='?page='+page;
             }
+
+            $('.err-endDay').empty();
+            $('.err-startDay').empty();
+        },
+        error: function(data){
+            var errors = data.responseJSON;
+            $('#result-projects').empty();
+            $('.err-endDay').text(errors.endDay);
+            $('.err-startDay').text(errors.startDay);
         }
     });
 }
@@ -145,6 +154,7 @@ function projectMembers() {
     var projectId = $('#projectId').val();
     var teamId = $('#teamId-member').val();
     var positionTeam = $('#position-team').val();
+    var flag = $('#flag').val();
     var skills = [];
     $('.skills:checked').each(function() {
         skills.push($(this).val());
@@ -165,6 +175,7 @@ function projectMembers() {
             skills: skills,
             level: level,
             projectId: projectId,
+            flag: flag,
         },
         success:function(data) {
             if (data.result) {
@@ -178,44 +189,56 @@ function projectMembers() {
 function addMember(flag) {
     var projectId = $('#projectId').val();
     var teamId = $('#teamId-member').val();
-    var leader = $('.leader').val();
+    var leader = $('.leader:checked').val();
     var userId = [];
 
     $('.add_user:checked').each(function() {
         userId.push($(this).val());
     });
+    console.log(userId);
+    if (userId.length !== 0) {
+        $.ajax({
+            type: 'POST',
+            url: action['project_add_member'],
+            dataType: 'json',
+            data: {
+                projectId: projectId,
+                userId: userId,
+                leader: leader,
+                teamId: teamId,
+                flag :flag,
+            },
+            success:function(data) {
+                $.colorbox.close();
+                    var messages;
+                    if (data.result) {
+                        $('.err-leader').empty();
+                        messages = trans['msg_insert_success'];
+                        if (data.flag) {
+                             messages = trans['msg_update_success'];
+                        }
+                        bootbox.alert(messages, function() {
+                                location.reload();
+                            });
+                    } else {
+                        messages = trans['msg_insert_fail'];
+                        if (data.flag) {
+                            messages = trans['msg_update_fail'];
+                        }
+                        bootbox.alert(trans['msg_insert_fail']);
+                    }
 
-    $.ajax({
-        type: 'POST',
-        url: action['project_add_member'],
-        dataType: 'json',
-        data: {
-            projectId: projectId,
-            userId: userId,
-            leader: leader,
-            teamId: teamId,
-            flag :flag,
-        },
-        success:function(data) {
-            $.colorbox.close();
-            var messages;
-            if (data.result) {
-                messages = trans['msg_update_success'];
-                if (data.flag) {
-                    messages = trans['msg_insert_success'];
-                }
-                bootbox.alert(messages, function() {
-                        location.reload();
-                    });
-            } else {
-                messages = trans['msg_insert_fail'];
-                if (data.flag) {
-                    messages = trans['msg_update_fail'];
-                }
-                bootbox.alert(trans['msg_insert_fail']);
+            },
+            error: function(data){
+                var errors = data.responseJSON;
+                $('.err-leader').text(errors.leader);
             }
-        }
-    });
+
+        });
+
+    } else {
+        alert('There are no members to add to the project');
+    }
 }
 
 function deleteMember(teamId, event) {
@@ -238,6 +261,7 @@ function deleteMember(teamId, event) {
             teamId: teamId,
         },
         success:function(data) {
+            console.log(data);
             $.colorbox.close();
             if (data.result) {
                 bootbox.alert(trans['msg_delete_success']);

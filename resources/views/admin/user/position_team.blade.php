@@ -17,6 +17,10 @@
                         </div>
                     @endforeach
                 </div>
+
+                <span class="help-block has-error">
+                    <strong class="err-position"></strong>
+                </span>
             </div>
             <div class="row">
                 <div class="col-md-3 col-md-offset-8">

@@ -24,8 +24,8 @@ class InsertPositionRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'short_name' => 'required',
+            'name' => 'required|max:255|unique:positions',
+            'short_name' => 'required|max:255|unique:positions',
         ];
     }
 
@@ -38,7 +38,11 @@ class InsertPositionRequest extends FormRequest
     {
         return [
             'name.required' => trans('position.msg.name-required'),
+            'name.unique' => trans('position.msg.name-unique'),
+            'name.max' => trans('position.msg.name-max'),
             'short_name.required' => trans('position.msg.short-name-required'),
+            'short_name.unique' => trans('position.msg.short-name-unique'),
+            'short_name.max' => trans('position.msg.short-name-max'),
         ];
     }
 }

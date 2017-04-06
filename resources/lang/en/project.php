@@ -23,7 +23,16 @@ return [
     'lbl-members' => 'Members',
     'msg' => [
         'name-required' => 'Please input name!',
-        'description-required' => 'Please input description!',
+        'name-unique' => 'Name already exists!',
+        'name-max' => 'Name have maxlengt is 255 characters!',
+        'leader-required' => 'Please choose leader!',
+        'short_name-required' => 'Please input short name!',
+        'short_name-unique' => 'Short Name already exists!',
+        'short_name-max' => 'Short Name have maxlengt is 255 characters!',
+        'start_day-required' => 'Please input start day!',
+        'end_day-required' => 'Please input End day!',
+        'end_day-after' => 'End date must be start after start day!',
+        //messages
         'insert-success' => 'Insert Project seccessfuly!',
         'insert-fail' => 'Insert Project fail!',
         'update-success' => 'Update Project seccessfuly!',

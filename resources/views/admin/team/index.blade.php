@@ -1,4 +1,4 @@
-@extends('admin.block.main')
+@extends('common.block.master')
 <!-- title off page -->
 @section('title')
     {{ trans('admin.title-admin') }}
@@ -6,83 +6,97 @@
 <!-- css used for page -->
 <!-- content of page -->
 @section('content')
-    <div class="row">
-        <div class="col-md-3 sub-menu">
-            <h4>{{ trans('team.title-teams') }}</h4>
-        </div>
-
-        <div class="col-md-4 col-md-offset-3 paddingtop">
-            <div class="col-md-6">
-                <a href="{{ action('Admin\TeamController@create') }}" class="btn btn-primary"><i class="fa fa-plus " ></i></a>
-                <a href="{{ action('Admin\TeamController@addMember') }}" class="btn btn-primary"><i class="fa fa-user-plus " ></i></a>
+    <div class="">
+        <!-- title -->
+        <div class="page-title">
+            <div class="title_left">
+                <h3>{{ trans('team.title-teams') }}</h3>
             </div>
+            <div class="title_right">
+                <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                     <div class="col-md-3">
+                        <a href="{{ action('Admin\TeamController@create') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Create team"><i class="fa fa-plus " ></i></a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ action('Admin\TeamController@addMember') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add member to team"><i class="fa fa-user-plus " ></i></a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="#" class="btn btn-primary" id= "import-file" data-toggle="tooltip" data-placement="top" title="Import file"><i class="glyphicon glyphicon-import" ></i></a>
+                        {!! Form::open(['action' => 'Admin\TeamController@importFile', 'class' => 'form-horizontal', 'id' => 'form-input-file', 'enctype' => 'multipart/form-data']) !!}
+                            {{  Form::file('file', ['id' => 'file-csv', 'class' => 'hidden']) }}
 
-            <div class="col-md-3">
-                <a href="#" class="btn btn-primary" id= "import-file"><i class="glyphicon glyphicon-import" ></i></a>
-                {!! Form::open(['action' => 'Admin\TeamController@importFile', 'class' => 'form-horizontal', 'id' => 'form-input-file', 'enctype' => 'multipart/form-data']) !!}
-                    {{  Form::file('file', ['id' => 'file-csv', 'class' => 'hidden']) }}
+                        {!! Form::close() !!}
+                    </div>
 
-                {!! Form::close() !!}
-            </div>
+                    <div class="col-md-3">
+                        <a href="#" class="btn btn-primary" id= "export-file" data-toggle="tooltip" data-placement="top" title="Export file"><i class="glyphicon glyphicon-export" ></i></a>
+                        {!! Form::open(['action' => 'Admin\TeamController@exportFile', 'class' => 'form-horizontal', 'id' => 'form-export-user', 'enctype' => 'multipart/form-data']) !!}
+                            {{ Form::hidden('type',null, ['id' => 'type-export']) }}
 
-            <div class="col-md-3">
-                <a href="#" class="btn btn-primary" id= "export-file"><i class="glyphicon glyphicon-export" ></i></a>
-                {!! Form::open(['action' => 'Admin\TeamController@exportFile', 'class' => 'form-horizontal', 'id' => 'form-export-user', 'enctype' => 'multipart/form-data']) !!}
-                    {{ Form::hidden('type',null, ['id' => 'type-export']) }}
-
-                {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
-    <!-- content -->
-    <div class="row">
-         <div class="col-md-12 paddingtop">
-            @include ('common.messages')
-            <div class="panel panel-primary ">
-                <div class="panel-heading">
-                    {{ trans('team.lbl-list-team') }}
+                        {!! Form::close() !!}
+                    </div>
                 </div>
-                <!--  -->
-                <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th >{{ trans('team.lbl-stt') }}</th>
-                                    <th >{{ trans('team.lbl-name') }}</th>
-                                    <th >{{ trans('team.lbl-leader') }}</th>
-                                    <th >{{ trans('team.lbl-description') }}</th>
-                                    <th ></th>
-                                </tr>
-                            </thead>
+            </div>
+        </div>
+        <!-- end title -->
+        <div class="clearfix"></div>
+        @include ('common.messages')
+        <div class="row">
+            <div class="x_content">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>{{ trans('team.lbl-list-team') }}</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th >{{ trans('team.lbl-stt') }}</th>
+                                                <th >{{ trans('team.lbl-name') }}</th>
+                                                <th >{{ trans('team.lbl-leader') }}</th>
+                                                <th >{{ trans('team.lbl-description') }}</th>
+                                                <th ></th>
+                                            </tr>
+                                        </thead>
 
-                            <tbody>
-                                @if (!empty($teams))
-                                    @foreach ($teams as $team)
-                                        <tr>
-                                            <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td>{{ $team->name }}</td>
-                                            <td>{{ $team->leader->name ?: '' }}</td>
-                                            <td >{{ $team->description }}</td>
-                                            <td >
-                                                <div class="col-md-5">
-                                                    <a href ="{{ action('Admin\TeamController@edit', $team->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></a>
-                                                </div>
-                                                <div class="col-md-5">
-                                                    {{ Form::open(['action' => 'Admin\TeamController@destroy', 'id' => 'form-delete-team']) }}
-                                                        {{ Form::hidden('teamId', $team->id) }}
-                                                        {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete', 'type' => 'button']) !!}
-                                                    {{ Form::close() }}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
-                        @if (isset($teams))
-                            {{ $teams->links() }}
-                        @endif
+                                        <tbody>
+                                            @if (!empty($teams))
+                                                @foreach ($teams as $team)
+                                                    <tr>
+                                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                                        <td>{{ $team->name }}</td>
+                                                        <td>{{ $team->leader->name ?: '' }}</td>
+                                                        <td style=" max-width: 600px; word-wrap: break-word !important;" >{{ $team->description }}</td>
+                                                        <td >
+                                                            <div class="col-md-5">
+                                                                <a href ="{{ action('Admin\TeamController@edit', $team->id) }}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Edit team"><i class="fa fa-pencil-square-o"></i></a>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                {{ Form::open(['action' => 'Admin\TeamController@destroy', 'id' => 'form-delete-team']) }}
+                                                                    {{ Form::hidden('teamId', $team->id) }}
+                                                                    {!! Form::button(trans('admin.lbl-delete'), ['class' => 'btn btn-primary', 'id' => 'btn-delete', 'type' => 'button', 'data-toggle' => 'tooltip', 'title' => 'Delete team']) !!}
+                                                                {{ Form::close() }}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                    @if (isset($teams))
+                                        {{ $teams->links() }}
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

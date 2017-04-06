@@ -16,7 +16,9 @@ use App\Models\ProjectTeam;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\ReportController as Report;
 use App\Http\Requests\Team\InsertRequest;
-use DB, DateTime;
+use App\Http\Requests\Team\UpdateTeamRequest;
+use DB;
+use DateTime;
 use Carbon\Carbon;
 
 class TeamController extends Controller
@@ -77,7 +79,7 @@ class TeamController extends Controller
             $request->session()->flash('success', trans('team.msg.insert-success'));
             DB::commit();
             return redirect()->action('Admin\TeamController@index');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $request->session()->flash('fail', trans('team.msg.insert-fail'));
             DB::rollback();
             return redirect()->back();
@@ -116,14 +118,14 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(InsertRequest $request)
+    public function update(UpdateTeamRequest $request)
     {
-        $team->name = $request->name;
-        $team->description = $request->description;
-        $team->leader()->associate($request->leader);
         DB::beginTransaction();
         try {
             $team = $this->team->findOrFail($request->teamId);
+            $team->name = $request->name;
+            $team->description = $request->description;
+            $team->leader()->associate($request->leader);
             $team->update();
             $this->activity->insertActivities($team, 'update');
             $request->session()->flash('success', trans('team.msg.update-success'));
@@ -172,7 +174,7 @@ class TeamController extends Controller
      */
     public function addMember()
     {
-        $teams = Library::getLibraryTeams();;
+        $teams = Library::getLibraryTeams();
         $skills = Library::getLibrarySkills();
         return view('admin.team.team_users', compact('teams', 'skills'));
     }
@@ -188,11 +190,12 @@ class TeamController extends Controller
         $userId = $request->userId;
         $positions = $request->positions;
         $flag = $request->flag;
+        // dd($request->all());
         DB::beginTransaction();
         try {
             $team = $this->team->findOrFail($teamId);
             $messages = 'edit members to team';
-            if($flag) { //when flag is add
+            if ($flag) { //when flag is add
                 $team->users()->attach($userId);
                 $messages = 'add members to team';
             }
@@ -200,10 +203,11 @@ class TeamController extends Controller
             $teamUserId = TeamUser::where('team_id', $teamId)->where('user_id', $userId)->with('positions')->pluck('id')->first();
             $positionTeam = TeamUser::findOrFail($teamUserId)->positions()->sync($positions);
             DB::commit();
-            return response()->json('result', true);
+            return response()->json(['result' => true]);
         } catch (\Exception $e) {
             DB::rollback();
-           return response()->json('result', false);
+
+            return response()->json('result', false);
         }
     }
 
@@ -220,7 +224,7 @@ class TeamController extends Controller
         try {
             $teamUser = TeamUser::where('team_id', $teamId)->where('user_id', $userId)->with('positions')->pluck('id')->first();
             $arrPosition = [];
-            if(!empty($teamUser)) {
+            if (!empty($teamUser)) {
                 $arrPosition = PositionTeam::where('team_user_id', $teamUser)->pluck('position_id')->all();
             }
             $positions = Library::getPositionTeams();
@@ -228,7 +232,7 @@ class TeamController extends Controller
             return response()->json(['result' => true, 'html' => $html]);
         } catch (\Exception $e) {
             DB::rollback();
-           return response()->json('result', false);
+            return response()->json('result', false);
         }
     }
 
@@ -240,33 +244,36 @@ class TeamController extends Controller
      */
     public function search(Request $request)
     {
-        $skills = $request->skills;
-        $levels = $request->levels;
-        $teamId = $request->teamId;
-        try {
-            $memberTeam = TeamUser::where('team_id', $teamId)->pluck('user_id')->toArray();
-            $users = SkillUser::with('user');
-            if(!is_null($skills) && !is_null($levels)) {
-                $users =  $users->whereIn('level', $levels)->whereIn('skill_id', $skills);
-            }
+        if ($request->ajax()) {
+            $skills = $request->skills;
+            $levels = $request->levels;
+            $teamId = $request->teamId;
+            try {
+                $memberTeam = TeamUser::where('team_id', $teamId)->pluck('user_id')->toArray();
+                $users = SkillUser::with('user');
+                if (!is_null($skills) && !is_null($levels)) {
+                    $users =  $users->whereIn('level', $levels)->whereIn('skill_id', $skills);
+                }
 
-            if(!is_null($skills) && is_null($levels)) {
-                $users = $users->whereIn('skill_id', $skills);
-            }
+                if (!is_null($skills) && is_null($levels)) {
+                    $users = $users->whereIn('skill_id', $skills);
+                }
 
-            if(!is_null($levels) && is_null($skills)) {
-                $users =  $users->whereIn('level', $levels);
-            }
+                if (!is_null($levels) && is_null($skills)) {
+                    $users =  $users->whereIn('level', $levels);
+                }
 
-            if(!is_null($memberTeam)) {
-                $users = $users->whereNotIn('user_id', array_flatten($memberTeam));
-            }
+                if (!is_null($memberTeam)) {
+                    $users = $users->whereNotIn('user_id', array_flatten($memberTeam));
+                }
 
-            $userSkills = $users->get();
-            $html = view('admin.team.search_user', compact('userSkills'))->render();
-            return response()->json(['result' => true, 'html' => $html]);
-        } catch (\Exception $e) {
-           return response()->json('result', false);
+                $userSkills = $users->get();
+                $html = view('admin.team.search_user', compact('userSkills'))->render();
+
+                return response()->json(['result' => true, 'html' => $html]);
+            } catch (\Exception $e) {
+                return response()->json('result', false);
+            }
         }
     }
 
@@ -284,7 +291,7 @@ class TeamController extends Controller
             $html = view('admin.team.list_member', compact('members'))->render();
             return response()->json(['result' => true, 'html' => $html]);
         } catch (\Exception $e) {
-           return response()->json('result', false);
+            return response()->json('result', false);
         }
     }
 
@@ -303,13 +310,16 @@ class TeamController extends Controller
             $projectTeam = ProjectTeam::where('team_user_id', $teamUserId)->delete();
             $positionTeam = PositionTeam::where('team_user_id', $teamUserId)->delete();
             $team = $this->team->findOrFail($teamId);
-            $team->users()->detach($userId);
-            $this->activity->insertActivities($team, 'delete members to team');
+            $teamResult = $team->users()->detach($userId);
+            // dd($teamResult);
+            // TeamUser::where('team_id', $teamId)->where('user_id', $userId)->delete();
             DB::commit();
-            return response()->json('result', true);
+
+            return response()->json(['result' => true, 'team' => '1']);
         } catch (\Exception $e) {
             DB::rollback();
-           return response()->json('result', false);
+
+            return response()->json('result', false);
         }
     }
 
@@ -318,12 +328,13 @@ class TeamController extends Controller
         $file = $request->file;
         try {
             $nameFile = '';
-            if(isset($file)) {
+            if (isset($file)) {
                 $nameFile = Library::importFile($file);
                 $teams = Report::importFileExcel($nameFile);
             }
+
             return view('admin.export.team.import_data', compact('teams', 'nameFile'));
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->action('Admin\TeamController@index');
         }
     }
@@ -336,7 +347,7 @@ class TeamController extends Controller
             $teams = Team::all();
             $nameFile = 'team_' . $dt->format('Y-m-d-H-i-s');
             Report::exportTeamFileExcel($teams, $type, $nameFile);
-            unlink( base_path() . '/public/Upload/' . $nameFile );
+            unlink(base_path() . '/public/Upload/' . $nameFile);
             $request->session()->flash('success', trans('team.msg.import-success'));
             return redirect()->action('Admin\TeamController@index');
         } catch (\Exception $e) {
@@ -355,7 +366,7 @@ class TeamController extends Controller
             // validate users
             foreach ($teams as $team) {
                 $insert = $this->dataTeam($team);
-                if(!$this->validator($insert)->validate()) {
+                if (!$this->validator($insert)->validate()) {
                     $team = $this->team->create($insert);
                     $this->activity->insertActivities($team, 'insert');
                 }
@@ -364,7 +375,7 @@ class TeamController extends Controller
             $request->session()->flash('success', trans('team.msg.import-success'));
             DB::commit();
             return redirect()->action('Admin\TeamController@index');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $request->session()->flash('fail', trans('team.msg.import-fail'));
             DB::rollback();
             return redirect()->action('Admin\TeamController@index');
@@ -380,7 +391,7 @@ class TeamController extends Controller
     public function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required',
+            'name' => 'required|unique:teams|max:255',
             'user_id' => 'required',
         ]);
     }

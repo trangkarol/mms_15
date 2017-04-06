@@ -25,6 +25,10 @@ return [
     'lbl-comfirm_password' => 'Comfirm Password',
     'lbl-avartar' => 'Avatar',
     'lbl-position_team' => 'Position Team',
+    'lbl-data-import' => 'Data Import',
+    'lbl-profile' => 'Profile',
+    'lbl-welcome' => 'Welcome, ',
+    'lbl-avatar' => 'Avatar',
     'msg' => [
         'email-required' => 'Please input email!',
         'email-format' => 'Email not accepted!',

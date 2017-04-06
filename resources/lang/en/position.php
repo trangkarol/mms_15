@@ -11,9 +11,16 @@ return [
     'lbl-type-position' => 'Type',
     'lbl-position-team' => 'Postion Teams',
     'lbl-position' => 'Postion',
+    'lbl-list-position' => 'List Postion',
     'msg' => [
         'name-required' => 'Please input name!',
+        'name-unique' => 'Name already exists!',
+        'name-max' => 'Name not longer than 255 characters!',
+        'position-required' => 'Please input position!',
+        'short-name-unique' => 'Short Name already exists!',
         'short-name-required' => 'Please input short name!',
+        'short-name-max' => 'Short Name not longer than 255 characters!',
+        // messages
         'insert-success' => 'Insert positon seccessfuly!',
         'insert-fail' => 'Insert positon fail!',
         'update-success' => 'Update positon seccessfuly!',

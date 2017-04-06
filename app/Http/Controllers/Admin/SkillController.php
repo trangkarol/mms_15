@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Skill\InserSkillRequest;
+use App\Http\Requests\Skill\UpdateSkillRequest;
 use App\Helpers\Library;
 use App\Models\Skill;
 use App\Models\SkillUser;
@@ -92,7 +93,7 @@ class SkillController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(InserSkillRequest $request)
+    public function update(UpdateSkillRequest $request)
     {
         DB::beginTransaction();
         try {

@@ -1,4 +1,4 @@
-@extends('admin.block.main')
+@extends('common.block.master')
 <!-- title off page -->
 @section('title')
     {{ trans('skill.title-update-skills') }}
@@ -6,39 +6,61 @@
 <!-- css used for page -->
 <!-- content of page -->
 @section('content')
-    <div class="row">
-        <div class="col-md-3 sub-menu">
-            <h4>{{trans('skill.title-skills')}}</h4>
-        </div>
-        <div class="col-md-4 col-md-offset-3 paddingtop">
-            <a href="{{ action('Admin\SkillController@index') }}" class="btn btn-primary"><i class="fa fa-list " ></i></a>
-        </div>
-    </div>
-    <!-- content -->
-    <div class="row">
-         <div class="col-md-12 paddingtop">
-            @include('common.messages')
-            <div class="panel panel-primary ">
-                <div class="panel-heading">
-                    {{ trans('skill.title-update-skills') }}
+     <div class="">
+        <!-- title -->
+        <div class="page-title">
+            <div class="title_left">
+                <h3>{{ trans('skill.title-skills') }}</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group">
+                    <div class="col-md-4">
+                       <a href="{{ action('Admin\TeamController@index') }}" class="btn btn-primary" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="List skills"><i class="fa fa-list " ></i></a>
+                    </div>
                 </div>
-                <!--  -->
-                <div class="panel-body">
-                {!! Form::open(['action' => 'Admin\SkillController@update', 'class' => 'form-horizontal']) !!}
-                    {{ Form::hidden('skillId', $skill->id) }}
-                    @include('admin.skill.form_skill')
-                    <!-- button -->
-                    <div class="form-group">
-                        <div class="col-md-6 col-md-offset-4">
-                            {{ Form::reset(trans('admin.btn-reset'), ['class' => 'btn btn-primary']) }}
+            </div>
+        </div>
+        <!-- end title -->
+        <div class="clearfix"></div>
+        <!-- form search -->
+        @include('common.messages')
+        <div class="row">
+            <div class="x_content">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>{{ trans('skill.title-update-skills') }}</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                    </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            {!! Form::open(['action' => 'Admin\SkillController@update', 'class' => 'form-horizontal']) !!}
+                                {{ Form::hidden('skillId', $skill->id) }}
+                                @include('admin.skill.form_skill')
+                                <!-- button -->
+                                <div class="form-group">
+                                    <div class="col-md-6 col-md-offset-8">
+                                        {{ Form::reset(trans('admin.btn-reset'), ['class' => 'btn btn-success']) }}
 
-                            {{ Form::submit(trans('admin.btn-update'), ['class' => 'btn btn-primary']) }}
+                                        {{ Form::submit(trans('admin.btn-update'), ['class' => 'btn btn-success']) }}
+                                    </div>
+                                </div>
+                            {{ Form::close() }}
+                            </div>
                         </div>
                     </div>
-                {{ Form::close() }}
                 </div>
             </div>
         </div>
     </div>
 @endsection
 <!-- js used for page -->
+@section('contentJs')
+    @parent
+    {{ Html::script('admin/js/team.js') }}
+    <!-- add trans and action used in file team.js -->
+    @include('library.team_trans_javascript')
+@endsection

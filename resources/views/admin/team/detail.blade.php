@@ -1,4 +1,4 @@
-@extends('admin.block.main')
+@extends('common.block.master')
 <!-- title off page -->
 @section('title')
     {{ trans('team.title-update-teams') }}
@@ -11,7 +11,7 @@
             <h4>{{ trans('team.lbl-detail') }} </h4>
         </div>
         <div class="col-md-4 col-md-offset-3 paddingtop">
-            <a href="{{ action('Admin\TeamController@index') }}" class="btn btn-primary"><i class="fa fa-list " ></i></a>
+            <a href="{{ action('Admin\TeamController@index') }}" class="btn btn-primary"  class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="List teams"><i class="fa fa-list " ></i></a>
         </div>
     </div>
 

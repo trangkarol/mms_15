@@ -13,6 +13,11 @@ return [
     'lbl-junior' => 'Junior',
     'msg' => [
         'name-required' => 'Please input name!',
+        'name-max' => 'Name not longer than 255 characters!',
+        'name-unique' => 'Name already exists!',
+        'exeper-required' => 'Please input experiensive!',
+        'exeper-max' => 'Experiensive not longer than 255 characters!',
+        // messages
         'insert-success' => 'Insert skill seccessfuly!',
         'insert-fail' => 'Insert skill fail!',
         'update-success' => 'Update skill seccessfuly!',

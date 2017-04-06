@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-md-8 col-md-offset-4">
+                                <div class="col-md-2 col-md-offset-5">
                                     {{ Form::submit(trans('admin.btn-change'), ['class' => 'btn btn-primary']) }}
                                 </div>
                             </div>

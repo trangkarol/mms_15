@@ -19,6 +19,7 @@ return [
     'title-list-member' => 'List member of Team',
     'title-change-password' => 'Change Password',
     'change-password-success' => 'Change Password successfully',
+    'comfirm-remove' => 'Are you want to delete?',
     'msg' => [
         'insert-success' => 'Insert Successfully!',
         'insert-fail' => 'Insert Fail!',

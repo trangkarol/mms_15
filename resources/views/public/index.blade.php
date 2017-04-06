@@ -1,4 +1,4 @@
-@extends('public.block.main')
+@extends('common.block.master')
 <!-- title off page -->
 @section('title')
     {{ trans('public.title-public') }}

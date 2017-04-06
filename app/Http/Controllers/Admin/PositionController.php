@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Position\InsertPositionRequest;
+use App\Http\Requests\Position\UpdatePositionRequest;
 use App\Helpers\Library;
 use App\Models\Position;
 use App\Models\Activity;
@@ -99,7 +100,7 @@ class PositionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(InsertPositionRequest $request)
+    public function update(UpdatePositionRequest $request)
     {
         DB::beginTransaction();
         try {
@@ -136,7 +137,6 @@ class PositionController extends Controller
 
         try {
             $positionId = $request->positionId;
-
             $position = $this->position->find($positionId);
             User::where('position_id', $positionId)->delete();
             PositionTeam::where('position_id', $positionId)->delete();

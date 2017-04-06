@@ -11,7 +11,7 @@
             <div class="col-md-12">
                 @foreach ($positions as $position)
                     <div class="col-md-6">
-                        {{ Form::checkbox('position[]', $loop->iteration, in_array($key, $arrPosition), ['class' => 'position' ]) }} {{ $position }}
+                        {{ Form::checkbox('position[]', $loop->iteration, in_array($loop->iteration, $arrPosition), ['class' => 'position' ]) }} {{ $position }}
                     </div>
                 @endforeach
             </div>

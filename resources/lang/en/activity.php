@@ -8,6 +8,7 @@ return [
     'lbl-action' => 'Action',
     'lbl-time' => 'Time',
     'lbl-description' => 'Description',
+    'lbl-list-activity' => 'List Activities',
     'msg' => [
         'delete-success' => 'Delete activity seccessfuly!',
         'delete-fail' => 'Delete activity fail!',

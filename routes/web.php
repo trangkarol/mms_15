@@ -11,9 +11,10 @@
 |
 */
 
+
 Route::get('/', function () {
-        return view('welcome');
-    })->middleware('auth');
+    return view('admin.index');
+});
 
 //admin
 Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admin'], function () {
@@ -46,9 +47,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admi
         Route::post('/add-skill', 'UserController@addSkill');
         Route::post('/position-team', 'UserController@positionTeam');
         Route::post('/add-team', 'UserController@addTeam');
-        Route::get('/delete-team/{teamId}/{userId}', 'UserController@deleteTeam');
+        Route::post('/delete-team', 'UserController@deleteTeam');
         Route::post('/get-skill', 'UserController@getSkill');
-        Route::get('/delete-skill/{skillId}/{userId}', 'UserController@deleteSkill');
+        Route::post('/delete-skill', 'UserController@deleteSkill');
         Route::post('/import-file', 'UserController@importFile');
         Route::post('/save-file', 'UserController@saveImport');
         Route::post('/export-file', 'UserController@exportFile');
@@ -104,6 +105,7 @@ Route::group(['prefix' => 'member' , 'middleware' => 'auth',  'namespace' => 'Me
     Route::get('/list-team', 'HomeController@listTeam');
     Route::get('/list-member/{id}', 'HomeController@listMember');
     Route::get('/detail-member/{id}', 'HomeController@detailMember');
+    Route::post('/update-member', 'HomeController@update');
 });
 
 /*login user*/

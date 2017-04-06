@@ -24,7 +24,10 @@ return [
     'lbl-detail' => 'Detail',
     'msg' => [
         'name-required' => 'Please input name!',
+        'name-unique' => 'Name already exists!',
+        'name-max' => 'Name not longer than 255 characters!',
         'description-required' => 'Please input description!',
+        // messages
         'insert-success' => 'Insert team seccessfuly!',
         'insert-fail' => 'Insert team fail!',
         'update-success' => 'Update team seccessfuly!',

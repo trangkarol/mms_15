@@ -29,20 +29,19 @@
                                     <td>
                                         @if ($member->teamUsers)
                                             @foreach ($member->teamUsers as $temUser)
-                                                @php
-                                                    $position = '';
-                                                @endphp
-
                                                 @if ($temUser->positions)
+                                                    @php
+                                                        $position = '';
+                                                    @endphp
                                                     @foreach ($temUser->positions as $positon)
                                                         @php
-                                                            $position = $position.$positon->name.' | ';
+                                                            $position .= $positon->name . ' | ';
                                                         @endphp
                                                     @endforeach
                                                 @endif
-                                               {{ $position. ' | ' }}
                                             @endforeach
                                         @endif
+                                        {{ $position }}
                                     </td>
                                     <td>
                                         {{ Form::radio('leader', $member->id, null, ['class' => 'leader' ]) }}
@@ -62,11 +61,5 @@
                 {{ $members->links() }}
             @endif
         </div>
-    </div>
-</div>
-
-<div class="col-md-12">
-    <div class="col-md-3 col-md-offset-8">
-        {{ Form::button(trans('admin.btn-add'), ['class' => 'btn btn-primary', 'id' => 'btn-add-member']) }}
     </div>
 </div>

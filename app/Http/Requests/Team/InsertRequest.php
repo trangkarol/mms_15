@@ -24,7 +24,7 @@ class InsertRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => 'required|unique:teams|max:255',
             'description' => 'required',
         ];
     }
@@ -38,6 +38,8 @@ class InsertRequest extends FormRequest
     {
         return [
             'name.required' => trans('team.msg.name-required'),
+            'name.unique' => trans('team.msg.name-unique'),
+            'name.max' => trans('team.msg.name-max'),
             'description.required' => trans('team.msg.description-required'),
         ];
     }

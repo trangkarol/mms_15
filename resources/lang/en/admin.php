@@ -14,6 +14,7 @@ return [
     'title-logout' => 'Logout',
     'title-change-password' => 'Change Password',
     //
+    'lbl-system' => 'System',
     'lbl-search' => 'Search',
     'lbl-result-search' => 'Result Search',
     'lbl-delete' => '<i class = "fa fa-trash-o"></i>',

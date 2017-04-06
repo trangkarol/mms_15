@@ -28,7 +28,7 @@ $(document).ready(function() {
     });
 
     // click delete member
-    $(document).on('click', '#btn-delete', function(event) {
+    $(document).on('click', '.btn-delete-member', function(event) {
         var userId = $(this).parents('tr').find('.userId').html().trim();
         bootbox.confirm(trans['msg_comfirm_delete'], function(result){
             if (result) {
@@ -44,7 +44,7 @@ $(document).ready(function() {
     });
 
     // position team edit
-    $(document).on('click', '#btn-edit-member', function() {
+    $(document).on('click', '.btn-edit-member', function() {
         var userId = $(this).parents('tr').find('.userId').html().trim();
         positionTeam(userId);
     });
@@ -87,7 +87,7 @@ $(document).ready(function() {
 });
 
 function search(page) {
-    var teamId = $('#team').val();
+    var teamId = $('#teamId').val();
 
     var skills = [];
     $('.skills:checked').each(function() {
@@ -114,8 +114,9 @@ function search(page) {
             teamId: teamId,
         },
         success:function(data) {
+
             if (data.result) {
-                $('#result-member').html();
+                $('#result-member').empty();
                 $('#result-member').html(data.html);
             }
         }

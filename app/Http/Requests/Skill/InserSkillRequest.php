@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class InserSkillRequest extends FormRequest
 {
-     /**
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
@@ -24,7 +24,7 @@ class InserSkillRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => 'required|max:255|unique:skills',
         ];
     }
 
@@ -36,7 +36,9 @@ class InserSkillRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => trans('slill.msg.name-required'),
+            'name.required' => trans('skill.msg.name-required'),
+            'name.max' => trans('skill.msg.name-required'),
+            'name.unique' => trans('skill.msg.name-required'),
         ];
     }
 }
