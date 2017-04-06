@@ -86,4 +86,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(SkillUser::class);
     }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }

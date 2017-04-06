@@ -4,6 +4,9 @@ return [
     // title
     'lbl-profile' => 'Profile',
     'lbl-name' => 'Name',
+    'lbl-hello' => 'Hello',
+    'lbl-password' => 'Password',
+    'lbl-connect' => 'Connect',
     'lbl-level' => 'Level',
     'lbl-experiensive' => 'Experiensive',
     'lbl-junior' => 'Junior',
