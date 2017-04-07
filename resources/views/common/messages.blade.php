@@ -1,8 +1,8 @@
- @if(Session::has('success'))
+ @if (Session::has('success'))
     <div class="alert alert-success">
         {{ Session::get('success') }}
     </div>
-@elseif(Session::has('fail'))
+@elseif (Session::has('fail'))
     <div class="alert alert-danger">
         {{ Session::get('fail') }}
     </div>
