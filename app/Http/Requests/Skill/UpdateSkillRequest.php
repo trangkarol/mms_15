@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Team;
+namespace App\Http\Requests\Skill;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class InsertRequest extends FormRequest
+class UpdateSkillRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class InsertRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:teams|max:255',
-            'description' => 'required',
+            'name' => 'required|max:255|unique:skills,name,' . $this->skillId,
         ];
     }
 
@@ -37,10 +36,9 @@ class InsertRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => trans('team.msg.name-required'),
-            'name.unique' => trans('team.msg.name-unique'),
-            'name.max' => trans('team.msg.name-max'),
-            'description.required' => trans('team.msg.description-required'),
+            'name.required' => trans('skill.msg.name-required'),
+            'name.max' => trans('skill.msg.name-max'),
+            'name.unique' => trans('skill.msg.name-unique'),
         ];
     }
 }

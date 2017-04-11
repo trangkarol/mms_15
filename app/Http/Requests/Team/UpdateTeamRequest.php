@@ -4,7 +4,7 @@ namespace App\Http\Requests\Team;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class InsertRequest extends FormRequest
+class UpdateTeamRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class InsertRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:teams|max:255',
+            'name' => 'required|unique:teams|max:255,name,' . $this->teamId,
             'description' => 'required',
         ];
     }
