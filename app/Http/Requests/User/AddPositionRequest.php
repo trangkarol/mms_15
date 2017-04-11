@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Team;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class InsertRequest extends FormRequest
+class AddPositionRequest extends FormRequest
 {
-    /**
+     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
@@ -24,8 +24,7 @@ class InsertRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:teams|max:255',
-            'description' => 'required',
+            'position.*' => 'required',
         ];
     }
 
@@ -37,10 +36,7 @@ class InsertRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => trans('team.msg.name-required'),
-            'name.unique' => trans('team.msg.name-unique'),
-            'name.max' => trans('team.msg.name-max'),
-            'description.required' => trans('team.msg.description-required'),
+            'position.required' => trans('position.msg.position-required'),
         ];
     }
 }
